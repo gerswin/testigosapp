@@ -4,14 +4,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import { SvgIcon } from '@mui/material';
 
 import logoRnec from '../images/registraduria-nacional.svg'
 
@@ -96,21 +94,10 @@ const Login = (props) => {
                     alignItems: 'center',
                 }}
             >
-                <Avatar sx={{ m: 4, bgcolor: 'white', width: 167, height:100 }} src='../images/registraduria-nacional.svg' >
-                    {/*<Box
-                        component="img"
-                        sx={{
-                            height: 100,
-                            width: 167,
-                            maxHeight: { xs: 233, md: 167 },
-                            maxWidth: { xs: 350, md: 250 },
-                        }}
-                        alt="rnec-logo"
-                        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-                    />*/}
-                   {/* <img src={logoRnec} alt='logoRnec'/>*/}
+                <Avatar variant="square" sx={{ m: 4, bgcolor: 'white', width: 167, height:100 }}  >
+                    <img src={logoRnec} alt='logoRnec'/>
                 </Avatar>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h5" fontWeight="600">
                     Autenticación
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -127,15 +114,11 @@ const Login = (props) => {
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
-                        label="Password"
+                        name="contrasena"
+                        label="Contraseña"
                         type="password"
-                        id="password"
+                        id="contrasena"
                         autoComplete="current-password"
-                    />
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
                     />
                     <Button
                         type="submit"
@@ -147,22 +130,15 @@ const Login = (props) => {
                     >
                         INGRESAR
                     </Button>
-                    <Grid container>
+                    <Grid container spacing={1}>
                         <Grid item xs>
                             <Link href="#" variant="body2" >
                                 ¿Olvidó su contraseña?
                             </Link>
                         </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
                     </Grid>
                 </Box>
             </Box>
-            <Copyright sx={{ mt: 8, mb: 4 }} />
-
         </Container>
     )
 

@@ -1,5 +1,4 @@
-
-import {Switch, Routes, Route,  } from 'react-router-dom';
+import { Routes, Route,  } from 'react-router-dom';
 import {useState} from "react";
 import Login from './login/Login'
 import AsistenciaPuestosVotacion from './asistenciaPuestosVotacion/AsistenciaPuestosVotacion'
