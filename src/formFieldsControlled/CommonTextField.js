@@ -6,38 +6,12 @@ import TextField from '@mui/material/TextField';
 
 const onSearch = value => console.log(value);
 
-const CommonTextField = ({ name, label, placeholder, defaultValue, control, tooltip, rules, error }) => {
+const CommonTextField = ({ name, label, control, rules }) => {
 
-    const { field: { onBlur, value, onChange, ref}, fieldState: {invalid, isTouched, isDirty}, formState: { touchedFields, dirtyFields}} = useController({name, control, rules})
+    const { field, fieldState, formState} = useController({name, control, rules})
 
     const renderInput = () => {
         switch (rules.type) {
-            case "number":
-                return <TextField
-                    name={name}
-                    value={value}
-                    controls='false'
-                    min={0}
-                    placeholder={placeholder}
-                    onChange={onChange}
-                    style={{minWidth: '100%', marginRight: '20px'}}
-                    inputRef={ref}
-                    onBlur={onBlur}
-                    defaultValue={defaultValue ?? null}
-                />
-            case "search":
-                return <TextField
-                    key={name}
-                    name={name}
-                    value={value}
-                    placeholder={placeholder}
-                    onChange={onChange}
-                    onSearch={onSearch}
-                    enterButton={true}
-                    inputRef={ref}
-                    onBlur={onBlur}
-                    defaultValue={defaultValue ?? null}
-                />
             default:
                 return <TextField
                     margin="normal"
