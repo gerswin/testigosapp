@@ -5,6 +5,7 @@ import HeaderCustom from '../header/HeaderCustom.js'
 import CommonButton from "../commons/CommonButton";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import { useForm } from "react-hook-form";
+import BasicTable from "../commons/BasicTable";
 
 const AsistenciaPuestosVotacion = () => {
     const { control, formState} = useForm()
@@ -72,45 +73,51 @@ const AsistenciaPuestosVotacion = () => {
     }
 
     return (
-        <div>
+        <>
             <HeaderCustom />
             <Container component="main" maxWidth="xs">
-                <Typography variant="h3" sx={{mb: 5, ml: 5, mt: 5, fontWeight: 700, color: "grey.grisOscuro"}} >
+                <Typography variant="h3" sx={{mb: 4, ml: 5, mt: 5, fontWeight: 700}} >
                     Delegados
                 </Typography>
-                <Box
-                    sx={{
-                        marginTop: 3,
+                <Box sx={{
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
-                        p: 5
+                        px: 5,
+                        mt: 8
                     }}
                 >
-
-                    <Typography variant="h1" sx={{mb: 5}}>
+                    <Typography variant="h4" sx={{mb: 1.5}}  >
                         Elección de Congreso 2022
                     </Typography>
-                    <Typography variant="h2" sx={{mb: 5}} >
-                        Informe puesto de votación
+                    <Typography variant="h5" sx={{mb: 1.5}} >
+                        13 de marzo de 2022
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} display="flex" flexDirection='column' alignItems='center'>
-                        <FormControl component="fieldset">
-                            {
-                                fields.map(field => (
-                                    <CommonRadioGroup
-                                        key={field.name}
-                                        field={field}
-                                        control={control}
-                                    />
-                                ))
-                            }
-                        </FormControl>
-                        <CommonButton style={{margin: '0 auto'}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
-                    </Box>
+                    <Typography variant="h6" sx={{mb: 1.5}} >
+                        Danilo Santamaria
+                    </Typography>
+                </Box>
+
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    px: 5,
+                    mt: 1
+                }}>
+                    <Typography variant="h2" sx={{mt: 6, mb: 5}}>
+                        Información General
+                    </Typography>
+                    <Typography variant="actionDrop" >
+                        Este es el lugar donde ejercerá como delegado de puesto de votación
+                    </Typography>
+
+                    <BasicTable/>
+
+                    <CommonButton type="primario" text="CONTINUAR" sx={{mt: 6}}/>
+
                 </Box>
             </Container>
-        </div>
+        </>
     )
 }
 

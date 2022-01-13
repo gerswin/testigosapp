@@ -31,14 +31,16 @@ export const theme = createTheme({
             fontWeight: 700,
             fontSize: "28px",
             lineHeight: "32.81px",
-            textAlign: "center"
+            textAlign: "center",
+            color: "#333333"
         },
         h2: {
             fontFamily: "'Roboto', sans-serif",
             fontWeight: 700,
             fontSize: "22px",
             lineHeight: "26px",
-            textAlign: "center"
+            textAlign: "center",
+            color: "#333333"
         },
         h3: {
             fontFamily: "'Roboto', sans-serif",
@@ -46,6 +48,31 @@ export const theme = createTheme({
             fontSize: "18px",
             lineHeight: "21px",
             fontStyle: 'normal',
+            color: "#555555"
+        },
+        h4: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 700,
+            fontSize: "18px",
+            lineHeight: "21px",
+            fontStyle: 'normal',
+            color: "#333333"
+        },
+        h5: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 400,
+            fontSize: "16px",
+            color: "#555555",
+            lineHeight: "18.75px",
+            fontStyle: 'normal',
+        },
+        h6: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 500,
+            fontSize: "16px",
+            lineHeight: "19px",
+            fontStyle: 'normal',
+            color: "#555555",
         },
         subtitle1: {
             fontFamily: "'Lato', sans-serif",
@@ -59,6 +86,14 @@ export const theme = createTheme({
             fontSize: "16px",
             lineHeight: "19px",
             color: '#555555'
+        },
+        actionDrop: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 400,
+            fontSize: "16px",
+            lineHeight: "18.75px",
+            fontStyle: 'normal',
+            color: "#555555",
         }
     },
     shape: {

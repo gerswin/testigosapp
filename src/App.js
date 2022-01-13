@@ -6,7 +6,7 @@ import {theme} from "./theme/themeStyles";
 import { ThemeProvider } from '@mui/material/styles';
 import ForgotPassword from "./components/login/ForgotPassword";
 import PasswordRecover from "./components/login/PasswordRecover";
-
+import InformacionGeneral from "./components/informacionGeneral/InformacionGeneral";
 
 function App(props) {
 
@@ -20,6 +20,7 @@ function App(props) {
                   <Route path="informes_asistencia" element={ <AsistenciaPuestosVotacion/> }/>
                   <Route path="cambiar_contrasena" element={ <ForgotPassword/> }/>
                   <Route path="restablecer_contrasena" element={ <PasswordRecover/> }/>
+                  <Route path="informacion_general" element={ <InformacionGeneral/> }/>
               </Routes>
           </div>
       </ThemeProvider>

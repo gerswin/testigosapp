@@ -3,7 +3,7 @@ import { ButtonUnstyled } from '@mui/base';
 import ButtonBase from "@mui/material/ButtonBase";
 
 const CommonButton = (props) => {
-    const {type, label, href} = props
+    const {type, label, href, sx} = props
     const {primario, inactivo, secundario} = type
 
     console.log(type)
@@ -21,8 +21,9 @@ const CommonButton = (props) => {
                             color: 'white',
                             maxWidth: "max-content",
                             fontSize: "14px",
+                            ...sx
                         }}
-                        href={"/informes_asistencia"}
+                        href={ href }
                         component={ButtonBase}
                     >
                         {props.text}
@@ -41,7 +42,7 @@ const CommonButton = (props) => {
                             fontSize: "14px",
                             border: 1
                         }}
-                        href={"/informes_asistencia"}
+                        href={ href }
                         component={ButtonBase}
                     >
                         {props.text}
