@@ -1,8 +1,8 @@
 import react from 'react'
 import {AppBar, Toolbar, IconButton, Box} from '@mui/material'
-import logoRnecXxi from "../images/logos_web_sigloXXI_negro.svg";
-import logoRnec from "../images/registraduria-nacional.svg";
-import {useStyles} from "../theme/themeStyles";
+import logoRnecXxi from "../../images/logos_web_sigloXXI_negro.svg";
+import logoRnec from "../../images/registraduria-nacional.svg";
+import {useStyles} from "../../theme/themeStyles";
 
 const HeaderCustom = () => {
     const classes = useStyles()

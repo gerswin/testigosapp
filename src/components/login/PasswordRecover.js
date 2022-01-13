@@ -5,16 +5,16 @@ import CommonTextField from '../formFieldsControlled/CommonTextField'
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import { Grid} from '@mui/material'
+import {Grid, Link, Paper} from '@mui/material'
 import CommonButton from '../commons/CommonButton'
-import {useStyles} from "../theme/themeStyles";
+import {useStyles} from "../../theme/themeStyles";
 
 import { useForm } from "react-hook-form";
 
-import logoRnec from '../images/registraduria-nacional.svg'
-import logoRnecXxi from '../images/logos_web_sigloXXI_negro.svg'
+import logoRnec from '../../images/registraduria-nacional.svg'
+import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
 
-const ForgotPassword = (props) => {
+const PasswordRecover = (props) => {
     const { olvidoContrasenaProp } = props
     const { control, formState} = useForm()
     const {errors} = formState;
@@ -31,29 +31,19 @@ const ForgotPassword = (props) => {
 
     const fields = [
         {
-            name: 'nuevacontrasena',
-            label: 'Nueva contraseña',
-            placeholder: 'Nueva contraseña',
+            name: 'usuario',
+            label: 'Usuario',
+            placeholder: 'Usuario',
             rules: {
                 required: true,
                 type: 'email',
             }
-        },
-        {
-            name: 'confirmar',
-            label: 'Confirmar contraseña',
-            placeholder: 'Confirmar contraseña',
-            rules: {
-                required: true,
-                type: "password"
-            }
         }
-
     ]
 
     return (
         <Container component="main" maxWidth="xs">
-            <Box
+            <Paper
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -68,12 +58,13 @@ const ForgotPassword = (props) => {
             >
                 <img src={logoRnec} alt='logoRnec' className={classes.logo} />
                 <Typography variant="h1" textAlign="center">
-                    Cambiar contraseña
+                    Recuperar contraseña
                 </Typography>
-                <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1 }} >
+                <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1, width: 1 }} >
                     {
                         fields.map(field=> {
                             return <CommonTextField
+                                key={field.name}
                                 name={field.name}
                                 label={field.label}
                                 placeholder={field.placeholder}
@@ -83,16 +74,24 @@ const ForgotPassword = (props) => {
                             />
                         })
                     }
-
-                    <Grid sx={{ width: '100%', justifyContent: 'center' }} container justifyContent='center' >
-                        <CommonButton style={{justifySelf: 'center'}} text={'CAMBIAR'} type='primario' />
-                        <img src={logoRnecXxi} alt='logoRnec' className={classes.logo} />
-
-                    </Grid>
                 </Box>
-            </Box>
+                <Grid container columns={1} direction="column" alignItems='center' >
+                    <Box sx={{ width: 1, display: "flex", justifyContent: "space-evenly" }} >
+                        <CommonButton text={'CANCELAR'} type='secundario' />
+                        <CommonButton text={'REESTABLECER'} type='primario' />
+                    </Box>
+                    <Link
+                        sx={{ mt: 3, mb: 2, px: 4, bgcolor: 'primary.light', fontWeight: 500, color: 'primary.main' }}
+                        href={"/cambiar_contrasena"}
+                        underline="always"
+                    >
+                        ¿Olvidó su contraseña?
+                    </Link>
+                    <img src={logoRnecXxi} alt='logoRnec' className={classes.logo} />
+                </Grid>
+            </Paper>
         </Container>
     )
 
 }
-export default ForgotPassword
+export default PasswordRecover

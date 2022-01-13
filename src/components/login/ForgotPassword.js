@@ -5,20 +5,16 @@ import CommonTextField from '../formFieldsControlled/CommonTextField'
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import ButtonBase from '@mui/material/ButtonBase';
-
-import {Button, Link, Grid} from '@mui/material'
+import {Grid, Paper} from '@mui/material'
 import CommonButton from '../commons/CommonButton'
-import {useStyles} from "../theme/themeStyles";
+import {useStyles} from "../../theme/themeStyles";
 
 import { useForm } from "react-hook-form";
 
-import logoRnec from '../images/registraduria-nacional.svg'
-import logoRnecXxi from '../images/logos_web_sigloXXI_negro.svg'
-import {ButtonUnstyled} from "@mui/base";
+import logoRnec from '../../images/registraduria-nacional.svg'
+import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
 
-const Login = (props) => {
+const ForgotPassword = (props) => {
     const { olvidoContrasenaProp } = props
     const { control, formState} = useForm()
     const {errors} = formState;
@@ -35,18 +31,18 @@ const Login = (props) => {
 
     const fields = [
         {
-            name: 'usuario',
-            label: 'Usuario',
-            placeholder: 'Usuario',
+            name: 'nuevacontrasena',
+            label: 'Nueva contraseña',
+            placeholder: 'Nueva contraseña',
             rules: {
                 required: true,
                 type: 'email',
             }
         },
         {
-            name: 'contraseña',
-            label: 'Contraseña',
-            placeholder: 'Contraseña',
+            name: 'confirmar',
+            label: 'Confirmar contraseña',
+            placeholder: 'Confirmar contraseña',
             rules: {
                 required: true,
                 type: "password"
@@ -55,13 +51,9 @@ const Login = (props) => {
 
     ]
 
-    const onLinkClick = async () => {
-        const informesLink = await history.push("/informes_votacion")
-    }
-
     return (
         <Container component="main" maxWidth="xs">
-            <Box
+            <Paper
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -75,13 +67,13 @@ const Login = (props) => {
                 }}
             >
                 <img src={logoRnec} alt='logoRnec' className={classes.logo} />
-                <Typography variant="h1">
-                    Autenticación
+                <Typography variant="h1" textAlign="center">
+                    Cambiar contraseña
                 </Typography>
-                <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1 }} >
+                <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1, width: 1 }} >
                     {
-                        fields.map(field=>(
-                            <CommonTextField
+                        fields.map(field=> {
+                            return <CommonTextField
                                 key={field.name}
                                 name={field.name}
                                 label={field.label}
@@ -90,23 +82,16 @@ const Login = (props) => {
                                 rules={field.rules}
                                 error={errors[field.name]}
                             />
-                        ))
+                        })
                     }
-                    <Grid sx={{ width: '100%', justifyContent: 'center' }} container justifyContent='center' >
-                        <CommonButton style={{justifySelf: 'center'}} text={'INGRESAR'} type='primario' />
-
-                        <Link
-                            sx={{ mt: 3, mb: 2, px: 4, bgcolor: 'primary.light', fontWeight: 500, color: 'primary.main' }}
-                            href={"/cambiar_contrasena"}
-                            underline="always"
-                        >
-                            ¿Olvidó su contraseña?
-                        </Link>
-                        <img src={logoRnecXxi} alt='logoRnec' className={classes.logo} />
-                    </Grid>
                 </Box>
-            </Box>
+                <Grid container columns={1} direction="column" alignItems='center' >
+                    <CommonButton text={'CAMBIAR'} type='primario' />
+                    <img src={logoRnecXxi} alt='logoRnec' className={classes.logo} />
+                </Grid>
+            </Paper>
         </Container>
     )
+
 }
-export default Login
+export default ForgotPassword

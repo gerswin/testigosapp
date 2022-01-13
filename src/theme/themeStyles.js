@@ -24,19 +24,21 @@ export const theme = createTheme({
     },
     typography: {
         fontFamily: "'Roboto', 'Lato, sans-serif",
-        fontSize: '16px',
+        fontSize: 16,
         fontWeight: 500,
         h1: {
             fontFamily: "'Roboto', sans-serif",
             fontWeight: 700,
             fontSize: "28px",
-            lineHeight: "32.81px"
+            lineHeight: "32.81px",
+            textAlign: "center"
         },
         h2: {
             fontFamily: "'Roboto', sans-serif",
             fontWeight: 700,
             fontSize: "22px",
-            lineHeight: "26px"
+            lineHeight: "26px",
+            textAlign: "center"
         },
         h3: {
             fontFamily: "'Roboto', sans-serif",

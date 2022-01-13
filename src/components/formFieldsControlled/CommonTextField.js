@@ -8,7 +8,7 @@ const onSearch = value => console.log(value);
 
 const CommonTextField = ({ name, label, control, rules }) => {
 
-    const { field, fieldState, formState} = useController({name, control, rules})
+    const { field: {value, onChange}, fieldState, formState} = useController({name, control, rules})
 
     const renderInput = () => {
         switch (rules.type) {
@@ -22,6 +22,8 @@ const CommonTextField = ({ name, label, control, rules }) => {
                     type={rules.type}
                     id={name}
                     autoComplete="current-password"
+                    value={value}
+                    onChange={onChange}
                 />
         }
     }
