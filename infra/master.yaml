@@ -22,12 +22,16 @@ Parameters:
       - 'PriceClass_100'
       - 'PriceClass_200'
       - 'PriceClass_All'
-
+  CertificateArn:
+    Description: ARN certifica from ACM
+    Type: String
 Resources:
   CloudFrontDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        Aliases:
+          - !Ref DomainName
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -74,8 +78,9 @@ Resources:
                 !Join ['', ['origin-access-identity/cloudfront/', !Ref CloudFrontOriginAccessIdentity]]
         PriceClass: !Ref PriceClass
         ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
-          CloudFrontDefaultCertificate: true
+          SslSupportMethod: sni-only
 
   CloudFrontOriginAccessIdentity:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
