@@ -1,0 +1,119 @@
+Description: >
+  Stack to create a S3 bucket and Cloudfront distribution.
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: The domain name.
+    Default: webapp.example.com
+  BucketNameLog:
+    Type: String
+    Description: The BucketName name logs.
+    Default: webapp.example.com
+  BucketName:
+    Type: String
+    Description: The BucketName name.
+    Default: webapp.example.com
+  PriceClass:
+    Type: String
+    Description: The CloudFront distribution price class
+    Default: 'PriceClass_All'
+    AllowedValues:
+      - 'PriceClass_100'
+      - 'PriceClass_200'
+      - 'PriceClass_All'
+
+Resources:
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+             Forward: none
+          TargetOriginId: the-s3-bucket
+          ViewerProtocolPolicy: redirect-to-https
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 300
+            ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+          - ErrorCachingMinTTL: 300
+            ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        Enabled: true
+        HttpVersion: http2
+        Origins:
+          - DomainName: !Join ['', [!Ref Bucket, '.s3.amazonaws.com']]
+            Id: the-s3-bucket
+            OriginCustomHeaders:
+              - HeaderName: "X-Frame-Options"
+                HeaderValue: "sameorigin"
+              - HeaderName: "X-Content-Type-Options"
+                HeaderValue: "nosniff"
+              - HeaderName: "X-XSS-Protection"
+                HeaderValue: "Protection:1;mode=block"
+              - HeaderName: "Strict-Transport-Security"
+                HeaderValue: "max-age=31536000;includeSubDomains"
+              - HeaderName: "X-Content-Security-Policy"
+                HeaderValue: "secure"
+              - HeaderName: "Referrer-Policy"
+                HeaderValue: "no referrerer"
+              - HeaderName: "Feature-Policy"
+                HeaderValue: 'vibrate "self" / camera none'
+            S3OriginConfig:
+              OriginAccessIdentity:
+                !Join ['', ['origin-access-identity/cloudfront/', !Ref CloudFrontOriginAccessIdentity]]
+        PriceClass: !Ref PriceClass
+        ViewerCertificate:
+          MinimumProtocolVersion: TLSv1.2_2021
+          CloudFrontDefaultCertificate: true
+
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'CloudFront OAI for ${DomainName}'
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls : true
+        BlockPublicPolicy : true
+        IgnorePublicAcls : true
+        RestrictPublicBuckets : true
+      AccessControl: BucketOwnerFullControl
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource: !Join ['', ['arn:aws:s3:::', !Ref Bucket, '/*']]
+            Principal:
+              CanonicalUser: !GetAtt CloudFrontOriginAccessIdentity.S3CanonicalUserId
+
+Outputs:
+    CloudFrontID:
+      Description: ID distribution cloudfront
+      Value: !Ref CloudFrontDistribution
+      Export:
+        Name: !Sub ${AWS::StackName}-CloudFrontID
