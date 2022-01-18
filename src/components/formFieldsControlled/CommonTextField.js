@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 
 const onSearch = value => console.log(value);
 
-const CommonTextField = ({ name, label, control, rules }) => {
+const CommonTextField = ({ name, label, control, rules, error }) => {
 
     const { field: {value, onChange}, fieldState, formState} = useController({name, control, rules})
 
@@ -24,6 +24,7 @@ const CommonTextField = ({ name, label, control, rules }) => {
                     autoComplete="current-password"
                     value={value}
                     onChange={onChange}
+                    error={error}
                 />
         }
     }

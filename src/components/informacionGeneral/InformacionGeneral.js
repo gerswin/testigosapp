@@ -1,70 +1,18 @@
 import react, {useState} from 'react';
-import { Box, Typography, Container, FormControl } from "@mui/material"
+import { Box, Typography, Container } from "@mui/material"
 
 import HeaderCustom from '../header/HeaderCustom.js'
 import CommonButton from "../commons/CommonButton";
-import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import { useForm } from "react-hook-form";
 import BasicTable from "../commons/BasicTable";
+import Footer from "../footer/Footer";
 
-const AsistenciaPuestosVotacion = () => {
+const InformacionGeneral = () => {
     const { control, formState} = useForm()
     const {errors} = formState;
 
-    const fields = [
-        {
-            type: 'radioGroup',
-            name: 'q1',
-            label: '¿Se encuentra en el puesto de votación?',
-            rules: {
-                required: true,
-                type: 'radio',
-            },
-            options: [
-                {
-                    label: 'Si',
-                    value: 'si'
-                },
-                {
-                    label: 'No',
-                    value: 'no'
-                }
-            ]
-        },
-        {
-            type: 'radioGroup',
-            name: 'q2',
-            label: 'Seleccione una novedad en caso de no asistir al puesto de votación *',
-            rules: {
-                required: true,
-                type: "radio"
-            },
-            options: [
-                {
-                    label: 'Lluvia intensa',
-                    value: 'lluvia-intensa'
-                },
-                {
-                    label: 'Retraso personal',
-                    value: 'retraso-personal'
-                },
-                {
-                    label: 'Calamidad Familiar',
-                    value: 'calamidad-familiar'
-                },
-                {
-                    label: 'Caos Vehicular',
-                    value: 'caos-vehicular'
-                },
-                {
-                    label: 'Disturbios',
-                    value: 'disturbios'
-                },
-            ]
-        }
-    ]
 
-    const handleSubmit = (e) => {
+    const handleContinue = (e) => {
         e.preventDefault()
         console.log({
             email: 'email',
@@ -102,7 +50,8 @@ const AsistenciaPuestosVotacion = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     px: 5,
-                    mt: 1
+                    mt: 1,
+                    mb: 20
                 }}>
                     <Typography variant="h2" sx={{mt: 6, mb: 5}}>
                         Información General
@@ -113,12 +62,13 @@ const AsistenciaPuestosVotacion = () => {
 
                     <BasicTable/>
 
-                    <CommonButton type="primario" text="CONTINUAR" sx={{mt: 6}}/>
+                    <CommonButton type="primario" text="CONTINUAR" sx={{mt: 6}} href=""/>
 
                 </Box>
             </Container>
+            <Footer/>
         </>
     )
 }
 
-export default AsistenciaPuestosVotacion
+export default InformacionGeneral

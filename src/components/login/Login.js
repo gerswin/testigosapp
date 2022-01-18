@@ -90,7 +90,7 @@ const Login = (props) => {
                     }
                 </Box>
                 <Grid container columns={1} direction="column" alignItems='center' >
-                    <CommonButton text={'INGRESAR'} type='primario' />
+                    <CommonButton text={'INGRESAR'} type='primario' href="/informes_asistencia" />
 
                     <Link
                         sx={{ mt: 3, mb: 2, px: 4, bgcolor: 'primary.light', fontWeight: 500, color: 'primary.main' }}

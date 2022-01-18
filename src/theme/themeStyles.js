@@ -19,8 +19,15 @@ export const theme = createTheme({
             grisDetalles: "#CCCCCC",
         },
         error: {
-            main: "#EE002D"
+            main: "#EE002D",
+            two: "#e88fa1"
         },
+        status: {
+            verde: '#33FF00',
+            amarillo: '#FFF500',
+            rojo: '#EE002D',
+            gris:  '#B0B0B0'
+        }
     },
     typography: {
         fontFamily: "'Roboto', 'Lato, sans-serif",
@@ -74,6 +81,13 @@ export const theme = createTheme({
             fontStyle: 'normal',
             color: "#555555",
         },
+        titleInput: {
+            fontFamily: "'Roboto', sans-serif",
+            fontStyle: 'normal',
+            fontWeight: 500,
+            fontSize: "18px",
+            lineHeight: "21px",
+        },
         subtitle1: {
             fontFamily: "'Lato', sans-serif",
             fontWeight: 500,
@@ -107,7 +121,7 @@ export const theme = createTheme({
                     padding: '10px 0'
                 }
             }
-        }
+        },
     },
     spacing: 4
 })
@@ -126,5 +140,12 @@ export const useStyles = makeStyles({
     },
     buttonReg: {
         backgroundColor: "primary.main",
+    },
+    homeIcon: {
+        maxWidth: 60
+    },
+    footerFontStyle: {
+        fontFamily: "'Roboto', sans-serif",
+        fontWeight: 500, fontSize: 12
     }
 })

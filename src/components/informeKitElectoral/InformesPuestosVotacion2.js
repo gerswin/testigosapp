@@ -1,13 +1,13 @@
-import react, {useEffect, useState} from 'react';
-import { Box, Typography, Container, FormControl } from "@mui/material"
-
-import HeaderCustom from '../header/HeaderCustom.js'
-import CommonButton from "../commons/CommonButton";
+import {Route} from "react-router-dom";
+import {useForm} from "react-hook-form";
+import {useEffect, useState} from "react";
+import HeaderCustom from "../header/HeaderCustom";
+import {Box, Container, FormControl, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
-import { useForm } from "react-hook-form";
+import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
 
-const AsistenciaPuestosVotacion = () => {
+const InformesPuestosVotacion2 = () => {
     const { control, formState, getValues, watch} = useForm({
         defaultValues: {
             q1: '',
@@ -15,29 +15,16 @@ const AsistenciaPuestosVotacion = () => {
         }
     })
     const { errors } = formState;
-    const [displayQ2, setDisplayQ2] = useState(false)
+    //const [displayQ2, setDisplayQ2] = useState(false)
 
     const values = watch()
-
-    useEffect(() => {
-        console.log(values)
-        const handleQ2Display = () => {
-            if (values.q1 === 'si') {
-                setDisplayQ2(false)
-            }
-            if (values.q1 === 'no') {
-                setDisplayQ2(true)
-            }
-        }
-        handleQ2Display()
-    }, [values])
 
     const fields = [
         {
             type: 'radioGroup',
             name: 'q1',
             display: true,
-            label: '¿Se encuentra en el puesto de votación?',
+            label: '¿Abrió el puesto de votación?',
             rules: {
                 required: true,
                 type: 'radio',
@@ -48,6 +35,10 @@ const AsistenciaPuestosVotacion = () => {
                     value: 'si'
                 },
                 {
+                    label: 'Si con novedad',
+                    value: 'si_con_novedad',
+                },
+                {
                     label: 'No',
                     value: 'no'
                 }
@@ -56,44 +47,62 @@ const AsistenciaPuestosVotacion = () => {
         {
             type: 'radioGroup',
             name: 'q2',
-            display: displayQ2,
-            label: 'Seleccione una novedad en caso de no asistir al puesto de votación *',
+            //display: displayQ2,
+            label: 'Seleccione una novedad',
             rules: {
-                required: true,
+                required: false,
                 type: "radio"
             },
             options: [
                 {
-                    label: 'Lluvia intensa',
-                    value: 'lluvia-intensa'
+                    label: 'sin_mesas_y_sillas',
+                    value: 'Sin mesas y sillas'
                 },
                 {
-                    label: 'Retraso personal',
-                    value: 'retraso-personal'
+                    label: 'Urnas y cubículos mojados',
+                    value: 'urnas_y_cubiculos_mojados'
                 },
                 {
-                    label: 'Calamidad Familiar',
-                    value: 'calamidad-familiar'
+                    label: 'Baños cerrados',
+                    value: 'baños_cerrados'
                 },
                 {
-                    label: 'Caos Vehicular',
-                    value: 'caos-vehicular'
+                    label: 'Otra',
+                    value: 'otra',
+                    addInput: true,
+                },
+            ]
+        },
+        {
+            type: 'radioGroup',
+            name: 'q2',
+            //display: displayQ2,
+            label: 'Seleccione una novedad',
+            rules: {
+                required: false,
+                type: "radio"
+            },
+            options: [
+                {
+                    label: 'Bloqueos para el ingreso al puesto de votación',
+                    value: 'bloqueos_para_el_ingreso_al_puesto_de_votación'
                 },
                 {
-                    label: 'Disturbios',
-                    value: 'disturbios'
+                    label: 'No se encuentra el encargado de las llaves',
+                    value: 'no_se_encuentra_el_encargado_de_las_llaves'
+                },
+                {
+                    label: 'Problemas por disturbios',
+                    value: 'problemas_por_disturbios'
+                },
+                {
+                    label: 'Otra',
+                    value: 'otra',
+                    addInput: true
                 },
             ]
         }
     ]
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log({
-            email: 'email',
-            password: 'password'
-        })
-    }
 
     return (
         <>
@@ -111,26 +120,36 @@ const AsistenciaPuestosVotacion = () => {
                         p: 5
                     }}
                 >
-
                     <Typography variant="h1" sx={{mb: 5}}>
                         Elección de Congreso 2022
                     </Typography>
                     <Typography variant="h2" sx={{mb: 5}} >
                         Informe puesto de votación
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
+                    <Box component="form" noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
                         <FormControl component="fieldset" sx={{width: 1}}>
                             {
-                                fields.map(field => field.display === true ? (
+                                fields.slice(0, 1).map(field =>
                                     <CommonRadioGroup
                                         key={field.name}
                                         field={field}
                                         error={errors[field.name]}
                                         control={control}
                                     />
-                                ) : null )
+                                )
+                            }
+                            {
+                                fields.slice(2, 3).map(field =>
+                                    <CommonRadioGroup
+                                        key={field.name}
+                                        field={field}
+                                        error={errors[field.name]}
+                                        control={control}
+                                    />
+                                )
                             }
                         </FormControl>
+
                         <CommonButton style={{margin: '0 auto'}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
@@ -140,4 +159,4 @@ const AsistenciaPuestosVotacion = () => {
     )
 }
 
-export default AsistenciaPuestosVotacion
+export default InformesPuestosVotacion2

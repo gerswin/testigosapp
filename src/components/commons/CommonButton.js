@@ -6,8 +6,6 @@ const CommonButton = (props) => {
     const {type, label, href, sx} = props
     const {primario, inactivo, secundario} = type
 
-    console.log(type)
-
     const renderButton = () => {
         switch (type) {
             case 'primario':
