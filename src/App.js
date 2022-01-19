@@ -14,6 +14,19 @@ import InformesPuestosVotacion2 from './components/informeKitElectoral/InformesP
 import InformesPuestosVotacion3 from "./components/informeKitElectoral/InformesPuestosVotacion3";
 import InformesPuestosVotacion5 from "./components/informeKitElectoral/InformesPuestosVotacion5";
 import InformesPuestosVotacion6 from "./components/informeKitElectoral/InformesPuestosVotacion6";
+import InformesPuestosVotacion7 from "./components/informeKitElectoral/InformesPuestosVotacion7";
+import InformesPuestosVotacion8 from "./components/informeKitElectoral/InformesPuestosVotacion8";
+import InformesPuestosVotacion9 from "./components/informeKitElectoral/InformesPuestosVotacion9";
+import InformesPuestosVotacion10 from "./components/informeKitElectoral/InformesPuestosVotacion10";
+import InformesPuestosVotacion11 from "./components/informeKitElectoral/InformesPuestosVotacion11";
+import InformesPuestosVotacion12 from "./components/informeKitElectoral/InformesPuestosVotacion12";
+import RecomendacionesEncuesta from "./components/recomendaciones/RecomendacionesEncuesta";
+import NovedadesProcesoEleccion from "./components/recomendaciones/NovedadesProcesoEleccion";
+import VerificarCredencialE15 from "./components/credencialE15/VerificarCredencialE15";
+import VerificarCredencialE15Info from "./components/credencialE15/VerificarCredencialE15Info";
+import GenerarCredencialDelegado from "./components/credencialE15/GenerarCredencialDelegado";
+import Alertas from "./components/alertas/Alertas";
+
 
 function App(props) {
 
@@ -24,6 +37,7 @@ function App(props) {
           <div className='App'>
               <Routes>
                   <Route path="/" element={ <Login/> } />
+                  <Route path="home" element={ <Home/> }/>
                   <Route path="informes_asistencia" element={ <AsistenciaPuestosVotacion/> }/>
                   <Route path="cambiar_contrasena" element={ <ForgotPassword/> }/>
                   <Route path="restablecer_contrasena" element={ <PasswordRecover/> }/>
@@ -34,7 +48,21 @@ function App(props) {
                   <Route path="informes_puestos_votacion3" element={ <InformesPuestosVotacion3/>  } />
                   <Route path="informes_puestos_votacion5" element={ <InformesPuestosVotacion5/>  } />
                   <Route path="informes_puestos_votacion6" element={ <InformesPuestosVotacion6/>  } />
-                  <Route path="home" element={ <Home/> }/>
+                  <Route path="informes_puestos_votacion7" element={ <InformesPuestosVotacion7/>  } />
+                  <Route path="informes_puestos_votacion8" element={ <InformesPuestosVotacion8/>  } />
+                  <Route path="informes_puestos_votacion9" element={ <InformesPuestosVotacion9/>  } />
+                  <Route path="informes_puestos_votacion10" element={ <InformesPuestosVotacion10/>  } />
+                  <Route path="informes_puestos_votacion11" element={ <InformesPuestosVotacion11/>  } />
+                  <Route path="informes_puestos_votacion12" element={ <InformesPuestosVotacion12/>  } />
+                  <Route path="informes_puestos_votacion12" element={ <InformesPuestosVotacion12/>  } />
+                  <Route path="recomendaciones_encuesta" element={ <RecomendacionesEncuesta/>  } />
+                  <Route path="novedades_proceso_eleccion" element={ <NovedadesProcesoEleccion/>  } />
+                  <Route path="verificar_credencial_e15" element={ <VerificarCredencialE15/>  } />
+                  <Route path="verificar_credencial_e15info" element={ <VerificarCredencialE15Info/>  } />
+                  <Route path="generar_credencial_delegado1" element={ <GenerarCredencialDelegado/>  } />
+                  <Route path="alertas" element={ <Alertas/>  } />
+
+
               </Routes>
           </div>
       </ThemeProvider>

@@ -47,8 +47,6 @@ const CommonRadioGroup = ({ field, control, error,  }) => {
                     )
                 )}
             </RadioGroup>
-
-
         </Box>
     )
 }

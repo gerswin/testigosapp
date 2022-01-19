@@ -1,9 +1,7 @@
 .idea/
 node_modules/
-.DS_Store
 *.DS_Store
 build/
 ios/
 android/
-
 .DS_Store
