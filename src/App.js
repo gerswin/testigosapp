@@ -4,6 +4,9 @@ import Login from './components/login/Login'
 import AsistenciaPuestosVotacion from './components/asistenciaPuestosVotacion/AsistenciaPuestosVotacion'
 import {theme} from "./theme/themeStyles";
 import { ThemeProvider } from '@mui/material/styles';
+//aws
+
+//components
 import ForgotPassword from "./components/login/ForgotPassword";
 import PasswordRecover from "./components/login/PasswordRecover";
 import InformacionGeneral from "./components/informacionGeneral/InformacionGeneral";
@@ -27,6 +30,8 @@ import VerificarCredencialE15Info from "./components/credencialE15/VerificarCred
 import GenerarCredencialDelegado from "./components/credencialE15/GenerarCredencialDelegado";
 import Alertas from "./components/alertas/Alertas";
 
+//process.env.NODE_ENV = process.env.NODE_ENV !== undefined ? process.env.NODE_ENV : 'prod'
+//dotenv.config({ path: `./dotenv/${process.env.NODE_ENV}/.env`})
 
 function App(props) {
 
@@ -61,8 +66,6 @@ function App(props) {
                   <Route path="verificar_credencial_e15info" element={ <VerificarCredencialE15Info/>  } />
                   <Route path="generar_credencial_delegado1" element={ <GenerarCredencialDelegado/>  } />
                   <Route path="alertas" element={ <Alertas/>  } />
-
-
               </Routes>
           </div>
       </ThemeProvider>

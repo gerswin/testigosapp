@@ -1,0 +1,18 @@
+{
+  "trigger": true,
+  "modules": [
+    "captcha-verify"
+  ],
+  "parentResource": "rdtwebcontrolpuestos5024013d",
+  "functionName": "rdtwebcontrolpuestos5024013dVerifyAuthChallengeResponse",
+  "resourceName": "rdtwebcontrolpuestos5024013dVerifyAuthChallengeResponse",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/snapshot/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/VerifyAuthChallengeResponse",
+  "triggerTemplate": "VerifyAuthChallengeResponse.json.ejs",
+  "triggerEventPath": "VerifyAuthChallengeResponse.event.json",
+  "roleName": "rdtwebcontrolpuestos5024013dVerifyAuthChallengeResponse",
+  "skipEdit": true,
+  "RECAPTCHASECRET": "Linktic-2022",
+  "enableCors": false
+}

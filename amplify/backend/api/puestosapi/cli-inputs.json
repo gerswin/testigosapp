@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/home": {
+      "name": "/home",
+      "lambdaFunction": "rdtwebcontrolpuestos74582b30",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

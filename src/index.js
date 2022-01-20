@@ -4,6 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Amplify, { Auth } from "aws-amplify";
+import awsmobile from "./aws-exports";
+
+Amplify.configure(awsmobile);
+console.log(awsmobile)
 
 ReactDOM.render(
      <BrowserRouter>

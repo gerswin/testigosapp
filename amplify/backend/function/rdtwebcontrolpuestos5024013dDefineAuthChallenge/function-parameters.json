@@ -1,0 +1,17 @@
+{
+  "trigger": true,
+  "modules": [
+    "captcha-define-challenge"
+  ],
+  "parentResource": "rdtwebcontrolpuestos5024013d",
+  "functionName": "rdtwebcontrolpuestos5024013dDefineAuthChallenge",
+  "resourceName": "rdtwebcontrolpuestos5024013dDefineAuthChallenge",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/snapshot/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/DefineAuthChallenge",
+  "triggerTemplate": "DefineAuthChallenge.json.ejs",
+  "triggerEventPath": "DefineAuthChallenge.event.json",
+  "roleName": "rdtwebcontrolpuestos5024013dDefineAuthChallenge",
+  "skipEdit": true,
+  "enableCors": false
+}

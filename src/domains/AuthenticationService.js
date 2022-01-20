@@ -2,7 +2,7 @@ import { Auth as amplifyAuth, Hub } from 'aws-amplify'
 import { CurrentUserInfo } from './CurrentUserInfo'
 import { useAuthenticationEmitter } from './AuthenticationObserver'
 import { ConfirmationRequiredEvent } from './ConfirmationRequiredEvent'
-import { useAuthenticationStore } from '~/store/authentication'
+//import { useAuthenticationStore } from '../store/authentication'
 
 const listener = (data) => {
     switch (data.payload.event) {
@@ -17,25 +17,25 @@ Hub.listen('auth', listener)
 const newPasswordUser = { value: null }
 
 export default function useAuthenticationService() {
-    const authenticationStore = useAuthenticationStore()
+    //const authenticationStore = useAuthenticationStore()
     const authenticationEmitter = useAuthenticationEmitter()
 
     async function signOut() {
         try {
             await amplifyAuth.signOut()
-            await authenticationStore.logout()
+            //await authenticationStore.logout()
             authenticationEmitter.dispatchSignOut()
         } catch (error) {
             console.log('Error', error.name)
         }
     }
 
-    async function forceSignOut() {
+    /*async function forceSignOut() {
         if (authenticationStore.isAuthenticated.value) {
             await signOut()
             authenticationEmitter.dispatchForceSignOut()
         }
-    }
+    }*/
 
     async function completeNewPassword(newPassword, requiredAttributes = {}) {
         try {
@@ -86,7 +86,7 @@ export default function useAuthenticationService() {
                 identityDocument: attributes['custom:identity_document'],
             })
 
-            await authenticationStore.login(currentUserInfo)
+            //await authenticationStore.login(currentUserInfo)
 
             authenticationEmitter.dispatchSignIn()
         } catch (error) {
@@ -171,7 +171,7 @@ export default function useAuthenticationService() {
                     currentUser.attributes['custom:identity_document'],
             })
 
-            await authenticationStore.login(currentUserInfo)
+            //await authenticationStore.login(currentUserInfo)
 
             return currentUserInfo
         } catch (error) {
@@ -179,7 +179,7 @@ export default function useAuthenticationService() {
                 error.name === 'NotAuthorizedException' ||
                 error === 'The user is not authenticated'
             )
-                return await forceSignOut()
+                //return await forceSignOut()
 
             return null
         }

@@ -1,0 +1,20 @@
+{
+  "resourceName": "dynamof173c002",
+  "tableName": "dynamof173c002",
+  "partitionKey": {
+    "fieldName": "column1",
+    "fieldType": "string"
+  },
+  "gsi": [
+    {
+      "name": "gsimesas",
+      "partitionKey": {
+        "fieldName": "column1",
+        "fieldType": "string"
+      }
+    }
+  ],
+  "triggerFunctions": [
+    "dynamof173c002Trigger38a7f184"
+  ]
+}

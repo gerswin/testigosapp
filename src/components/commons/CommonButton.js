@@ -3,7 +3,7 @@ import { ButtonUnstyled } from '@mui/base';
 import ButtonBase from "@mui/material/ButtonBase";
 
 const CommonButton = (props) => {
-    const {type, label, href, sx} = props
+    const {type, label, href, sx, onClick} = props
     const {primario, inactivo, secundario} = type
 
     const renderButton = () => {
@@ -21,6 +21,7 @@ const CommonButton = (props) => {
                             fontSize: "14px",
                             ...sx
                         }}
+                        onClick={onClick}
                         href={ href }
                         component={ButtonBase}
                     >

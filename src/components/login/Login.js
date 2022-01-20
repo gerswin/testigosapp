@@ -14,6 +14,8 @@ import { useForm } from "react-hook-form";
 
 import logoRnec from '../../images/registraduria-nacional.svg'
 import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
+import useAuthenticationService from "../../domains/AuthenticationService";
+import { Auth } from 'aws-amplify'
 
 const Login = (props) => {
     const { olvidoContrasenaProp } = props
@@ -28,6 +30,47 @@ const Login = (props) => {
             email: 'email',
             password: 'password'
         })
+    }
+
+    async function signIn(username, password) {
+        try {
+            const user = await Auth.signIn(username, password);
+            console.log(user)
+        } catch (error) {
+            console.log('error signing in', error);
+        }
+    }
+
+    const authenticationService = useAuthenticationService()
+    //const signInState = usePromiseLoadingState()
+    //const notifications = useNotificationsService()
+
+    const register = async (data) => {
+        try {
+            const userCreated = await authenticationService.signUp({
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                password: data.password,
+                phoneNumber: data.phoneNumber,
+                profile: data.profile,
+                identityDocument: data.identityDocument,
+            })
+            console.log(userCreated)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const testData = {
+        email: 'juan@gmail.com',
+        firstName: 'Juan',
+        lastName: 'Rodriguez',
+        password: 'juan2022',
+        phoneNumber: '3016516666',
+        profile: 'profile',
+        identityDocument: '102300000',
     }
 
     const fields = [
@@ -90,7 +133,8 @@ const Login = (props) => {
                     }
                 </Box>
                 <Grid container columns={1} direction="column" alignItems='center' >
-                    <CommonButton text={'INGRESAR'} type='primario' href="/informes_asistencia" />
+                    <CommonButton text={'INGRESAR'} type='primario' onClick={()=>signIn('juan@gmail.com', 'password')} />
+                    <CommonButton text={'SIGN UP'} type='primario' onClick={()=>register(testData)} />
 
                     <Link
                         sx={{ mt: 3, mb: 2, px: 4, bgcolor: 'primary.light', fontWeight: 500, color: 'primary.main' }}
