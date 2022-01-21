@@ -6,6 +6,9 @@ import { ConfirmationRequiredEvent } from './ConfirmationRequiredEvent'
 
 const listener = (data) => {
     switch (data.payload.event) {
+        case 'signUp':
+            console.log('user signed up');
+            break;
         case 'signOut':
             console.log('User signed out')
             break
@@ -109,17 +112,20 @@ export default function useAuthenticationService() {
                               identityDocument = String(),
                           }) {
         try {
-            const { userConfirmed } = await amplifyAuth.signUp({
+            const { userConfirmed }  = await amplifyAuth.signUp({
                 username: email || undefined,
                 password: password || undefined,
                 attributes: {
+                    email: email,
                     given_name: firstName || undefined,
                     family_name: lastName || undefined,
                     phone_number: phoneNumber || undefined,
                     profile: profile || undefined,
-                    'custom:identity_document': identityDocument || undefined,
+                    //'custom:identity_document': identityDocument || undefined,
                 },
             })
+
+            console.log({userConfirmed})
 
             if (userConfirmed) {
                 return authenticationEmitter.dispatchSignUp()
@@ -128,7 +134,10 @@ export default function useAuthenticationService() {
             authenticationEmitter.dispatchConfirmationRequired(
                 ConfirmationRequiredEvent.create({ email })
             )
-        } catch (error) {}
+        } catch (error) {
+            throw error
+            console.log(error)
+        }
     }
 
     async function confirmSignUp({ email, code }) {
@@ -167,8 +176,7 @@ export default function useAuthenticationService() {
                 email: currentUser.attributes.email,
                 phoneNumber: currentUser.attributes.phone_number,
                 profile: currentUser.attributes.profile,
-                identityDocument:
-                    currentUser.attributes['custom:identity_document'],
+                identityDocument: currentUser.attributes['custom:identity_document'],
             })
 
             //await authenticationStore.login(currentUserInfo)

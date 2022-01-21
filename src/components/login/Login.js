@@ -1,15 +1,8 @@
 import react, {useState} from 'react'
-import { useNavigate } from 'react-router-dom';
-
-import CommonTextField from '../formFieldsControlled/CommonTextField'
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-
-import {Link, Grid} from '@mui/material'
+import { Link, Grid, FormControl, Typography, Container, Box } from '@mui/material'
 import CommonButton from '../commons/CommonButton'
-import {useStyles} from "../../theme/themeStyles";
-
+import CommonTextField from '../formFieldsControlled/CommonTextField'
+import { useStyles } from "../../theme/themeStyles";
 import { useForm } from "react-hook-form";
 
 import logoRnec from '../../images/registraduria-nacional.svg'
@@ -17,24 +10,27 @@ import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
 import useAuthenticationService from "../../domains/AuthenticationService";
 import { Auth } from 'aws-amplify'
 
-const Login = (props) => {
-    const { olvidoContrasenaProp } = props
-    const { control, formState} = useForm()
+const defaultValues = {
+    defaultValues: {
+        username: '',
+        password: ''
+    }
+}
+
+const Login = () => {
+    const { control, getValues, watch, formState } = useForm(defaultValues)
     const {errors} = formState;
-    let { history } = useNavigate()
     const classes = useStyles()
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log({
-            email: 'email',
-            password: 'password'
-        })
-    }
+    const [formAuthState, setFormAuthState] = useState('')
+
+    const values = watch()
+    console.log(values)
 
     async function signIn(username, password) {
         try {
             const user = await Auth.signIn(username, password);
+            setFormAuthState('confirmSignUp')
             console.log(user)
         } catch (error) {
             console.log('error signing in', error);
@@ -43,39 +39,32 @@ const Login = (props) => {
 
     const authenticationService = useAuthenticationService()
     //const signInState = usePromiseLoadingState()
-    //const notifications = useNotificationsService()
 
     const register = async (data) => {
-        try {
-            const userCreated = await authenticationService.signUp({
-                email: data.email,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                password: data.password,
-                phoneNumber: data.phoneNumber,
-                profile: data.profile,
-                identityDocument: data.identityDocument,
-            })
-            console.log(userCreated)
 
-        } catch (error) {
-            console.log(error)
+        try {
+            const userCreated = await authenticationService.signUp(data)
+            //create notification
+            console.log(userCreated)
+        } catch (e) {
+            //throw error notification 'Ha ocurrido un error al intentar crear tu usuario'
+            console.log(e)
         }
     }
 
     const testData = {
-        email: 'juan@gmail.com',
-        firstName: 'Juan',
-        lastName: 'Rodriguez',
-        password: 'juan2022',
-        phoneNumber: '3016516666',
+        email: values.username,
+        firstName: 'Juan2',
+        lastName: 'Rodriguez2',
+        password: values.password,
+        phoneNumber: '+573016516666',
         profile: 'profile',
         identityDocument: '102300000',
     }
 
     const fields = [
         {
-            name: 'usuario',
+            name: 'username',
             label: 'Usuario',
             placeholder: 'Usuario',
             rules: {
@@ -84,7 +73,7 @@ const Login = (props) => {
             }
         },
         {
-            name: 'contraseña',
+            name: 'password',
             label: 'Contraseña',
             placeholder: 'Contraseña',
             rules: {
@@ -94,10 +83,27 @@ const Login = (props) => {
         }
     ]
 
-    const onLinkClick = async () => {
-        const informesLink = await history.push("/informes_votacion")
-    }
-
+    const confirmSignUpFields = [
+        {
+            name: 'username',
+            label: 'Usuario',
+            placeholder: 'Usuario',
+            rules: {
+                required: true,
+                type: 'email',
+            }
+        },
+        {
+            name: 'verificationCode',
+            label: 'Verification Code',
+            placeholder: 'Verification Code',
+            rules: {
+                required: true,
+                type: "input"
+            }
+        }
+    ]
+    
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -117,23 +123,37 @@ const Login = (props) => {
                 <Typography variant="h1">
                     Autenticación
                 </Typography>
-                <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1, width: 1 }} >
-                    {
-                        fields.map(field=>(
-                            <CommonTextField
-                                key={field.name}
-                                name={field.name}
-                                label={field.label}
-                                placeholder={field.placeholder}
-                                control={control}
-                                rules={field.rules}
-                                error={errors[field.name]}
-                            />
-                        ))
-                    }
+                <Box component="form" display='flex' flexDirection='column' sx={{ mt: 1, width: 1 }} >
+                    <FormControl component="fieldset" sx={{width: 1}}>
+                        {
+                            formAuthState === 'confirmSignUp' ?
+                                confirmSignUpFields.map(field=>(
+                                    <CommonTextField
+                                        key={field.name}
+                                        name={field.name}
+                                        label={field.label}
+                                        placeholder={field.placeholder}
+                                        control={control}
+                                        rules={field.rules}
+                                        error={errors[field.name]}
+                                    />
+                                )) :
+                                fields.map(field=>(
+                                    <CommonTextField
+                                        key={field.name}
+                                        name={field.name}
+                                        label={field.label}
+                                        placeholder={field.placeholder}
+                                        control={control}
+                                        rules={field.rules}
+                                        error={errors[field.name]}
+                                    />
+                                ))
+                        }
+                    </FormControl>
                 </Box>
                 <Grid container columns={1} direction="column" alignItems='center' >
-                    <CommonButton text={'INGRESAR'} type='primario' onClick={()=>signIn('juan@gmail.com', 'password')} />
+                    <CommonButton text={'INGRESAR'} type='primario' onClick={()=>signIn(values.username, values.password)} />
                     <CommonButton text={'SIGN UP'} type='primario' onClick={()=>register(testData)} />
 
                     <Link
