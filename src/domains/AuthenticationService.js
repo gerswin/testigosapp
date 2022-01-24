@@ -2,7 +2,10 @@ import { Auth as amplifyAuth, Hub } from 'aws-amplify'
 import { CurrentUserInfo } from './CurrentUserInfo'
 import { useAuthenticationEmitter } from './AuthenticationObserver'
 import { ConfirmationRequiredEvent } from './ConfirmationRequiredEvent'
-//import { useAuthenticationStore } from '../store/authentication'
+import { useNavigate } from "react-router-dom";
+
+import { useDispatch } from 'react-redux';
+import { loginNewUser } from '../redux/actions'
 
 const listener = (data) => {
     switch (data.payload.event) {
@@ -12,6 +15,9 @@ const listener = (data) => {
         case 'signOut':
             console.log('User signed out')
             break
+        case 'completeNewPassword':
+            console.log('completeNewPassword')
+            break
     }
 }
 
@@ -20,8 +26,9 @@ Hub.listen('auth', listener)
 const newPasswordUser = { value: null }
 
 export default function useAuthenticationService() {
-    //const authenticationStore = useAuthenticationStore()
     const authenticationEmitter = useAuthenticationEmitter()
+    let navigate = useNavigate();
+    const dispatch = useDispatch()
 
     async function signOut() {
         try {
@@ -40,17 +47,15 @@ export default function useAuthenticationService() {
         }
     }*/
 
-    async function completeNewPassword(newPassword, requiredAttributes = {}) {
+    async function completeNewPassword(newLoginUser, newPassword/*, requiredAttributes = {}*/) {
         try {
-            if (!newPasswordUser.value)
-                throw new Error('There is no userAccount to set new password')
-
             await amplifyAuth.completeNewPassword(
-                newPasswordUser.value,
+                newLoginUser,
                 newPassword,
-                requiredAttributes
-            )
-
+            ).then( user => {
+                console.log(user)
+                return navigate("/")
+            }).catch(e => console.log(e))
             await signOut()
         } catch (error) {
             console.log('Error', JSON.stringify(error))
@@ -66,32 +71,37 @@ export default function useAuthenticationService() {
             }
 
             await amplifyAuth.signIn(userCredentials)
+                .then(async user => {
+                    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+                        dispatch(loginNewUser(user))
+                        navigate("/cambiar_contrasena")
+                    } else {
+                        const { username, attributes, challengeName } = user
+                        const currentUserInfo = CurrentUserInfo.create({
+                            uuid: username,
+                            firstName: attributes.given_name,
+                            lastName: attributes.family_name,
+                            email: attributes.email,
+                            phoneNumber: attributes.phone_number,
+                            profile: attributes.profile,
+                            identityDocument: attributes['custom:identity_document'],
+                        })
+                        dispatch(loginNewUser(user))
+                        //console.log({user})
+                        //authenticationEmitter.dispatchSignIn()
+                        //return user
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
 
-            await amplifyAuth.signOut({ global: true })
+            //await amplifyAuth.signOut({ global: true })
 
-            const userAuthenticated = await amplifyAuth.signIn(userCredentials)
+            //const userAuthenticated = await amplifyAuth.signIn(userCredentials)
+            //console.log({userAuthenticated})
 
-            const { username, attributes, challengeName } = userAuthenticated
-
-            if (challengeName === 'NEW_PASSWORD_REQUIRED') {
-                newPasswordUser.value = userAuthenticated
-
-                return authenticationEmitter.dispatchNewPasswordRequired()
-            }
-
-            const currentUserInfo = CurrentUserInfo.create({
-                uuid: username,
-                firstName: attributes.given_name,
-                lastName: attributes.family_name,
-                email: attributes.email,
-                phoneNumber: attributes.phone_number,
-                profile: attributes.profile,
-                identityDocument: attributes['custom:identity_document'],
-            })
-
-            //await authenticationStore.login(currentUserInfo)
-
-            authenticationEmitter.dispatchSignIn()
+            //authenticationEmitter.dispatchSignIn()
         } catch (error) {
             if (error.code === 'UserNotConfirmedException')
                 authenticationEmitter.dispatchConfirmationRequired(
@@ -124,8 +134,6 @@ export default function useAuthenticationService() {
                     //'custom:identity_document': identityDocument || undefined,
                 },
             })
-
-            console.log({userConfirmed})
 
             if (userConfirmed) {
                 return authenticationEmitter.dispatchSignUp()
@@ -161,13 +169,11 @@ export default function useAuthenticationService() {
      *
      * @returns {Promise<CurrentUserInfo|null>}
      */
-    async function currentUser(store) {
+    async function currentUser() {
         try {
             const currentUser = await amplifyAuth.currentAuthenticatedUser({
                 bypassCache: true,
             })
-
-            console.log('Current user', currentUser)
 
             const currentUserInfo = CurrentUserInfo.create({
                 uuid: currentUser.username,
@@ -179,9 +185,10 @@ export default function useAuthenticationService() {
                 identityDocument: currentUser.attributes['custom:identity_document'],
             })
 
+            //dispatch(loggedInUser(currentUserInfo)
             //await authenticationStore.login(currentUserInfo)
 
-            return currentUserInfo
+            return currentUser
         } catch (error) {
             if (
                 error.name === 'NotAuthorizedException' ||

@@ -8,39 +8,53 @@ import Box from '@mui/material/Box';
 import {Grid, Link, Paper} from '@mui/material'
 import CommonButton from '../commons/CommonButton'
 import {useStyles} from "../../theme/themeStyles";
-
 import { useForm } from "react-hook-form";
+
+import { useSelector, shallowEqual} from "react-redux";
 
 import logoRnec from '../../images/registraduria-nacional.svg'
 import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
+import useAuthenticationService from "../../domains/AuthenticationService";
 
 const ForgotPassword = (props) => {
     const { olvidoContrasenaProp } = props
-    const { control, formState} = useForm()
+    const { control, formState, watch} = useForm({
+        defaultValues: {
+            username: '',
+            newPassword: '',
+            passwordConfirm: ''
+        }
+    })
     const {errors} = formState;
     let { history } = useNavigate()
     const classes = useStyles()
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log({
-            email: 'email',
-            password: 'password'
-        })
-    }
+    const values = watch()
+
+    const newLoginUser = useSelector( state => state.loginNewUser, shallowEqual)
+
 
     const fields = [
-        {
-            name: 'nuevacontrasena',
-            label: 'Nueva contraseña',
-            placeholder: 'Nueva contraseña',
+        /*{
+            name: 'username',
+            label: 'Usuario',
+            placeholder: 'Usuario',
             rules: {
                 required: true,
                 type: 'email',
             }
+        },*/
+        {
+            name: 'newPassword',
+            label: 'Nueva contraseña',
+            placeholder: 'Nueva contraseña',
+            rules: {
+                required: true,
+                type: 'password',
+            }
         },
         {
-            name: 'confirmar',
+            name: 'passwordConfirm',
             label: 'Confirmar contraseña',
             placeholder: 'Confirmar contraseña',
             rules: {
@@ -50,6 +64,16 @@ const ForgotPassword = (props) => {
         }
 
     ]
+    const authenticationService = useAuthenticationService()
+
+    const createNewPassword = (password) => {
+        try {
+            const newPassword = authenticationService.completeNewPassword(newLoginUser, password)
+            console.log(newPassword)
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -70,7 +94,7 @@ const ForgotPassword = (props) => {
                 <Typography variant="h1" textAlign="center">
                     Cambiar contraseña
                 </Typography>
-                <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1, width: 1 }} >
+                <Box component="form" display='flex' flexDirection='column' sx={{ mt: 1, width: 1 }} >
                     {
                         fields.map(field=> {
                             return <CommonTextField
@@ -86,7 +110,7 @@ const ForgotPassword = (props) => {
                     }
                 </Box>
                 <Grid container columns={1} direction="column" alignItems='center' >
-                    <CommonButton text={'CAMBIAR'} type='primario' />
+                    <CommonButton text={'CAMBIAR'} type='primario' onClick={()=>createNewPassword(values.passwordConfirm )} />
                     <Link
                         sx={{ mt: 3, mb: 2, px: 4, bgcolor: 'primary.light', fontWeight: 500, color: 'primary.main' }}
                         href={"/restablecer_contrasena"}

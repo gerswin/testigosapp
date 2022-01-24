@@ -1,19 +1,22 @@
-import react, {useState} from 'react'
+import react, {useEffect, useState} from 'react'
 import { Link, Grid, FormControl, Typography, Container, Box } from '@mui/material'
 import CommonButton from '../commons/CommonButton'
 import CommonTextField from '../formFieldsControlled/CommonTextField'
 import { useStyles } from "../../theme/themeStyles";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
+//redux
 
 import logoRnec from '../../images/registraduria-nacional.svg'
 import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
 import useAuthenticationService from "../../domains/AuthenticationService";
-import { Auth } from 'aws-amplify'
 
 const defaultValues = {
     defaultValues: {
         username: '',
-        password: ''
+        password: '',
+        verificationCode: ''
     }
 }
 
@@ -21,34 +24,27 @@ const Login = () => {
     const { control, getValues, watch, formState } = useForm(defaultValues)
     const {errors} = formState;
     const classes = useStyles()
+    let navigate = useNavigate();
 
     const [formAuthState, setFormAuthState] = useState('')
 
     const values = watch()
-    console.log(values)
+
+    const authenticationService = useAuthenticationService()
+
 
     async function signIn(username, password) {
         try {
-            const user = await Auth.signIn(username, password);
-            setFormAuthState('confirmSignUp')
-            console.log(user)
+            await authenticationService.signIn({email: username, password: password})
+            const currentUser = authenticationService.currentUser()
+
+            console.log({currentUser})
+
+            if (await currentUser ) {
+                navigate("/home")
+            }
         } catch (error) {
             console.log('error signing in', error);
-        }
-    }
-
-    const authenticationService = useAuthenticationService()
-    //const signInState = usePromiseLoadingState()
-
-    const register = async (data) => {
-
-        try {
-            const userCreated = await authenticationService.signUp(data)
-            //create notification
-            console.log(userCreated)
-        } catch (e) {
-            //throw error notification 'Ha ocurrido un error al intentar crear tu usuario'
-            console.log(e)
         }
     }
 
@@ -103,7 +99,7 @@ const Login = () => {
             }
         }
     ]
-    
+
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -154,7 +150,11 @@ const Login = () => {
                 </Box>
                 <Grid container columns={1} direction="column" alignItems='center' >
                     <CommonButton text={'INGRESAR'} type='primario' onClick={()=>signIn(values.username, values.password)} />
-                    <CommonButton text={'SIGN UP'} type='primario' onClick={()=>register(testData)} />
+                    {
+                        formAuthState === 'confirmSignUp' ?
+                            <CommonButton text={'CONFIRM SIGN UP'} type='primario' onClick={()=>authenticationService.confirmSignUp({email: values.email, code: values.code })} /> :
+                            null
+                    }
 
                     <Link
                         sx={{ mt: 3, mb: 2, px: 4, bgcolor: 'primary.light', fontWeight: 500, color: 'primary.main' }}
