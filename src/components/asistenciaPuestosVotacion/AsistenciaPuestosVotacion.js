@@ -1,26 +1,36 @@
-import react, {useEffect, useState} from 'react';
+import react, {useCallback, useEffect, useState} from 'react';
 import { Box, Typography, Container, FormControl } from "@mui/material"
+import _ from "underscore";
 
 import HeaderCustom from '../header/HeaderCustom.js'
 import CommonButton from "../commons/CommonButton";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import { useForm } from "react-hook-form";
 import Footer from "../footer/Footer";
+import validateErrors from '../../utilities/validateErrors'
+import axios from "axios";
+import validateFunction from "../../utilities/validateFields";
 
 const AsistenciaPuestosVotacion = () => {
-    const { control, formState, getValues, watch} = useForm({
+    const { control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
         defaultValues: {
             q1: '',
             q2: ''
         }
     })
-    const { errors } = formState;
+    const { errors, touchedFields, dirtyFields } = formState;
+    const [open, setOpen] = useState(false)
+    const [dialogTitle, setDialogTitle] = useState('¿Confirma su respuesta?')
     const [displayQ2, setDisplayQ2] = useState(false)
-
+    const [acceptButton, setAcceptButton] = useState(false)
     const values = watch()
 
     useEffect(() => {
-        console.log(values)
+        validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
+    }, [formState])
+
+    useEffect(() => {
+        //console.log(values)
         const handleQ2Display = () => {
             if (values.q1 === 'si') {
                 setDisplayQ2(false)
@@ -30,7 +40,7 @@ const AsistenciaPuestosVotacion = () => {
             }
         }
         handleQ2Display()
-    }, [values])
+    }, [formState])
 
     const fields = [
         {
@@ -87,13 +97,53 @@ const AsistenciaPuestosVotacion = () => {
         }
     ]
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log({
-            email: 'email',
-            password: 'password'
-        })
+
+    const handleOpen = ( mesa) => {
+        setOpen(true)
     }
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const url = process.env.API_PUESTOS_URL + '/novelties'
+
+    const postNovedadesData = async (body) => {
+        let response
+        try {
+            response = await axios.post( url, body )
+            response = response.data
+            console.log(response)
+            if (response.data.status === 201) {
+                setDialogTitle('La novedad ha sido enviada')
+                setAcceptButton(true)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const onSubmit = useCallback(
+        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+            clearErrors()
+            try {
+                validateFunction(fields, errors, values, setError)
+                if (_.isEmpty( errors )) {
+                    validateFunction(fields, errors, values, setError)
+                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
+                        if (_.isEmpty( errors )) {
+                            handleOpen()
+                            //await postNovedadesData(body)
+                        }
+                    }}
+                else {
+                    console.log('level4', errors)
+                    validateFunction(fields, errors, values, setError)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }, [ formState ]
+    )
 
     return (
         <>
@@ -111,14 +161,13 @@ const AsistenciaPuestosVotacion = () => {
                         p: 5
                     }}
                 >
-
                     <Typography variant="h1" sx={{mb: 5}}>
                         Elección de Congreso 2022
                     </Typography>
                     <Typography variant="h2" sx={{mb: 5}} >
                         Informe puesto de votación
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
+                    <Box component="form" onSubmit={handleSubmit(data => console.log(data))} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
                         <FormControl component="fieldset" sx={{width: 1}}>
                             {
                                 fields.map(field => field.display === true ? (
@@ -131,7 +180,7 @@ const AsistenciaPuestosVotacion = () => {
                                 ) : null )
                             }
                         </FormControl>
-                        <CommonButton style={{margin: '0 auto'}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
             </Container>

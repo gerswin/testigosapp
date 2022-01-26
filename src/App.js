@@ -44,6 +44,7 @@ function App(props) {
                   <Route path="/" element={ <Login/> } />
                   <Route path="home" element={ <Home/> }/>
                   <Route path="informes_asistencia" element={ <AsistenciaPuestosVotacion/> }/>
+                  <Route path="informe_puesto_de_votacion" element={ <InformacionGeneral/> }/>
                   <Route path="cambiar_contrasena" element={ <ForgotPassword/> }/>
                   <Route path="restablecer_contrasena" element={ <PasswordRecover/> }/>
                   <Route path="informacion_general" element={ <InformacionGeneral/> }/>

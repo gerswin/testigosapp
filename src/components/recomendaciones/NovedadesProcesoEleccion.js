@@ -1,42 +1,124 @@
-import React from "react";
+import React, {useEffect, useCallback, useState} from "react";
+import _ from "underscore";
 
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
+import axios from 'axios'
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, MenuItem, Select, TextField, Typography} from "@mui/material";
-import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
+import {Box, Container, FormControl, Typography, Dialog, DialogTitle} from "@mui/material";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
+import useFetch from "../../utilities/useFetch";
+import DropdownInput from "../commons/DropdownInput";
+import validateFunction from "../../utilities/validateFields";
+import CommonTextField from "../formFieldsControlled/CommonTextField";
+import CommonDialog from "../commons/CommonDialog";
+import validateErrors from '../../utilities/validateErrors'
 
 const NovedadesProcesoEleccion = () => {
-    const { control, formState} = useForm({
+    const { control, handleSubmit, formState, clearErrors, getValues, setError} = useForm({
         defaultValues: {
-            q1: '',
-            q2: ''
+            noveltiesDropdown: '',
+            newNovelty: ''
         }
     })
-    const { errors } = formState;
+    const { errors, touchedFields, dirtyFields } = formState;
+    const url = 'https://apipuestos-dev.registraduria.org/novelties'
+    const { data, loading, error } = useFetch(url)
+    const [dialogTitle, setDialogTitle] = useState('¿Desea enviar la novedad?')
+    const [open, setOpen] = useState(false)
+    const [acceptButton, setAcceptButton] = useState(false)
+    const values = getValues()
+
+    useEffect(() => {
+        validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
+    }, [formState])
 
     const fields = [
         {
-            type: 'radioGroup',
-            name: 'q1',
-            label: '¿Se realizó el respectivo aseo y organización del puesto al finalizar la jornada electoral?',
+            type: 'dropdown',
+            name: 'noveltiesDropdown',
+            label: 'Tipo de novedad',
             rules: {
                 required: true,
-                type: 'radio',
-            },
-            options: [
-                {
-                    label: 'Si',
-                    value: 'si'
-                },
-                {
-                    label: 'No',
-                    value: 'no'
+                type: 'string',
+                validate: (value) => {
+                    if (data.findIndex(novelty => novelty.value === value) === -1) {
+                        return 'invalid novelty selection'
+                    }
                 }
-            ]
+            },
+            options: data,
+            defaultValue: 'Por favor seleccione..'
+        },
+        {
+            type: 'multiline',
+            name: 'newNovelty',
+            multiline: true,
+            label: 'Por favor ingrese la novedad presentada',
+            rules: {
+                required: true,
+                type: 'string',
+                validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
+            }
         }
     ]
+
+    const body = {
+        "data": {
+            "type": "typeNovelties",
+            "attributes": {
+                "eventTypeCode": "01",
+                "novelty": values.newNovelty
+            }
+        }
+    }
+
+    const handleOpen = ( mesa) => {
+        setOpen(true)
+    }
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const postNovedadesData = async (body) => {
+        let response
+        try {
+            response = await axios.post( url, body )
+            response = response.data
+            console.log(response)
+            if (response.data.status === 201) {
+                setDialogTitle('La novedad ha sido enviada')
+                setAcceptButton(true)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const onSubmit = useCallback(
+        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+            clearErrors()
+            try {
+                validateFunction(fields, errors, values, setError)
+                if (_.isEmpty( errors )) {
+                    validateFunction(fields, errors, values, setError)
+                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
+                        if (_.isEmpty( errors )) {
+                            handleOpen()
+                            //await postNovedadesData(body)
+                        }
+               }}
+                else {
+                    console.log('level4', errors)
+                    validateFunction(fields, errors, values, setError)
+                }
+            } catch (e) {
+                console.log(e)
+                //<Alert severity="error"> {error.message} </Alert>
+                //open notification
+            }
+        }, [ formState ]
+    )
 
     return (
         <>
@@ -60,37 +142,46 @@ const NovedadesProcesoEleccion = () => {
                     <Typography variant="h2" sx={{mb: 5}} >
                         Novedades del proceso
                     </Typography>
-                    <Box component="form" noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='left'>
+                    <Box component="form" onSubmit={handleSubmit(data => console.log(data))} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='left'>
                         <FormControl component="fieldset" sx={{width: 1}}>
                             <>
-                                <Typography variant="h3" sx={{mb: '10px', mt: 3, color: 'grey.grisOscuro'}}>
-                                    Tipo de novedad
-                                </Typography>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    sx={{mb: 3}}
-                                    variant="outlined"
-                                    placeholder="seleccione"
-                                    fullWidth
-                                >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
+                                <DropdownInput
+                                    name={fields[0].name}
+                                    label={fields[0].label}
+                                    defaultValue={fields[0].defaultValue}
+                                    options={fields[0].options}
+                                    rules={fields[0].rules}
+                                    control={control}
+                                    error={errors[fields[0].name]}
+                                />
                             </>
-                            <Typography variant="h3" sx={{mb: '10px', mt: 5, color: 'grey.grisOscuro'}}>
-                                Por favor ingrese la novedad presentada
-                            </Typography>
-                            <TextField
-                                id="informes12q2"
-                                multiline
-                                rows={8}
-                            />
+
+                            {
+                                fields.slice(1, 2).map(field => (
+                                    <CommonTextField
+                                        multiline={field.multiline}
+                                        key={field.name}
+                                        name={field.name}
+                                        label={field.label}
+                                        placeholder={field.placeholder}
+                                        control={control}
+                                        rules={field.rules}
+                                        error={errors[field.name]}
+                                    />
+                                ))
+                            }
                         </FormControl>
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
+                <CommonDialog
+                    open={open}
+                    onClose={handleClose}
+                    submitInfo={postNovedadesData}
+                    bodyInfo={body}
+                    dialogTitle={dialogTitle}
+                    acceptButton={acceptButton}
+                />
             </Container>
             <Footer/>
         </>

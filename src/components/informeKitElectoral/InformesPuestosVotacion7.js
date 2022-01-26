@@ -6,40 +6,9 @@ import {Box, Container, FormControl, Grid, Paper, TextField, Button, Typography,
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
-
-const DialogVotantesMesa = ({mesa, displayModal, onClose, open}) => {
-    return (
-        <Dialog open={open} onClose={onClose} >
-            <DialogTitle>Ingrese la cantidad de votantes de la {mesa}</DialogTitle>
-            <DialogContent>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id={'votantes' + mesa}
-                    type="number"
-                    //fullWidth
-                    variant="outlined"
-                />
-            </DialogContent>
-            <DialogActions sx={{mr: 4}}>
-                <Button onClick={displayModal}>
-                    <Typography sx={{mx: 5}} variant="h6" color="primary.main">
-                        SI
-                    </Typography>
-                </Button>
-                <Button onClick={onClose}>
-                    <Typography variant="h6" color="primary.main">
-                        NO
-                    </Typography>
-                </Button>
-            </DialogActions>
-        </Dialog>
-    )
-    //'Ingrese la cantidad de votantes de la' + mesa
-}
+import CommonDialog from "../commons/CommonDialog";
 
 const InformesPuestosVotacion7 = () => {
-
     const { formState, watch, control} = useForm({
         defaultValues: {
             q1: '',
@@ -94,8 +63,57 @@ const InformesPuestosVotacion7 = () => {
         {
             name: 'Mesa 1000',
             value: 3
+        },
+        {
+            name: 'Mesa 1',
+            value: 4
+        },
+        {
+            name: 'Mesa 2',
+            value: 10
+        },
+        {
+            name: 'Mesa 888',
+            value: 3
+        },
+        {
+            name: 'Mesa 1000',
+            value: 3
+        },
+        {
+            name: 'Mesa 1',
+            value: 4
+        },
+        {
+            name: 'Mesa 2',
+            value: 10
+        },
+        {
+            name: 'Mesa 888',
+            value: 3
+        },
+        {
+            name: 'Mesa 1000',
+            value: 3
+        },
+        {
+            name: 'Mesa 1',
+            value: 4
+        },
+        {
+            name: 'Mesa 2',
+            value: 10
+        },
+        {
+            name: 'Mesa 888',
+            value: 3
+        },
+        {
+            name: 'Mesa 1000',
+            value: 3
         }
     ]
+
     const handleOpen = ( mesa) => {
         setOpen(true)
         setDisplayModal(mesa)
@@ -170,8 +188,10 @@ const InformesPuestosVotacion7 = () => {
                     </Grid>
                     <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
                 </Box>
-                <DialogVotantesMesa
+                <CommonDialog
+                    isinput={true}
                     mesa={displayModal}
+                    dialogTitle='Ingrese la cantidad de votantes de la '
                     displayModal={displayModal.display}
                     open={open}
                     onClose={handleClose}

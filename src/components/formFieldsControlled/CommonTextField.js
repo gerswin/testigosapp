@@ -3,12 +3,11 @@ import { useController } from 'react-hook-form'
 
 // Ant Design
 import TextField from '@mui/material/TextField';
+import {Typography} from "@mui/material";
 
-const onSearch = value => console.log(value);
+const CommonTextField = ({ name, label, control, rules, error, multiline, defaultValue }) => {
 
-const CommonTextField = ({ name, label, control, rules, error }) => {
-
-    const { field: {value, onChange}, fieldState, formState} = useController({name, control, rules})
+    const { field: {value, onChange, onBlur} } = useController({name, control, rules})
 
     const renderInput = () => {
         switch (rules.type) {
@@ -24,7 +23,9 @@ const CommonTextField = ({ name, label, control, rules, error }) => {
                     autoComplete="current-password"
                     value={value}
                     onChange={onChange}
-                    error={error}
+                    error={error && error.isError}
+                    onBlur={onBlur}
+                    defaultValue={defaultValue}
                 />
         }
     }
@@ -32,6 +33,28 @@ const CommonTextField = ({ name, label, control, rules, error }) => {
 
         <div>
             {
+                multiline ? <>
+                        <Typography variant="h3" sx={{mb: '10px', mt: 5, color: 'grey.grisOscuro'}}>
+                            {label}
+                        </Typography>
+                        <TextField
+                            defaultValue={defaultValue}
+                            multiline
+                            rows={8}
+                            margin="normal"
+                            required
+                            fullWidth
+                            name={name}
+                            //label={label}
+                            type={rules.type}
+                            id={name}
+                            autoComplete="current-password"
+                            value={value}
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            error={error && error.isError}
+                        />
+                    </> :
                 renderInput()
             }
         </div>
