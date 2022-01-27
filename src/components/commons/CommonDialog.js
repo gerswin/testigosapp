@@ -1,20 +1,23 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, isinput, acceptButton}) => {
+const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, isinput, acceptButton, href}) => {
+    let navigate = useNavigate();
 
-    const handleSubmitInfo = ()=>{
+    const handleSubmitInfo = async (body) =>{
         try {
-            const response = submitInfo(bodyInfo)
+            console.log(body)
+            let response = await submitInfo(body)
+            response = await response.data
             console.log(response)
-
+            onClose()
         } catch (e) {
-
+            console.log(e)
         }
-
     }
     return (
-        <Dialog open={open} onClose={onClose} >
+        <Dialog open={open}  >
             <DialogTitle>{dialogTitle} {mesa}</DialogTitle>
             {
                 isinput ?
@@ -24,7 +27,6 @@ const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, i
                         margin="dense"
                         id={'votantes' + mesa}
                         type="number"
-                        //fullWidth
                         variant="outlined"
                     />
                 </DialogContent> : null
@@ -32,7 +34,7 @@ const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, i
             <DialogActions sx={{mr: 4}}>
                 {
                     !acceptButton ? <>
-                        <Button onClick={()=>handleSubmitInfo()}>
+                        <Button onClick={()=>handleSubmitInfo(bodyInfo)} >
                             <Typography sx={{mx: 5}} variant="h6" color="primary.main">
                                 SI
                             </Typography>
@@ -43,19 +45,16 @@ const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, i
                             </Typography>
                         </Button>
                     </> : <>
-                        <Button onClick={onClose} href='/home'>
+                        <Button onClick={()=>onClose()} >
                             <Typography variant="h6" color="primary.main">
                                 ACEPTAR
                             </Typography>
                         </Button>
                     </>
                 }
-
-
             </DialogActions>
         </Dialog>
     )
-    //'Ingrese la cantidad de votantes de la' + mesa
 }
 
 export default CommonDialog

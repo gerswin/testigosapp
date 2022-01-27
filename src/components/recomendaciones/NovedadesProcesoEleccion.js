@@ -8,7 +8,7 @@ import {Box, Container, FormControl, Typography, Dialog, DialogTitle} from "@mui
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
 import useFetch from "../../utilities/useFetch";
-import DropdownInput from "../commons/DropdownInput";
+import DropdownInput from "../formFieldsControlled/DropdownInput";
 import validateFunction from "../../utilities/validateFields";
 import CommonTextField from "../formFieldsControlled/CommonTextField";
 import CommonDialog from "../commons/CommonDialog";
@@ -105,7 +105,6 @@ const NovedadesProcesoEleccion = () => {
                     if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
-                            //await postNovedadesData(body)
                         }
                }}
                 else {
@@ -114,8 +113,6 @@ const NovedadesProcesoEleccion = () => {
                 }
             } catch (e) {
                 console.log(e)
-                //<Alert severity="error"> {error.message} </Alert>
-                //open notification
             }
         }, [ formState ]
     )
@@ -170,8 +167,8 @@ const NovedadesProcesoEleccion = () => {
                                     />
                                 ))
                             }
+                            <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
                         </FormControl>
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
                 <CommonDialog

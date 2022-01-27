@@ -10,32 +10,65 @@ import Footer from "../footer/Footer";
 import validateErrors from '../../utilities/validateErrors'
 import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
+import React from "react";
+import CommonDialog from "../commons/CommonDialog";
+
+const radioq1 = [
+    {
+        label: 'Si',
+        value: 'SI'
+    },
+    {
+        label: 'No',
+        value: 'NO'
+    }
+]
+
+const novedades = [
+    {
+        label: 'Lluvia intensa',
+        value: 'lluvia-intensa'
+    },
+    {
+        label: 'Retraso personal',
+        value: 'retraso-personal'
+    },
+    {
+        label: 'Calamidad Familiar',
+        value: 'calamidad-familiar'
+    },
+    {
+        label: 'Caos Vehicular',
+        value: 'caos-vehicular'
+    },
+    {
+        label: 'Disturbios',
+        value: 'disturbios'
+    },
+]
 
 const AsistenciaPuestosVotacion = () => {
     const { control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
         defaultValues: {
             q1: '',
-            q2: ''
+            q1Novelty: ''
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
     const [open, setOpen] = useState(false)
-    const [dialogTitle, setDialogTitle] = useState('¿Confirma su respuesta?')
     const [displayQ2, setDisplayQ2] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
+    const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const values = watch()
+    const url = process.env.API_PUESTOS_URL + '/delegates/places'
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
-    }, [formState])
-
-    useEffect(() => {
-        //console.log(values)
         const handleQ2Display = () => {
-            if (values.q1 === 'si') {
+            if (values.q1 === 'SI') {
                 setDisplayQ2(false)
             }
-            if (values.q1 === 'no') {
+            if (values.q1 === 'NO') {
                 setDisplayQ2(true)
             }
         }
@@ -47,76 +80,70 @@ const AsistenciaPuestosVotacion = () => {
             type: 'radioGroup',
             name: 'q1',
             display: true,
+            row: true,
             label: '¿Se encuentra en el puesto de votación?',
             rules: {
                 required: true,
-                type: 'radio',
-            },
-            options: [
-                {
-                    label: 'Si',
-                    value: 'si'
-                },
-                {
-                    label: 'No',
-                    value: 'no'
+                type: 'string',
+                validate: (value) => {
+                    if (radioq1.findIndex(option => option.value === value) === -1) {
+                        return 'invalid selection'
+                    }
                 }
-            ]
+            },
+            options: radioq1
         },
         {
             type: 'radioGroup',
-            name: 'q2',
+            name: 'q1Novelty',
             display: displayQ2,
             label: 'Seleccione una novedad en caso de no asistir al puesto de votación *',
             rules: {
-                required: true,
-                type: "radio"
+                required: values.q1 === 'NO',
+                type: "string",
+                validate: (value) => {
+                    if (novedades.findIndex(option => option.value === value) === -1) {
+                        return 'Novedades no seleccionadas'
+                    }
+                }
             },
-            options: [
-                {
-                    label: 'Lluvia intensa',
-                    value: 'lluvia-intensa'
-                },
-                {
-                    label: 'Retraso personal',
-                    value: 'retraso-personal'
-                },
-                {
-                    label: 'Calamidad Familiar',
-                    value: 'calamidad-familiar'
-                },
-                {
-                    label: 'Caos Vehicular',
-                    value: 'caos-vehicular'
-                },
-                {
-                    label: 'Disturbios',
-                    value: 'disturbios'
-                },
-            ]
+            options: novedades
         }
     ]
 
-
-    const handleOpen = ( mesa) => {
-        setOpen(true)
+    const body = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "departmentCode": "88",
+                "municipalityCode": "220",
+                "zoneCode": "15",
+                "placeCode": "02",
+                "document":"1143858325",
+                "question":"1",
+                "answer": values.q1,
+                "novelties": values.q1Novelty,
+            }
+        }
+    }
+    const handleOpen = () => {
+        setConfirmaRespuesta(true)
+        setOpen( true)
     }
     const handleClose = () => {
         setOpen(false)
     }
 
-    const url = process.env.API_PUESTOS_URL + '/novelties'
-
     const postNovedadesData = async (body) => {
         let response
         try {
             response = await axios.post( url, body )
-            response = response.data
+            response = await response.data
             console.log(response)
             if (response.data.status === 201) {
-                setDialogTitle('La novedad ha sido enviada')
                 setAcceptButton(true)
             }
+            return response
         } catch (e) {
             console.log(e)
         }
@@ -129,10 +156,10 @@ const AsistenciaPuestosVotacion = () => {
                 validateFunction(fields, errors, values, setError)
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
+                    console.log('level1', errors)
                     if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
-                            //await postNovedadesData(body)
                         }
                     }}
                 else {
@@ -167,23 +194,39 @@ const AsistenciaPuestosVotacion = () => {
                     <Typography variant="h2" sx={{mb: 5}} >
                         Informe puesto de votación
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit(data => console.log(data))} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
+                    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
                         <FormControl component="fieldset" sx={{width: 1}}>
                             {
                                 fields.map(field => field.display === true ? (
-                                    <CommonRadioGroup
-                                        key={field.name}
-                                        field={field}
-                                        error={errors[field.name]}
-                                        control={control}
-                                    />
+                                    <>
+                                        <CommonRadioGroup
+                                            id={field.name}
+                                            key={field.name}
+                                            field={field}
+                                            error={errors[field.name]}
+                                            control={control}
+                                        />
+                                    </>
                                 ) : null )
                             }
+                            <CommonButton style={{margin: '0 auto'}} sx={{alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
                         </FormControl>
-                        <CommonButton style={{margin: '0 auto'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
+                        {
+                            confirmaRespuesta ?
+                                <CommonDialog
+                                    open={open}
+                                    onClose={handleClose}
+                                    submitInfo={postNovedadesData}
+                                    bodyInfo={body}
+                                    dialogTitle={'¿Confirma su respuesta?'}
+                                    acceptButton={acceptButton}
+                                /> : null
+                        }
                     </Box>
+
                 </Box>
             </Container>
+
             <Footer/>
         </>
     )

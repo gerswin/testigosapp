@@ -6,48 +6,61 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import Box from "@mui/material/Box";
+import FormHelperText from '@mui/material/FormHelperText';
 import {TextField} from "@mui/material";
 
-const CommonRadioGroup = ({ field, control, error,  }) => {
-    const { name, label, rules, options } = field
-    const { field: {value, onChange}, fieldState, formState} = useController({name, control, rules})
+const CommonRadioGroup = ({ field, control, error }) => {
+    const { name, label, rules, options, row } = field
+    const { field: {value, onChange, onBlur}} = useController({name, control, rules})
 
+    //console.log(error)
     return (
-        <Box sx={{width: 1}}>
-            <FormLabel>
-                <Typography variant="h3" sx={{mb: '10px', mt: 4, color: 'grey.grisOscuro'}}>
-                    {label}
+        <>
+            <FormLabel htmlFor={field.name} >
+                <Typography variant="h3" sx={{mb: '10px', mt: 4, color: error && error.isError ? 'error.main' : 'grey.grisOscuro'}}>
+                    {field.label}
                 </Typography>
             </FormLabel>
-
             <RadioGroup
-                error={error}
+                sx={{width: 1, }}
+                row={row}
                 name={name}
-                value={value }
+                value={value}
                 onChange={onChange}
+                onBlur={onBlur}
             >
                 {options.map(option => (
-                    option.addInput === true ?
-                        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <FormControlLabel
-                                key={option.value} value={option.value}
-                                control={<Radio/>} label={option.label}
+                        option.addInput === true ?
+                            <Box key={option.value} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <FormControlLabel
+                                    name={name}
+                                    value={option.value}
+                                    control={<Radio/>}
+                                    label={option.label}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                />
+                                <TextField
+                                    type="text"
+                                    variant="outlined"
+                                    required={true}
+                                    autoFocus={true}
+                                    onBlur={onBlur}
+                                />
+                            </Box>
+                            : <FormControlLabel
+                                name={name}
+                                key={option.value}
+                                value={option.value}
+                                control={<Radio/>}
+                                label={option.label}
+                                onBlur={onBlur}
+                                onChange={onChange}
                             />
-                            <TextField
-                                type="text"
-                                variant="outlined"
-                                required={true}
-                                autoFocus={true}
-                            />
-                        </Box>
-                         : <FormControlLabel
-                            key={option.value} value={option.value}
-                            control={<Radio/>} label={option.label}
-                        />
                     )
                 )}
             </RadioGroup>
-        </Box>
+        </>
     )
 }
 
