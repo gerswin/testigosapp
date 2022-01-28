@@ -60,7 +60,14 @@ const InformesPuestosVotacion11 = () => {
                 {
                     label: 'Otra',
                     value: 'q2d',
-                    addInput: true
+                    addInput: true,
+                    inputLabel: {
+                        name: 'q11AddInput',
+                        rules: {
+                            required: true,
+                        },
+                        //error: errors.q6NoveltyAddInput
+                    }
                 }
             ],
             inputLabel: {

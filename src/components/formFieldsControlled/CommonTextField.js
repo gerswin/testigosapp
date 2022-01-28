@@ -5,7 +5,7 @@ import { useController } from 'react-hook-form'
 import TextField from '@mui/material/TextField';
 import {Typography} from "@mui/material";
 
-const CommonTextField = ({ name, label, control, rules, error, multiline, defaultValue }) => {
+const CommonTextField = ({ name, label, control, rules, error, multiline, defaultValue, disabled }) => {
 
     const { field: {value, onChange, onBlur} } = useController({name, control, rules})
 
@@ -26,11 +26,11 @@ const CommonTextField = ({ name, label, control, rules, error, multiline, defaul
                     error={error && error.isError}
                     onBlur={onBlur}
                     defaultValue={defaultValue}
+                    disabled={disabled}
                 />
         }
     }
     return (
-
         <div>
             {
                 multiline ? <>
@@ -45,7 +45,6 @@ const CommonTextField = ({ name, label, control, rules, error, multiline, defaul
                             required
                             fullWidth
                             name={name}
-                            //label={label}
                             type={rules.type}
                             id={name}
                             autoComplete="current-password"

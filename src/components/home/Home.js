@@ -19,33 +19,34 @@ const Home = () => {
         {
             title: 'Informes del puesto',
             img: iconInformes,
-            href: 'informe_puesto_de_votacion'
+            href: 'submodulo_informes_puesto'
         },
         {
             title: 'Novedades',
             img: iconNovedades,
-            href: 'novedades'
+            href: 'novedades_proceso_eleccion'
         },
         {
             title: 'Tips',
             img: iconTips,
-            href: 'tips'
+            href: 'informes_puestos_votacion3'
         },
         {
             title: 'Verificar E-15',
             img: iconVerificarqr,
-            href: 'verificar_e-15'
+            href: 'verificar_credencial_e15'
         },
         {
             title: 'Credenciales delegados',
             img: iconCredenciales,
-            href: 'credenciales_delegados'
+            href: 'generar_credencial_delegado1'
         },
         {
             title: 'Alertas',
             img: iconAlertas,
             href: 'alertas'
         },
+
     ]
 
     return (

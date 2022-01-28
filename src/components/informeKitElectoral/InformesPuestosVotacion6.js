@@ -1,44 +1,129 @@
 import {Route} from "react-router-dom";
 import {useForm} from "react-hook-form";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import HeaderCustom from "../header/HeaderCustom";
 import {Box, Container, FormControl, TextField, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
+import useFetch from "../../utilities/useFetch";
+import validateErrors from "../../utilities/validateErrors";
+import axios from "axios";
+import validateFunction from "../../utilities/validateFields";
+import _ from "underscore";
+import CommonDialog from "../commons/CommonDialog";
+
+const q5Options = [
+    {
+        label: 'Si',
+        value: 'SI'
+    },
+    {
+        label: 'No',
+        value: 'NO',
+    }
+]
 
 const InformesPuestosVotacion6 = () => {
 
-    const { formState, watch, control} = useForm({
+    const { control, formState, clearErrors, getValues, setError } = useForm({
         defaultValues: {
-            q1: '',
-            q2: ''
+            q5: '',
         }
     })
-    const { errors } = formState;
-    const values = watch()
+    const { errors, touchedFields, dirtyFields } = formState;
+    const [open, setOpen] = useState(false)
+    const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [acceptButton, setAcceptButton] = useState(false)
+    const values = getValues()
+    const url =  process.env.API_PUESTOS_URL + '/delegates/places'
+
+    useEffect(() => {
+        validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
+    }, [formState])
 
     const fields = [
         {
             type: 'radioGroup',
-            name: 'q1',
+            name: 'q5',
+            row: true,
             label: '¿Hubo presencia de la mesa de justicia?',
             rules: {
                 required: true,
-                type: 'radio',
-            },
-            options: [
-                {
-                    label: 'Si',
-                    value: 'si'
-                },
-                {
-                    label: 'No',
-                    value: 'no',
+                type: 'string',
+                validate: (value) => {
+                    if (q5Options.findIndex(option => option.value === value) === -1) {
+                        return 'invalid selection'
+                    }
                 }
-            ]
+            },
+            options: q5Options
         }
     ]
+
+    const body = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "departmentCode": "88",
+                "municipalityCode": "220",
+                "zoneCode": "15",
+                "placeCode": "02",
+                "document":"1143858325",
+                "question": "5",
+                "answer": values.q5,
+                "novelties":"",
+                "inputText":"",
+                "valueText":""
+            }
+        }
+    }
+
+    const handleOpen = () => {
+        setConfirmaRespuesta(true)
+        setOpen( true)
+    }
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const postNovedadesData = async (body) => {
+        let response
+        try {
+            response = await axios.post( url, body )
+            response = await response.data
+            console.log(response)
+            if (response.data.status === 201) {
+                setAcceptButton(true)
+            }
+            return response
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const onSubmit = useCallback(
+        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+            clearErrors()
+            try {
+                validateFunction(fields, errors, values, setError)
+                if (_.isEmpty( errors )) {
+                    validateFunction(fields, errors, values, setError)
+                    console.log('level1', errors)
+                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
+                        if (_.isEmpty( errors )) {
+                            handleOpen()
+                        }
+                    }}
+                else {
+                    console.log('level4', errors)
+                    validateFunction(fields, errors, values, setError)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }, [ formState ]
+    )
 
     return (
         <>
@@ -76,7 +161,19 @@ const InformesPuestosVotacion6 = () => {
                             )
                         }
                     </FormControl>
-                    <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
+                    <CommonButton style={{margin: '0 auto'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} sx={{marginTop: 8}} text={'GUARDAR'} type='primario' />
+
+                    {
+                        confirmaRespuesta ?
+                            <CommonDialog
+                                open={open}
+                                onClose={handleClose}
+                                submitInfo={postNovedadesData}
+                                bodyInfo={body}
+                                dialogTitle={'¿Confirma su respuesta?'}
+                                acceptButton={acceptButton}
+                            /> : null
+                    }
                 </Box>
             </Container>
             <Footer/>

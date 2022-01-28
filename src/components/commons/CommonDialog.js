@@ -10,8 +10,9 @@ const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, i
             console.log(body)
             let response = await submitInfo(body)
             response = await response.data
-            console.log(response)
+            //console.log(response)
             onClose()
+            return response
         } catch (e) {
             console.log(e)
         }

@@ -13,6 +13,27 @@ import validateFunction from "../../utilities/validateFields";
 import CommonTextField from "../formFieldsControlled/CommonTextField";
 import CommonDialog from "../commons/CommonDialog";
 import validateErrors from '../../utilities/validateErrors'
+import {useNavigate} from "react-router-dom";
+
+const data =  [
+    {
+        label: 'Disturbios',
+        id: 4
+    },
+    {
+        label: 'Sucesos ambientales',
+        id: 10
+    },
+    {
+        label: 'Conflictos',
+        id: 3
+    },
+    {
+        label: 'Protestas',
+        id: 5
+    },
+]
+
 
 const NovedadesProcesoEleccion = () => {
     const { control, handleSubmit, formState, clearErrors, getValues, setError} = useForm({
@@ -22,12 +43,14 @@ const NovedadesProcesoEleccion = () => {
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
-    const url = 'https://apipuestos-dev.registraduria.org/novelties'
-    const { data, loading, error } = useFetch(url)
+    const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    //const { data, loading, error } = useFetch(url)
     const [dialogTitle, setDialogTitle] = useState('¿Desea enviar la novedad?')
     const [open, setOpen] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const values = getValues()
+    let navigate = useNavigate();
+
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -65,9 +88,11 @@ const NovedadesProcesoEleccion = () => {
 
     const body = {
         "data": {
-            "type": "typeNovelties",
+            "type": "placesReports",
             "attributes": {
-                "eventTypeCode": "01",
+                "document":"1120387794",
+                "question":"12",
+                "observation":"protestas",
                 "novelty": values.newNovelty
             }
         }
@@ -89,7 +114,9 @@ const NovedadesProcesoEleccion = () => {
             if (response.data.status === 201) {
                 setDialogTitle('La novedad ha sido enviada')
                 setAcceptButton(true)
+                navigate('/novedades_proceso_eleccion')
             }
+            return response
         } catch (e) {
             console.log(e)
         }
@@ -141,17 +168,15 @@ const NovedadesProcesoEleccion = () => {
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit(data => console.log(data))} noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='left'>
                         <FormControl component="fieldset" sx={{width: 1}}>
-                            <>
-                                <DropdownInput
-                                    name={fields[0].name}
-                                    label={fields[0].label}
-                                    defaultValue={fields[0].defaultValue}
-                                    options={fields[0].options}
-                                    rules={fields[0].rules}
-                                    control={control}
-                                    error={errors[fields[0].name]}
-                                />
-                            </>
+                            <DropdownInput
+                                name={fields[0].name}
+                                label={fields[0].label}
+                                defaultValue={fields[0].defaultValue}
+                                options={fields[0].options}
+                                rules={fields[0].rules}
+                                control={control}
+                                error={errors[fields[0].name]}
+                            />
 
                             {
                                 fields.slice(1, 2).map(field => (

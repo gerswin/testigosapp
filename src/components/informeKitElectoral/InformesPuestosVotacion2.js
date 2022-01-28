@@ -1,4 +1,4 @@
-import {Route} from "react-router-dom";
+import {Route, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import React, {useCallback, useEffect, useState} from "react";
 import HeaderCustom from "../header/HeaderCustom";
@@ -19,7 +19,7 @@ const radioq2 = [
     },
     {
         label: 'Si con novedad',
-        value: 'Q2SICON',
+        value: 'SI_CON_NOVEDAD',
     },
     {
         label: 'No',
@@ -44,6 +44,12 @@ const q2SiConOptions = [
         label: 'Otra',
         value: 'otra',
         addInput: true,
+        inputLabel: {
+            name: 'q2SiConAddInput',
+            rules: {
+                required: true,
+            },
+        }
     },
 ]
 
@@ -63,7 +69,13 @@ const q2NoOptions = [
     {
         label: 'Otra',
         value: 'otra',
-        addInput: true
+        addInput: true,
+        inputLabel: {
+            name: 'q2NoAddInput',
+            rules: {
+                required: true,
+            },
+        }
     },
 ]
 
@@ -72,7 +84,9 @@ const InformesPuestosVotacion2 = () => {
         defaultValues: {
             q2: '',
             q2SiCon: '',
-            q2No: ''
+            q2No: '',
+            q2SiConAddInput: '',
+            q2NoAddInput: ''
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
@@ -84,6 +98,7 @@ const InformesPuestosVotacion2 = () => {
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const values = watch()
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    let navigate = useNavigate();
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -96,7 +111,7 @@ const InformesPuestosVotacion2 = () => {
                 setDisplayQ2No(false)
                 setDisplayQ2SiCon(false)
             }
-            if (values.q2 === 'Q2SICON') {
+            if (values.q2 === 'SI_CON_NOVEDAD') {
                 setDisplayQ2No(false)
                 setDisplayQ2SiCon(true)
             }
@@ -133,7 +148,7 @@ const InformesPuestosVotacion2 = () => {
             display: displayQ2SiCon,
             label: 'Seleccione una novedad',
             rules: {
-                required: values.q2 === 'Q2SICON',
+                required: values.q2 === 'SI_CON_NOVEDAD',
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
@@ -153,30 +168,40 @@ const InformesPuestosVotacion2 = () => {
         }
     ]
 
-    const body = {
+    const sendNovelty = () => {
+        switch (values.q2) {
+            case 'NO':
+                return values.q2No
+            case 'SI':
+                return ''
+            case 'SI_CON_NOVEDAD':
+                return values.q2SiCon
+        }
+    }
+
+    const bodySi = {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "departmentCode": "88",
-                "municipalityCode": "220",
-                "zoneCode": "15",
-                "placeCode": "02",
-                "document":"1143858325",
+                "document":"1120387794",
                 "question":"2",
                 "answer": values.q2,
-                "novelties": () => {
-                    switch (values.q2) {
-                        case 'NO':
-                            return values.q2No
-                        case 'SI':
-                            return ''
-                        case 'Q2SICON':
-                            return values.q2SiCon
-                    }
-                }
             }
         }
     }
+
+    const bodyNo = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "document":"1120387794",
+                "question":"2",
+                "answer": values.q2,
+                "novelty": sendNovelty()
+            }
+        }
+    }
+
     const postNovedadesData = async (body) => {
         let response
         try {
@@ -185,6 +210,7 @@ const InformesPuestosVotacion2 = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
+                navigate('/home')
             }
             return response
         } catch (e) {
@@ -193,7 +219,7 @@ const InformesPuestosVotacion2 = () => {
     }
     const fieldValidation = () => {
         switch(values.q2){
-            case 'Q2SICON':
+            case 'SI_CON_NOVEDAD':
                 return dirtyFields.q2SiCon !== undefined
             case 'NO':
                 return dirtyFields.q2No !== undefined
@@ -256,7 +282,6 @@ const InformesPuestosVotacion2 = () => {
                             {
                                 fields.slice(0, 1).map(field => (
                                     <CommonRadioGroup
-                                        id={field.name}
                                         key={field.name}
                                         field={field}
                                         error={errors[field.name]}
@@ -267,7 +292,6 @@ const InformesPuestosVotacion2 = () => {
                             {
                                 fields.slice(1,3).map(field => field.display === true ? (
                                     <CommonRadioGroup
-                                        id={field.name}
                                         key={field.name}
                                         field={field}
                                         error={errors[field.name]}
@@ -283,7 +307,7 @@ const InformesPuestosVotacion2 = () => {
                                     open={open}
                                     onClose={handleClose}
                                     submitInfo={postNovedadesData}
-                                    bodyInfo={body}
+                                    bodyInfo={ values.q2 === 'SI' ? bodySi : bodyNo}
                                     dialogTitle={'¿Confirma su respuesta?'}
                                     acceptButton={acceptButton}
                                 /> : null

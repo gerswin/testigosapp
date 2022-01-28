@@ -13,7 +13,7 @@ const DropdownInput = ({ name, label, control, rules, error, options, defaultVal
                     key={option.id}
                     value={ option.id }
                 >
-                    { option.attributes.novelty}
+                    { option.label}
                 </MenuItem>
             ))
         }

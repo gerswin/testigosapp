@@ -1,20 +1,10 @@
 import react from 'react';
 import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
-function createData(field, info) {
-    return { field, info };
-}
 
-const rows = [
-    createData('Departamento', 'META', ),
-    createData('Municipio', 'VILLAVICENCIO'),
-    createData('Zona', '04'),
-    createData('Puesto', 'COLEGIO COFREM'),
-    createData('Direccion', 'CARRERA 20 - A NO. 35 - 02'),
-    createData('Mesas asignadas', 'DESDE 10 HASTA 19'),
-];
 
-const BasicTable = () => {
+
+const BasicTable = ({rows}) => {
     return (
         <TableContainer sx={{mt: 5}}>
             <Table sx={{minWidth: 650, mt: 5}} aria-label="simple table">

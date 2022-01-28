@@ -41,7 +41,7 @@ const Login = () => {
             console.log({currentUser})
 
             if (await currentUser ) {
-                navigate("/home")
+                navigate("/informes_asistencia")
             }
         } catch (error) {
             console.log('error signing in', error);

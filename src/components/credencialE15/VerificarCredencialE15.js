@@ -72,7 +72,7 @@ const VerificarCredencialE15 = () => {
                                 </Paper>
                             </a>
                         </FormControl>
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={'informacion_general'} text={'REGISTRAR ASISTENCIA'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={'verificar_credencial_e15info'} text={'REGISTRAR ASISTENCIA'} type='primario' />
                     </Box>
                 </Box>
             </Container>

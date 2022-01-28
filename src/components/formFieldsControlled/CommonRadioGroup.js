@@ -8,12 +8,12 @@ import Radio from "@mui/material/Radio";
 import Box from "@mui/material/Box";
 import FormHelperText from '@mui/material/FormHelperText';
 import {TextField} from "@mui/material";
+import CommonTextField from "./CommonTextField";
 
 const CommonRadioGroup = ({ field, control, error }) => {
-    const { name, label, rules, options, row } = field
+    const { name, rules, options, row } = field
     const { field: {value, onChange, onBlur}} = useController({name, control, rules})
 
-    //console.log(error)
     return (
         <>
             <FormLabel htmlFor={field.name} >
@@ -40,12 +40,13 @@ const CommonRadioGroup = ({ field, control, error }) => {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                 />
-                                <TextField
-                                    type="text"
-                                    variant="outlined"
-                                    required={true}
-                                    autoFocus={true}
-                                    onBlur={onBlur}
+                                <CommonTextField
+                                    key={option.inputLabel.name}
+                                    name={option.inputLabel.name}
+                                    value={value}
+                                    disabled={value !== 'otra'}
+                                    control={control}
+                                    rules={option.inputLabel.rules}
                                 />
                             </Box>
                             : <FormControlLabel

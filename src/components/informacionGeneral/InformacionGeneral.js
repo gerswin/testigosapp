@@ -7,10 +7,24 @@ import { useForm } from "react-hook-form";
 import BasicTable from "../commons/BasicTable";
 import Footer from "../footer/Footer";
 
+function createData(field, info) {
+    return { field, info };
+}
+
+const rows = [
+    createData('Departamento', 'META', ),
+    createData('Municipio', 'VILLAVICENCIO'),
+    createData('Puesto', 'COLEGIO COFREM'),
+    createData('Direccion', 'CARRERA 20 - A NO. 35 - 02'),
+    createData('Zona', '04'),
+    createData('Mesas asignadas', 'DESDE 10 HASTA 19'),
+    createData('Código localidad', '03'),
+    createData('Nombre localidad', 'COMUNA 03'),
+];
+
 const InformacionGeneral = () => {
     const { control, formState} = useForm()
     const {errors} = formState;
-
 
     const handleContinue = (e) => {
         e.preventDefault()
@@ -60,7 +74,7 @@ const InformacionGeneral = () => {
                         Este es el lugar donde ejercerá como delegado de puesto de votación
                     </Typography>
 
-                    <BasicTable/>
+                    <BasicTable rows={rows}/>
 
                     <CommonButton type="primario" text="CONTINUAR" sx={{mt: 6}} href=""/>
 

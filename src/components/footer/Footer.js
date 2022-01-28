@@ -36,7 +36,7 @@ const Footer = () => {
                                 fontFamily: "'Roboto', sans-serif",
                                 fontWeight: 500, fontSize: "12px"
                             }
-                        }} label="Usuario" icon={<PersonIcon />}
+                        }} label="Usuario" href='informacion_general' icon={<PersonIcon />}
                     />
                     <BottomNavigationAction sx={{
                         flexDirection: 'row',

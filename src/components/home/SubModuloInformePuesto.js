@@ -8,6 +8,7 @@ import CommonButton from "../commons/CommonButton";
 import aperturaPuesto from "../../images/informes_puesto/apertura_puesto.svg"
 import cierrePuesto from "../../images/informes_puesto/cierre_del_puesto.svg"
 import reporteVotantes from "../../images/informes_puesto/reporte_votantes.svg"
+import iconTips from "../../images/home/tips.svg";
 
 const SubModuloInformePuestoVotacion = () => {
     const classes = useStyles()
@@ -16,23 +17,63 @@ const SubModuloInformePuestoVotacion = () => {
         {
             title: 'Apertura del puesto',
             img: aperturaPuesto,
-            href: 'apertura_del_puesto'
+            href: 'informes_puestos_votacion2'
         },
         {
             title: 'Cierre del puesto',
             img: cierrePuesto,
-            href: 'cierre_del_puesto'
+            href: ''
         },
         {
             title: '1 Reporte de votantes',
             img: reporteVotantes,
-            href: '1_reporte_de_votantes'
+            href: 'informe_kit_electoral'
         },
         {
             title: '2 Reporte de votantes',
             img: reporteVotantes,
-            href: '2_reporte_de_votantes'
-        }
+            href: 'informes_puestos_votacion7'
+        },
+        {
+            title: 'Informe 5',
+            img: iconTips,
+            href: 'informes_puestos_votacion5'
+        },
+        {
+            title: 'Informe 6',
+            img: iconTips,
+            href: 'informes_puestos_votacion6'
+        },
+        {
+            title: 'Informe 8',
+            img: iconTips,
+            href: 'informes_puestos_votacion8'
+        },
+        {
+            title: 'Informe 9',
+            img: iconTips,
+            href: 'informes_puestos_votacion9'
+        },
+        {
+            title: 'Informe 10',
+            img: iconTips,
+            href: 'informes_puestos_votacion10'
+        },
+        {
+            title: 'Informe 11',
+            img: iconTips,
+            href: 'informes_puestos_votacion11'
+        },
+        {
+            title: 'Informe 12',
+            img: iconTips,
+            href: 'informes_puestos_votacion12'
+        },
+        {
+            title: 'Recomendaciones',
+            img: iconTips,
+            href: 'recomendaciones_encuesta'
+        },
     ]
 
     return (

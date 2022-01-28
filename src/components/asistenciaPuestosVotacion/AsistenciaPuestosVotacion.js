@@ -198,15 +198,13 @@ const AsistenciaPuestosVotacion = () => {
                         <FormControl component="fieldset" sx={{width: 1}}>
                             {
                                 fields.map(field => field.display === true ? (
-                                    <>
-                                        <CommonRadioGroup
-                                            id={field.name}
-                                            key={field.name}
-                                            field={field}
-                                            error={errors[field.name]}
-                                            control={control}
-                                        />
-                                    </>
+                                    <CommonRadioGroup
+                                        id={field.name}
+                                        key={field.name}
+                                        field={field}
+                                        error={errors[field.name]}
+                                        control={control}
+                                    />
                                 ) : null )
                             }
                             <CommonButton style={{margin: '0 auto'}} sx={{alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />

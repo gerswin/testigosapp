@@ -44,7 +44,6 @@ function App(props) {
                   <Route path="/" element={ <Login/> } />
                   <Route path="home" element={ <Home/> }/>
                   <Route path="informes_asistencia" element={ <AsistenciaPuestosVotacion/> }/>
-                  <Route path="informe_puesto_de_votacion" element={ <InformacionGeneral/> }/>
                   <Route path="cambiar_contrasena" element={ <ForgotPassword/> }/>
                   <Route path="restablecer_contrasena" element={ <PasswordRecover/> }/>
                   <Route path="informacion_general" element={ <InformacionGeneral/> }/>
@@ -59,7 +58,6 @@ function App(props) {
                   <Route path="informes_puestos_votacion9" element={ <InformesPuestosVotacion9/>  } />
                   <Route path="informes_puestos_votacion10" element={ <InformesPuestosVotacion10/>  } />
                   <Route path="informes_puestos_votacion11" element={ <InformesPuestosVotacion11/>  } />
-                  <Route path="informes_puestos_votacion12" element={ <InformesPuestosVotacion12/>  } />
                   <Route path="informes_puestos_votacion12" element={ <InformesPuestosVotacion12/>  } />
                   <Route path="recomendaciones_encuesta" element={ <RecomendacionesEncuesta/>  } />
                   <Route path="novedades_proceso_eleccion" element={ <NovedadesProcesoEleccion/>  } />

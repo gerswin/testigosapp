@@ -8,6 +8,22 @@ import BasicTable from "../commons/BasicTable";
 import Footer from "../footer/Footer";
 import React from "react";
 
+
+function createData(field, info) {
+    return { field, info };
+}
+
+const rows = [
+    createData('Danilo Santamaria',  ),
+    createData('CC 100987650', ),
+    createData('Departamento', 'META', ),
+    createData('Municipio', 'VILLAVICENCIO'),
+    createData('Zona', '04'),
+    createData('Mesas asignadas', 'DESDE 10 HASTA 19'),
+    createData('Código localidad', '03'),
+    createData('Nombre localidad', 'COMUNA 03'),
+];
+
 const GenerarCredencialDelegado = () => {
     const { control, formState} = useForm()
     const {errors} = formState;
@@ -52,7 +68,7 @@ const GenerarCredencialDelegado = () => {
                     mt: 1,
                     mb: 20
                 }}>
-                    <BasicTable/>
+                    <BasicTable rows={rows}/>
                     <CommonButton type="primario" text="ACEPTAR" sx={{mt: 6}} href=""/>
                 </Box>
             </Container>
