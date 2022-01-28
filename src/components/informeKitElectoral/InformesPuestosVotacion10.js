@@ -111,7 +111,7 @@ const InformesPuestosVotacion10 = () => {
                             }
                         </FormControl>
 
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'informes_puestos_votacion11'} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
             </Container>

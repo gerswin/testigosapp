@@ -210,7 +210,7 @@ const InformesPuestosVotacion2 = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
-                navigate('/home')
+                navigate('/informes_puestos_votacion3')
             }
             return response
         } catch (e) {

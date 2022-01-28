@@ -1,4 +1,4 @@
-import {Route} from "react-router-dom";
+import {Route, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import React, {useCallback, useEffect, useState} from "react";
 import HeaderCustom from "../header/HeaderCustom";
@@ -37,6 +37,7 @@ const InformesPuestosVotacion6 = () => {
     const [acceptButton, setAcceptButton] = useState(false)
     const values = getValues()
     const url =  process.env.API_PUESTOS_URL + '/delegates/places'
+    let navigate = useNavigate();
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -65,16 +66,9 @@ const InformesPuestosVotacion6 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "departmentCode": "88",
-                "municipalityCode": "220",
-                "zoneCode": "15",
-                "placeCode": "02",
-                "document":"1143858325",
-                "question": "5",
+                "document":"1120387794",
+                "question":"5",
                 "answer": values.q5,
-                "novelties":"",
-                "inputText":"",
-                "valueText":""
             }
         }
     }
@@ -95,6 +89,7 @@ const InformesPuestosVotacion6 = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
+                navigate('/informes_puestos_votacion5')
             }
             return response
         } catch (e) {

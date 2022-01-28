@@ -1,4 +1,4 @@
-import {Route} from "react-router-dom";
+import {Route, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import React, {useCallback, useEffect, useState} from "react";
 import _ from "underscore";
@@ -42,6 +42,7 @@ const InformesPuestosVotacion5 = () => {
     const [acceptButton, setAcceptButton] = useState(false)
     const [displayQ6Mesas, setDisplayQ6Mesas] = useState(false)
     const [displayQ6Novelty, setDisplayQ6Novelty ] = useState(false)
+    let navigate = useNavigate();
 
     const values = watch()
     const url =  process.env.API_PUESTOS_URL + '/delegates/places'
@@ -183,6 +184,8 @@ const InformesPuestosVotacion5 = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
+                //deshabilitar menu de apertura de puesto..
+                navigate('/home')
             }
             return response
         } catch (e) {

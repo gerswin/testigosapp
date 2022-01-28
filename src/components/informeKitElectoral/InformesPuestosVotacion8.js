@@ -82,7 +82,7 @@ const InformesPuestosVotacion8 = () => {
                             Colombia garantiza el voto en Braile, siendo el Instituto Nacional para Ciegos -INCI quién imprime los tarjetones en braile, de acuerdo al mandato de la Corte Constitucional de la Sentencia T-487 de 2003
                         </Typography>
 
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={'informes_puestos_votacion9'} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
             </Container>

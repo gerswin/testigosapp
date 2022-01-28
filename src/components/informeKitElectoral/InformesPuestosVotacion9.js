@@ -81,7 +81,7 @@ const InformesPuestosVotacion9 = () => {
                         <Typography variant="actionDrop">
                             Las copias de los E-14 delegados se fijarán en lugares visibles para que los Testigos Electorales puedan tomar fotos o grabar los documentos originales.
                         </Typography>
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={''} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} href={'informes_puestos_votacion10'} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
             </Container>

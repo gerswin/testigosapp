@@ -159,7 +159,7 @@ const InformeKitElectoral = () => {
                     ))
                 }
                 <Grid container columns={1} direction="column" alignItems='center' >
-                    <CommonButton type="primario" text="GUARDAR" href="2_informe_puestos_votacion" sx={{mb: 10, mt: 20}}/>
+                    <CommonButton type="primario" text="GUARDAR" href="informes_puestos_votacion2" sx={{mb: 10, mt: 20}}/>
                 </Grid>
                 <Footer/>
             </Container>

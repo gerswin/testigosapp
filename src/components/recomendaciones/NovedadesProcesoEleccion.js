@@ -51,7 +51,6 @@ const NovedadesProcesoEleccion = () => {
     const values = getValues()
     let navigate = useNavigate();
 
-
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
     }, [formState])

@@ -29,7 +29,7 @@ const Home = () => {
         {
             title: 'Tips',
             img: iconTips,
-            href: 'informes_puestos_votacion3'
+            href: ''
         },
         {
             title: 'Verificar E-15',
@@ -46,7 +46,6 @@ const Home = () => {
             img: iconAlertas,
             href: 'alertas'
         },
-
     ]
 
     return (

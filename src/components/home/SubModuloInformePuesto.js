@@ -17,62 +17,22 @@ const SubModuloInformePuestoVotacion = () => {
         {
             title: 'Apertura del puesto',
             img: aperturaPuesto,
-            href: 'informes_puestos_votacion2'
+            href: 'informe_kit_electoral'
         },
         {
             title: 'Cierre del puesto',
             img: cierrePuesto,
-            href: ''
+            href: 'informes_puestos_votacion8'
         },
         {
             title: '1 Reporte de votantes',
             img: reporteVotantes,
-            href: 'informe_kit_electoral'
+            href: 'informes_puestos_votacion7'
         },
         {
             title: '2 Reporte de votantes',
             img: reporteVotantes,
             href: 'informes_puestos_votacion7'
-        },
-        {
-            title: 'Informe 5',
-            img: iconTips,
-            href: 'informes_puestos_votacion5'
-        },
-        {
-            title: 'Informe 6',
-            img: iconTips,
-            href: 'informes_puestos_votacion6'
-        },
-        {
-            title: 'Informe 8',
-            img: iconTips,
-            href: 'informes_puestos_votacion8'
-        },
-        {
-            title: 'Informe 9',
-            img: iconTips,
-            href: 'informes_puestos_votacion9'
-        },
-        {
-            title: 'Informe 10',
-            img: iconTips,
-            href: 'informes_puestos_votacion10'
-        },
-        {
-            title: 'Informe 11',
-            img: iconTips,
-            href: 'informes_puestos_votacion11'
-        },
-        {
-            title: 'Informe 12',
-            img: iconTips,
-            href: 'informes_puestos_votacion12'
-        },
-        {
-            title: 'Recomendaciones',
-            img: iconTips,
-            href: 'recomendaciones_encuesta'
         },
     ]
 
