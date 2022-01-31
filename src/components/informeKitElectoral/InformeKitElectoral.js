@@ -55,10 +55,6 @@ const InformeKitElectoral = () => {
         {
             name: 'Mesa 9',
             value: '9'
-        },
-        {
-            name: 'Mesa 10',
-            value: '10'
         }
     ]
 /*
