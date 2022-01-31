@@ -50,23 +50,38 @@ const Alertas = () => {
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
+                                sx={{width: 1, display: 'flex', flexDirection: 'column'}}
                             >
-                                <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                                    General settings
+                                <Typography sx={{ width: 1 }}>
+                                    Mensaje de: Directivos nivel central
                                 </Typography>
-                                <Typography sx={{ color: 'text.secondary' }}>I am an accordion</Typography>
+                                <Typography sx={{ color: 'text.secondary' }}>Hora: 02:15 pm</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
-                                    Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                                    Aliquam eget maximus est, id dignissim quam.
+                                    Se ha habilitado el Reporte de votación de las 12:30 pm, por favor dirijase al módulo informe de puesto y registre el número de votos por cada mesa asignada.
                                 </Typography>
                             </AccordionDetails>
                         </Accordion>
-
+                        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
+                                sx={{width: 1, display: 'flex', flexDirection: 'column'}}
+                            >
+                                <Typography sx={{ width: 1 }}>
+                                    Mensaje de: Directivos nivel central
+                                </Typography>
+                                <Typography sx={{ color: 'text.secondary' }}>Hora: 02:15 pm</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Typography>
+                                    Se ha habilitado el Reporte de votación de las 11:30 pm, por favor dirijase al módulo informe de puesto y registre el número de votos por cada mesa asignada.
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
                     </div>
-
-
                     <CommonButton type="primario" text="ACEPTAR" sx={{mt: 6}} href=""/>
                 </Box>
             </Container>

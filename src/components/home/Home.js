@@ -72,16 +72,16 @@ const Home = () => {
                         Danilo Santamaria
                     </Typography>
                 </Box>
-                <Typography variant="h2" sx={{mt: 6}} fontSize={22} >
+                <Typography variant="h2" sx={{mt: 6, mb: 4}} fontSize={22} >
                     Seleccione la opción requerida
                 </Typography>
-                <Grid container direction="row" spacing={5} sx={{mb: 40, px: 5}} >
+                <Grid container direction="row" columnSpacing={3} rowSpacing={3} sx={{mb: 40, px: 5}} >
                     {
                         menuOptions.map((option)=>{
                             return (
-                                <Grid key={option.name} item xs={6} sx={{mt: 5, height: '170px', width: '170px',}} >
+                                <Grid key={option.title} item xs={6} sx={{mt: 1,  width: '170px',}} >
                                     <a href={option.href} style={{textDecoration: 'none'}}>
-                                        <Paper sx={{py: 10, borderRadius: '15px',  display: 'flex', flexDirection: 'column', alignItems: 'center'}} elevation={3}>
+                                        <Paper sx={{height: '170px', borderRadius: '15px',  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}} elevation={3}>
                                             <img src={option.img} alt={option.title} className={classes.homeIcon} />
                                             <Typography sx={{mt: 3, textDecoration: 'none'}} variant="h4" textAlign="center">{option.title}</Typography>
                                         </Paper>
