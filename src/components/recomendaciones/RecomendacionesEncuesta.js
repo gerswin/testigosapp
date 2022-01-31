@@ -73,7 +73,7 @@ const RecomendacionesEncuesta = () => {
 
                         </FormControl>
 
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'informacion_general'} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'home'} text={'GUARDAR'} type='primario' />
                     </Box>
                 </Box>
             </Container>
