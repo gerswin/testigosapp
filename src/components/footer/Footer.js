@@ -45,7 +45,7 @@ const Footer = () => {
                                 fontFamily: "'Roboto', sans-serif",
                                 fontWeight: 500, fontSize: "12px"
                             }
-                        }} label="Opciones" icon={<MoreVertIcon />}
+                        }} label="Novedades" href='novedades_proceso_eleccion' icon={<MoreVertIcon />}
                     />
                 </BottomNavigation>
             </Paper>

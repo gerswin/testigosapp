@@ -22,12 +22,43 @@ const InformeKitElectoral = () => {
     const mesas = [
         {
             name: 'Mesa 1',
+            value: '1'
         },
         {
-            name: 'Mesa 2'
+            name: 'Mesa 2',
+            value: '2'
         },
         {
-            name: 'Mesa Test 1'
+            name: 'Mesa 3',
+            value: '3'
+        },
+        {
+            name: 'Mesa 4',
+            value: '4'
+        },
+        {
+            name: 'Mesa 5',
+            value: '5'
+        },
+        {
+            name: 'Mesa 6',
+            value: '6'
+        },
+        {
+            name: 'Mesa 7',
+            value: '7'
+        },
+        {
+            name: 'Mesa 8',
+            value: '8'
+        },
+        {
+            name: 'Mesa 9',
+            value: '9'
+        },
+        {
+            name: 'Mesa 10',
+            value: '10'
         }
     ]
 /*
@@ -100,6 +131,8 @@ const InformeKitElectoral = () => {
                             variant="outlined"
                             required={true}
                             autoFocus={true}
+                            disabled={true}
+                            value={'10'}
                         />
                     </Grid>
                 </Grid>

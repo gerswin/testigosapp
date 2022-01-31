@@ -236,7 +236,6 @@ const InformesPuestosVotacion2 = () => {
                 validateFunction(fields, errors, values, setError)
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
-                    console.log('level1', values, errors)
                     if (_.isEmpty( errors ) && _.isEmpty(dirtyFields) === false && fieldValidation()) {
                         validateFunction(fields, errors, values, setError)
                         if (_.isEmpty( errors )) {
