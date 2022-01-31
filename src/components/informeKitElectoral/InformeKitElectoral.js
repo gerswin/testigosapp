@@ -33,41 +33,46 @@ const InformeKitElectoral =  () => {
         'inservible':{},
         'faltantes':{}
     });
-   
     const [data, setData] = useState({});
-    const [tableAssignment, setTableAssignment] = useState([]);
     const estadosCode = {};
     let navigate = useNavigate();
 
 
-    //const authenticationService = useAuthenticationService()
-    //const currentUser = authenticationService.currentUser();
-    //const document = currentUser.identityDocument
-    
-    const document = 1120387794; //@todo todavia  no funciona lo de currentUser
+    const queryTables =  () => {
+        //const authenticationService = useAuthenticationService()
+        //const currentUser = authenticationService.currentUser();
+        //const document = currentUser.identityDocument
+        
+        const document = 1120387794; //@todo todavia  no funciona lo de currentUser
 
-    const url = process.env.API_PUESTOS_URL+'/delegates?document='+document;
-    
+        const url = process.env.API_PUESTOS_URL+'/delegates?document='+document;
+        
+        axios.get(url)
+          .then(res => {
 
-    
-    axios.get(url)
-      .then(res => {
+            if (!res.data.data[0]['attributes']['tableAssignment']) {
+                return false;
+            }
+            const mesasLael = [];
+            res.data.data[0]['attributes']['tableAssignment'].forEach( function(element, index) {
+                mesasLael.push({label: 'Mesa '+element,id:element,name:'mesa_'+element+''});
+            });
 
-        if (!res.data.data[0]['attributes']['tableAssignment']) {
-            return false;
-        }
-        const mesasLael = [];
-        res.data.data[0]['attributes']['tableAssignment'].forEach( function(element, index) {
-            mesasLael.push({label: 'Mesa '+element,id:element,name:'mesa_'+element+''});
+            setMesas(mesasLael);
+
         });
 
-        setMesas(mesasLael);
+    };
 
-    });
+
+    if (!mesas.length) {
+         queryTables();
+    }
 
 
     const handleSubmit = async () => {
 
+        const tableAssignment = [];
         for (var key in count) {
             for (var keyNew in count[key]) {
                tableAssignment.push({ 
@@ -90,8 +95,6 @@ const InformeKitElectoral =  () => {
             }
         };
 
-        
-
 
         try {
             let response
@@ -109,6 +112,7 @@ const InformeKitElectoral =  () => {
     };
 
     const changeTable = (event) => {
+        console.log('entre por aca');
         const target = event.target;
         const value  = target.type === 'checkbox' ? target.checked : target.value;
         const name   = target.name;
@@ -123,10 +127,13 @@ const InformeKitElectoral =  () => {
            count[data[table]][table] = table;
         }
 
-        console.log(data);
+        setCount(count);
         console.log(count);
+        
 
     }
+
+    console.log(count);
 
 
 /*
@@ -262,6 +269,7 @@ const InformeKitElectoral =  () => {
                                     autoFocus={true}
                                     name={estado.value}
                                     value={Object.keys(count[estado.value]).length}
+                                    defaultValue={Object.keys(count[estado.value]).length}
                                 />
                             </Grid>
                         </Grid>
