@@ -108,10 +108,8 @@ const InformeKitElectoral =  () => {
             response = response.data
             console.log(response)
             if (response.data.status === 201) {
-
-                navigate('/informes_puestos_votacion3')
+                navigate('/informes_puestos_votacion2')
             }
-           
            
         } catch (e) {
             console.log(e)
