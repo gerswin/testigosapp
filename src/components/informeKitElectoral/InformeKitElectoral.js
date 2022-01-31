@@ -65,24 +65,15 @@ const InformeKitElectoral =  () => {
     });
 
 
-    const handleSubmit = async (event) => {
-        const formData = new FormData(event.currentTarget);
-        event.preventDefault();
-        const oject = {};
-        for (let [key, value] of formData.entries()) {
-            oject[key] = value;
-        }
-
+    const handleSubmit = async () => {
 
         for (var key in count) {
-
             for (var keyNew in count[key]) {
                tableAssignment.push({ 
                 "tableCodes":keyNew,
                 "statusReceptionKit":estadosCode[key]}
                 );
             }
-          
         }
 
         console.log(tableAssignment);
@@ -92,13 +83,13 @@ const InformeKitElectoral =  () => {
                 "type": "delegates",
                 "attributes": {
                     "document": document,
-                    "numberKitReception":oject['numer_kits'],
+                    "numberKitReception":mesas.length,
                     "tableAssignment": tableAssignment
                 }
             }
         };
 
-        console.log(data);
+        
 
 
         try {
@@ -124,9 +115,6 @@ const InformeKitElectoral =  () => {
         const part   = name.split("_");
 
         count[value][part[1]] = part[1];
-
-        
-
 
     }
 
@@ -207,6 +195,7 @@ const InformeKitElectoral =  () => {
                             name ="numer_kits"
                             required={true}
                             autoFocus={true}
+                            value = {mesas.length}
                         />
                     </Grid>
                 </Grid>
@@ -269,7 +258,7 @@ const InformeKitElectoral =  () => {
                     ))
                 }
                 <Grid container columns={1} direction="column" alignItems='center' >
-                    <button type="submit">Guardar</button>
+                    <CommonButton style={{margin: '0 auto'}} sx={{alignSelf: 'center'}} onClick={async (e )=> handleSubmit()} text={'GUARDAR'} type='primario' />
                 </Grid>
                 </form>
                 <Footer/>
