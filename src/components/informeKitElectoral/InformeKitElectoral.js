@@ -32,8 +32,9 @@ const InformeKitElectoral =  () => {
         'dano':{},
         'inservible':{},
         'faltantes':{}
-
     });
+   
+    const [data, setData] = useState({});
     const [tableAssignment, setTableAssignment] = useState([]);
     const estadosCode = {};
     let navigate = useNavigate();
@@ -107,14 +108,23 @@ const InformeKitElectoral =  () => {
         }
     };
 
-
     const changeTable = (event) => {
         const target = event.target;
         const value  = target.type === 'checkbox' ? target.checked : target.value;
         const name   = target.name;
         const part   = name.split("_");
 
-        count[value][part[1]] = part[1];
+        data[part[1]] = value;
+        count['bueno']={};
+        count['dano']={};
+        count['inservible']={};
+        count['faltantes']={};
+        for (var table in data) {
+           count[data[table]][table] = table;
+        }
+
+        console.log(data);
+        console.log(count);
 
     }
 
