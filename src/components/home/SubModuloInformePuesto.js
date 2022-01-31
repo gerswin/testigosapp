@@ -64,9 +64,9 @@ const SubModuloInformePuestoVotacion = () => {
                     {
                         menuOptions.map((option)=>{
                             return (
-                                <Grid item xs={6} sx={{mt: 5, height: '170px', width: '170px',}} >
+                                <Grid key={option.title} item xs={6} sx={{mt: 5, height: '170px', width: '170px',}} >
                                     <a href={option.href} style={{textDecoration: 'none'}}>
-                                        <Paper sx={{py: 10, borderRadius: '15px',  display: 'flex', flexDirection: 'column', alignItems: 'center'}} elevation={4} key={option.name} >
+                                        <Paper sx={{height: '170px', borderRadius: '15px',  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}} elevation={4} key={option.name} >
                                             <img src={option.img} alt={option.title} className={classes.homeIcon} />
                                             <Typography sx={{mt: 3, textDecoration: 'none'}} variant="h4" textAlign="center">{option.title}</Typography>
                                         </Paper>

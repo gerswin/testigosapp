@@ -25,6 +25,8 @@ const InformesPuestosVotacion7 = () => {
             type: 'textInput',
             name: 'q1',
             label: 'Total Votantes',
+            disabled: true,
+            value: '200',
             rules: {
                 required: true,
                 type: 'number',
@@ -37,6 +39,8 @@ const InformesPuestosVotacion7 = () => {
             type: 'textInput',
             name: 'q2',
             label: 'Hora',
+            disabled: true,
+            value: '1100',
             rules: {
                 required: true,
                 type: 'text',
@@ -50,67 +54,43 @@ const InformesPuestosVotacion7 = () => {
     const mesas = [
         {
             name: 'Mesa 1',
-            value: 4
+            value: '20'
         },
         {
             name: 'Mesa 2',
-            value: 10
+            value: '20'
         },
         {
-            name: 'Mesa 888',
-            value: 3
+            name: 'Mesa 3',
+            value: '20'
         },
         {
-            name: 'Mesa 1000',
-            value: 3
+            name: 'Mesa 4',
+            value: '20'
         },
         {
-            name: 'Mesa 1',
-            value: 4
+            name: 'Mesa 5',
+            value: '20'
         },
         {
-            name: 'Mesa 2',
-            value: 10
+            name: 'Mesa 6',
+            value: '20'
         },
         {
-            name: 'Mesa 888',
-            value: 3
+            name: 'Mesa 7',
+            value: '20'
         },
         {
-            name: 'Mesa 1000',
-            value: 3
+            name: 'Mesa 8',
+            value: '20'
         },
         {
-            name: 'Mesa 1',
-            value: 4
+            name: 'Mesa 9',
+            value: '20'
         },
         {
-            name: 'Mesa 2',
-            value: 10
-        },
-        {
-            name: 'Mesa 888',
-            value: 3
-        },
-        {
-            name: 'Mesa 1000',
-            value: 3
-        },
-        {
-            name: 'Mesa 1',
-            value: 4
-        },
-        {
-            name: 'Mesa 2',
-            value: 10
-        },
-        {
-            name: 'Mesa 888',
-            value: 3
-        },
-        {
-            name: 'Mesa 1000',
-            value: 3
+            name: 'Mesa 10',
+            value: '20'
         }
     ]
 
@@ -161,6 +141,8 @@ const InformesPuestosVotacion7 = () => {
                                                 variant="outlined"
                                                 required={true}
                                                 autoFocus={true}
+                                                disabled={field.disabled}
+                                                value={field.value}
                                             />
                                         </Grid>
                                     ) : null

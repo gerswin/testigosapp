@@ -12,6 +12,7 @@ import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
 import React from "react";
 import CommonDialog from "../commons/CommonDialog";
+import {useNavigate} from "react-router-dom";
 
 const radioq1 = [
     {
@@ -19,7 +20,7 @@ const radioq1 = [
         value: 'SI'
     },
     {
-        label: 'No',
+        label: 'No asistiré',
         value: 'NO'
     }
 ]
@@ -61,6 +62,7 @@ const AsistenciaPuestosVotacion = () => {
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const values = watch()
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    let navigate = useNavigate();
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -85,11 +87,7 @@ const AsistenciaPuestosVotacion = () => {
             rules: {
                 required: true,
                 type: 'string',
-                validate: (value) => {
-                    if (radioq1.findIndex(option => option.value === value) === -1) {
-                        return 'invalid selection'
-                    }
-                }
+                validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
             options: radioq1
         },
@@ -101,11 +99,7 @@ const AsistenciaPuestosVotacion = () => {
             rules: {
                 required: values.q1 === 'NO',
                 type: "string",
-                validate: (value) => {
-                    if (novedades.findIndex(option => option.value === value) === -1) {
-                        return 'Novedades no seleccionadas'
-                    }
-                }
+                validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
             options: novedades
         }
@@ -115,14 +109,10 @@ const AsistenciaPuestosVotacion = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "departmentCode": "88",
-                "municipalityCode": "220",
-                "zoneCode": "15",
-                "placeCode": "02",
-                "document":"1143858325",
-                "question":"1",
-                "answer": values.q1,
-                "novelties": values.q1Novelty,
+                "document":"1120387794",
+                "question": "1",
+                "novelty": values.q1Novelty || 'SI',
+                "answer": values.q1
             }
         }
     }
@@ -142,10 +132,23 @@ const AsistenciaPuestosVotacion = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
+                navigate('/informacion_general')
+                // Deshabilitar esta pregunta después de haberla respondido
             }
             return response
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    const fieldValidation = () => {
+        switch(values.q1){
+            case 'NO':
+                return dirtyFields.q1Novelty !== undefined
+            case 'SI':
+                return true
+            default:
+                return
         }
     }
 
@@ -157,7 +160,7 @@ const AsistenciaPuestosVotacion = () => {
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
                     console.log('level1', errors)
-                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
+                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && fieldValidation()  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
                         }
