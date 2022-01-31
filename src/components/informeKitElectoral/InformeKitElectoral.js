@@ -10,6 +10,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import React from "react";
 import axios from "axios";
+import {Route, useNavigate} from "react-router-dom";
+
 
 
 
@@ -26,17 +28,16 @@ const InformeKitElectoral =  () => {
     const {errors} = formState;
     const [mesas, setMesas] = useState([]);
     const [count, setCount] = useState({
-        'bueno':0,
-        'dano':0,
-        'inservible':0,
-        'faltantes':0
+        'bueno':{},
+        'dano':{},
+        'inservible':{},
+        'faltantes':{}
 
     });
-    const [formulario, setFormulario] = useState({
-        number_kits:0,
-        mesa:{},
-        estado:null
-    });
+    const [tableAssignment, setTableAssignment] = useState([]);
+    const estadosCode = {};
+    let navigate = useNavigate();
+
 
     //const authenticationService = useAuthenticationService()
     //const currentUser = authenticationService.currentUser();
@@ -56,7 +57,7 @@ const InformeKitElectoral =  () => {
         }
         const mesasLael = [];
         res.data.data[0]['attributes']['tableAssignment'].forEach( function(element, index) {
-            mesasLael.push({label: 'Mesa '+element,id:element,name:'mesa['+element+']'});
+            mesasLael.push({label: 'Mesa '+element,id:element,name:'mesa_'+element+''});
         });
 
         setMesas(mesasLael);
@@ -64,35 +65,72 @@ const InformeKitElectoral =  () => {
     });
 
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         const formData = new FormData(event.currentTarget);
         event.preventDefault();
+        const oject = {};
         for (let [key, value] of formData.entries()) {
-          console.log(key, value);
+            oject[key] = value;
+        }
+
+
+        for (var key in count) {
+
+            for (var keyNew in count[key]) {
+               tableAssignment.push({ 
+                "tableCodes":keyNew,
+                "statusReceptionKit":estadosCode[key]}
+                );
+            }
+          
+        }
+
+        console.log(tableAssignment);
+
+        const data  =  {
+            "data": {
+                "type": "delegates",
+                "attributes": {
+                    "document": document,
+                    "numberKitReception":oject['numer_kits'],
+                    "tableAssignment": tableAssignment
+                }
+            }
+        };
+
+        console.log(data);
+
+
+        try {
+            let response
+            const url = process.env.API_PUESTOS_URL+'/delegates/reception';
+            response = await axios.post( url, data )
+            response = response.data
+            console.log(response)
+            if (response.data.status === 201) {
+
+                navigate('/informes_puestos_votacion3')
+            }
+           
+           
+        } catch (e) {
+            console.log(e)
         }
     };
 
 
     const changeTable = (event) => {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
+        const value  = target.type === 'checkbox' ? target.checked : target.value;
+        const name   = target.name;
+        const part   = name.split("_");
+
+        count[value][part[1]] = part[1];
 
         
 
-        count[value]++;
 
-
-        console.log(name);
-        console.log('=');
-        console.log(value);
-        console.log(count);
     }
-
-    
-
-    
-
 
 
 /*
@@ -131,6 +169,10 @@ const InformeKitElectoral =  () => {
             value: 'faltantes'
         },
     ]
+    
+    for (var key in estados) {
+        estadosCode[estados[key]['value']] = estados[key]['label']
+    }
 
     return (
         <>
@@ -222,7 +264,7 @@ const InformeKitElectoral =  () => {
                                     required={true}
                                     autoFocus={true}
                                     name={estado.value}
-                                    value={count[estado.value]}
+                                    value={Object.keys(count[estado.value]).length}
                                 />
                             </Grid>
                         </Grid>
