@@ -97,6 +97,7 @@ const InformesPuestosVotacion7 = () => {
     const handleOpen = ( mesa) => {
         setOpen(true)
         setDisplayModal(mesa)
+
     }
     const handleClose = () => {
         setOpen(false)
@@ -158,9 +159,26 @@ const InformesPuestosVotacion7 = () => {
                                     <Grid key={mesa.name} item xs={4} sx={{mt: 4,  width: '100px',}} >
                                         <a onClick={()=>handleOpen( mesa.name)} style={{textDecoration: 'none'}}>
                                             <Paper sx={{ height: '100px', borderRadius: '15px',  display: 'flex', flexDirection: 'column', alignItems: 'center'}} elevation={3}>
-                                                <Box sx={{ borderTopRightRadius: '15px', borderTopLeftRadius: '15px', width: 1, backgroundColor: 'primary.main', height: '12px'}}/>
-                                                <Typography color="primary.main" sx={{ mt: 3, textDecoration: 'none'}} variant="h4" textAlign="center">{mesa.name}</Typography>
-                                                <Typography variant="h6" sx={{ mt: 2}}>{mesa.value}</Typography>
+                                                <Box sx={{
+                                                    borderTopRightRadius: '15px',
+                                                    borderTopLeftRadius: '15px',
+                                                    width: 1,
+                                                    height: '12px',
+                                                    backgroundColor: 'primary.main'//if mesa has input values change color to primary.main else grey
+                                                }}/>
+                                                <Typography
+                                                    color="primary.main" //if mesa has inputed values primary.main else grey
+                                                    x={{ mt: 3, textDecoration: 'none'}}
+                                                    variant="h4"
+                                                    textAlign="center"
+                                                >
+                                                    {mesa.name}
+                                                </Typography>
+                                                <Typography
+                                                    variant="h6" sx={{ mt: 2}}
+                                                >
+                                                    {mesa.value }
+                                                </Typography>
                                             </Paper>
                                         </a>
                                     </Grid>
