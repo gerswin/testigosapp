@@ -5,11 +5,10 @@ const validateFunction = (fields, errors, values, setError) => {
         const requiredRule = field.rules.required
         const typeofRule = field.rules.type
 
-        const fieldInputRequiredRule = field.inputLabel && field.inputLabel.rules.required
-        const fieldInputType = field.inputLabel && field.inputLabel.rules.type
-
-
         if (field.inputLabel && field.inputLabel.display) {
+            const fieldInputRequiredRule = field.inputLabel && field.inputLabel.rules.required
+            const fieldInputType = field.inputLabel && field.inputLabel.rules.type
+
             if (fieldInputType !== typeof values[field.inputLabel.name] && values[field.inputLabel.name] !== undefined) {
                 await setError(field.inputLabel.name, {type: 'typeOf', message: 'Type of field is not valid', isError: true})
             }
