@@ -159,14 +159,12 @@ const AsistenciaPuestosVotacion = () => {
                 validateFunction(fields, errors, values, setError)
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
-                    console.log('level1', errors)
                     if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && fieldValidation()  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
                         }
                     }}
                 else {
-                    console.log('level4', errors)
                     validateFunction(fields, errors, values, setError)
                 }
             } catch (e) {
@@ -202,7 +200,6 @@ const AsistenciaPuestosVotacion = () => {
                             {
                                 fields.map(field => field.display === true ? (
                                     <CommonRadioGroup
-                                        id={field.name}
                                         key={field.name}
                                         field={field}
                                         error={errors[field.name]}

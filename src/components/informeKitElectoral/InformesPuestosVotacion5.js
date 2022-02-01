@@ -93,7 +93,6 @@ const InformesPuestosVotacion5 = () => {
         }
     ]
 
-
     useEffect(() => {
         console.log(values, errors)
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -118,7 +117,7 @@ const InformesPuestosVotacion5 = () => {
             row: true,
             rules: {
                 required: true,
-                type: 'radio',
+                type: 'string',
                 validate: (value) => {
                     if (q6Options.findIndex(option => option.value === value) === -1) {
                         return 'invalid selection'
