@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
 import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
@@ -6,67 +6,106 @@ import {Box, Container, FormControl, MenuItem, Typography, Select} from "@mui/ma
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
+import validateFunction from "../../utilities/validateFields";
+import _ from "underscore";
+import CommonDialog from "../commons/CommonDialog";
+import {useNavigate} from "react-router-dom";
+import validateErrors from "../../utilities/validateErrors";
+import axios from "axios";
+
+const q11Options = [
+    {
+        label: 'Si',
+        value: 'SI'
+    },
+    {
+        label: 'No',
+        value: 'NO'
+    }
+]
 
 const InformesPuestosVotacion11 = () => {
-    const { control, formState} = useForm({
+    const { control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
         defaultValues: {
-            q1: '',
-            q2: ''
+            q11: '',
+            q11Novelty: '',
+            q11AddInput: ''
         }
     })
-    const { errors } = formState;
+    const { errors, touchedFields, dirtyFields  } = formState;
+    const [open, setOpen] = useState(false)
+    const [displayQ11Novelty, setDisplayQ11Novelty] = useState(false)
+    const [acceptButton, setAcceptButton] = useState(false)
+    const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const values = watch()
+    const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
+        const handleQ9Display = () => {
+            if (values.q11 === 'SI') {
+                setDisplayQ11Novelty(false)
+            }
+            if (values.q11 === 'NO') {
+                setDisplayQ11Novelty(true)
+            }
+        }
+        handleQ9Display()
+    }, [formState])
 
     const fields = [
         {
             type: 'radioGroup',
-            name: 'q1',
+            name: 'q11',
+            row: true,
+            display: true,
             label: '¿Se realizó la recolección de urnas y cubículos en el puesto?',
             rules: {
                 required: true,
-                type: 'radio',
-            },
-            options: [
-                {
-                    label: 'Si',
-                    value: 'si'
-                },
-                {
-                    label: 'No',
-                    value: 'no'
+                type: 'string',
+                validate: (value) => {
+                    if (q11Options.findIndex(option => option.value === value) === -1) {
+                        return 'invalid selection'
+                    }
                 }
-            ]
+            },
+            options: q11Options
         },
         {
             type: 'input',
-            name: 'q2',
+            name: 'q11Novelty',
             label: 'Seleccione una novedad',
+            display: displayQ11Novelty,
             rules: {
-                required: true,
-                type: "radio"
+                required: displayQ11Novelty,
+                type: "string",
+                validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
             options: [
                 {
                     label: 'Novedad 1',
-                    value: 'q2a'
+                    value: 'q11a'
                 },
                 {
                     label: 'Novedad 2',
-                    value: 'q2b',
+                    value: 'q11b',
                 },
                 {
                     label: 'Novedad 3',
-                    value: 'q2c',
+                    value: 'q11c',
                 },
                 {
                     label: 'Otra',
-                    value: 'q2d',
+                    value: 'q11d',
                     addInput: true,
                     inputLabel: {
                         name: 'q11AddInput',
                         rules: {
-                            required: true,
+                            required: displayQ11Novelty,
+                            type: 'string',
+                            validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
                         },
-                        //error: errors.q6NoveltyAddInput
                     }
                 }
             ],
@@ -75,6 +114,71 @@ const InformesPuestosVotacion11 = () => {
             }
         },
     ]
+
+    const handleOpen = () => {
+        setConfirmaRespuesta(true)
+        setOpen( true)
+    }
+    const handleClose = () => {
+        setOpen(false)
+    }
+    const body = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "document":"1120387794",
+                "question":"11",
+                "answer": values.q11,
+                "novelty": values.q11Novelty
+            }
+        }
+    }
+    const postNovedadesData = async (body) => {
+        let response
+        try {
+            response = await axios.post( url, body )
+            response = await response.data
+            console.log(response)
+            if (response.data.status === 201) {
+                setAcceptButton(true)
+                navigate('/informes_puestos_votacion12')
+            }
+            return response
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const fieldValidation = () => {
+        switch(values.q11){
+            case 'NO':
+                return dirtyFields.q11Novelty !== undefined
+            case 'SI':
+                return true
+            default:
+                return
+        }
+    }
+    const onSubmit = useCallback(
+        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+            clearErrors()
+            try {
+                validateFunction(fields, errors, values, setError)
+                if (_.isEmpty( errors )) {
+                    validateFunction(fields, errors, values, setError)
+                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && fieldValidation()  ) {
+                        if (_.isEmpty( errors )) {
+                            handleOpen()
+                        }
+                    }}
+                else {
+                    validateFunction(fields, errors, values, setError)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }, [ formState ]
+    )
 
     return (
         <>
@@ -101,21 +205,29 @@ const InformesPuestosVotacion11 = () => {
                     <Box component="form" noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
                         <FormControl component="fieldset" sx={{width: 1}}>
                             {
-                                fields.map(field =>
-                                    <>
-                                        <CommonRadioGroup
-                                            key={field.name}
-                                            field={field}
-                                            error={errors[field.name]}
-                                            control={control}
-                                        />
-                                    </>
-                                )
+                                fields.map(field => field.display === true ? (
+                                    <CommonRadioGroup
+                                        key={field.name}
+                                        field={field}
+                                        error={errors[field.name]}
+                                        control={control}
+                                    />
+                                ) : null )
                             }
                         </FormControl>
-
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} href={'informes_puestos_votacion12'} text={'GUARDAR'} type='primario' />
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
                     </Box>
+                    {
+                        confirmaRespuesta ?
+                            <CommonDialog
+                                open={open}
+                                onClose={handleClose}
+                                submitInfo={postNovedadesData}
+                                bodyInfo={body}
+                                dialogTitle={'¿Confirma su respuesta?'}
+                                acceptButton={acceptButton}
+                            /> : null
+                    }
                 </Box>
             </Container>
             <Footer/>

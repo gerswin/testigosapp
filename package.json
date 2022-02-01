@@ -5,10 +5,9 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^2.1.9",
     "@babel/core": "^7.16.0",
-    "@capacitor/android": "^3.3.4",
+    "@capacitor/android": "^3.4.0",
     "@capacitor/app-launcher": "^1.0.7",
-    "@capacitor/cli": "^3.3.4",
-    "@capacitor/core": "^3.3.4",
+    "@capacitor/core": "^3.4.0",
     "@capacitor/ios": "^3.3.4",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
@@ -106,6 +105,7 @@
     ]
   },
   "devDependencies": {
+    "@capacitor/cli": "^3.4.0",
     "dotenv-webpack": "^7.0.3"
   },
   "jest": {

@@ -19,13 +19,13 @@ const q9Options = [
         value: 'SI'
     },
     {
-        label: 'No asistiré',
+        label: 'No',
         value: 'NO'
     }
 ]
 
 const InformesPuestosVotacion10 = () => {
-    const {  control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
+    const { control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
         defaultValues: {
             q9: '',
             q9Novelty: '',
@@ -98,11 +98,11 @@ const InformesPuestosVotacion10 = () => {
                     inputLabel: {
                         name: 'q9AddInput',
                         rules: {
-                            required: true,
+                            required: displayQ9Novelty,
                             type: 'string',
                             validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
                         },
-                        error: errors.q6NoveltyAddInput
+                        //error: errors.q6NoveltyAddInput
                     }
                 }
             ],
@@ -195,7 +195,7 @@ const InformesPuestosVotacion10 = () => {
                     <Typography variant="h2" sx={{mb: 5}} >
                         Informe puesto de votación
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit()}  noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
+                    <Box component="form" noValidate sx={{ mt: 1, width: 1 }} display="flex" flexDirection='column' alignItems='center'>
                         <FormControl component="fieldset" sx={{width: 1}}>
                             {
                                 fields.map(field => field.display === true ? (
