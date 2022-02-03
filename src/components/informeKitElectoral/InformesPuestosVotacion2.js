@@ -1,5 +1,5 @@
-import {Route, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {Route, useNavigate} from "react-router-dom";
 import React, {useCallback, useEffect, useState} from "react";
 import HeaderCustom from "../header/HeaderCustom";
 import {Box, Container, FormControl, Typography} from "@mui/material";
@@ -11,6 +11,7 @@ import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
 import _ from "underscore";
 import CommonDialog from "../commons/CommonDialog";
+import useFetch from "../../utilities/useFetch";
 
 const radioq2 = [
     {
@@ -90,15 +91,19 @@ const InformesPuestosVotacion2 = () => {
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
-
     const [open, setOpen] = useState(false)
     const [displayQ2No, setDisplayQ2No] = useState(false)
     const [displayQ2SiCon, setDisplayQ2SiCon] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [novelties03, setNovelties03] = useState([])
     const values = watch()
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
     let navigate = useNavigate();
+
+    const noveltiesUrl02 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=02'
+    const noveltiesUrl03 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=03'
+    const { data, loading, error } = useFetch(noveltiesUrl02)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -118,6 +123,21 @@ const InformesPuestosVotacion2 = () => {
         }
         handleQ2Display()
     }, [formState])
+
+    useEffect(()=>{
+        const fetchNovelties = () => {
+            const source = axios.CancelToken.source();
+            axios.get(noveltiesUrl03, { cancelToken: source.token })
+                .then(res => {
+                    setNovelties03(res.data);
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+        fetchNovelties()
+    }, [noveltiesUrl03])
+
     const handleOpen = () => {
         setConfirmaRespuesta(true)
         setOpen( true)
@@ -145,6 +165,7 @@ const InformesPuestosVotacion2 = () => {
         {
             type: 'radioGroup',
             name: 'q2SiCon',
+            novelty: true,
             display: displayQ2SiCon,
             label: 'Seleccione una novedad',
             rules: {
@@ -152,11 +173,13 @@ const InformesPuestosVotacion2 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: q2SiConOptions
+            options: data && data.data,
+            addInput: true,
         },
         {
             type: 'radioGroup',
             name: 'q2No',
+            novelty: true,
             display: displayQ2No,
             label: 'Seleccione una novedad',
             rules: {
@@ -164,8 +187,9 @@ const InformesPuestosVotacion2 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: q2NoOptions
-        }
+            options: novelties03.data,
+            addInput: true,
+        },
     ]
 
     const sendNovelty = () => {
@@ -183,7 +207,7 @@ const InformesPuestosVotacion2 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"2",
                 "answer": values.q2,
             }
@@ -194,7 +218,7 @@ const InformesPuestosVotacion2 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"2",
                 "answer": values.q2,
                 "novelty": sendNovelty()
@@ -230,7 +254,7 @@ const InformesPuestosVotacion2 = () => {
         }
     }
     const onSubmit = useCallback(
-        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+        async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
             try {
                 validateFunction(fields, errors, values, setError)

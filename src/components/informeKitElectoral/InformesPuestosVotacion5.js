@@ -13,6 +13,7 @@ import CommonDialog from "../commons/CommonDialog";
 import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
 import DropdownInput from "../formFieldsControlled/DropdownInput";
+import useFetch from "../../utilities/useFetch";
 
 const q6Options = [
     {
@@ -39,59 +40,30 @@ const InformesPuestosVotacion5 = () => {
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [displayQ6Novelty, setDisplayQ6Novelty ] = useState(false)
+    const [mesasData, setMesasData] = useState([])
     let navigate = useNavigate();
-
     const values = watch()
-    const url =  process.env.API_PUESTOS_URL + '/delegates/places'
+    const placesUrl =  process.env.API_PUESTOS_URL + '/delegates/places'
+    const noveltiesUrl =  process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=04'
+    const tablesUrl =  process.env.API_PUESTOS_URL + '/delegates/table?document=1120873152'
+    const { data, loading, error } = useFetch(noveltiesUrl)
 
-    const data =  [
-        {
-            label: 'Mesa 11',
-            id: "1"
-        },
-        {
-            label: 'Mesa 22',
-            id: '2'
-        },
-        {
-            label: 'Mesa 33',
-            id: '3'
-        },
-        {
-            label: 'Mesa 44',
-            id: '4'
-        },
-        {
-            label: 'Mesa 55',
-            id: '5'
-        },
-    ]
-
-    const q6NoveltyOptions =  [
-        {
-            label: 'Falta de jurados de votación',
-            value: 'falta_de_jurados_de_votacion'
-        },
-        {
-            label: 'Seleccione una novedad',
-            value: 'seleccione_una_novedad',
-        },
-        {
-            label: 'Otra',
-            value: 'otra',
-            addInput: true,
-            inputLabel: {
-                name: 'q6NoveltyAddInput',
-                rules: {
-                    required: true,
-                },
-                error: errors.q6NoveltyAddInput
-            }
+    useEffect(()=>{
+        const fetchMesas = () => {
+            const source = axios.CancelToken.source();
+            axios.get(tablesUrl, { cancelToken: source.token })
+                .then(res => {
+                    setMesasData(res && res.data && res.data.data && res.data.data.attributes && res.data.data.attributes.tableAssignment);
+                    console.log(mesasData)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
-    ]
+        fetchMesas()
+    }, [tablesUrl])
 
     useEffect(() => {
-        console.log(values, errors)
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
         const handleQ6Display = () => {
             if (values.q6 === 'NO' ) {
@@ -126,17 +98,19 @@ const InformesPuestosVotacion5 = () => {
             name: 'q6Mesa',
             label: 'Seleccione la mesa',
             display: true,
+            mesas: true,
             rules: {
                 required: true,
                 type: 'string',
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: data,
+            options: mesasData ,
             defaultValue: 'Por favor seleccione..'
         },
         {
             type: 'radioGroup',
             name: 'q6Novelty',
+            novelty: true,
             label: 'Seleccione una novedad',
             display: displayQ6Novelty,
             rules: {
@@ -144,19 +118,31 @@ const InformesPuestosVotacion5 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: q6NoveltyOptions
+            options: data && data.data
         },
     ]
 
-    const body = {
+    const bodyNo = {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"6",
                 "tableCode":values.q6Mesa,
                 "answer":values.q6,
                 "novelty": values.q6Novelty
+            }
+        }
+    }
+
+    const bodySi = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "document":"1120873152",
+                "question":"6",
+                "tableCode":values.q6Mesa,
+                "answer":values.q6,
             }
         }
     }
@@ -172,10 +158,10 @@ const InformesPuestosVotacion5 = () => {
     const postNovedadesData = async (body) => {
         let response
         try {
-            response = await axios.post( url, body )
-            response = await response.data
+            response = await axios.post( placesUrl, body )
+            response = await response
             console.log(response)
-            if (response.data.status === 201) {
+            if (response.data.data.status === 201) {
                 setAcceptButton(true)
                 navigate('/home')
             }
@@ -188,7 +174,7 @@ const InformesPuestosVotacion5 = () => {
     const fieldValidation = () => {
         switch(values.q6){
             case 'SI':
-                return true
+                return dirtyFields.q6Mesa !== undefined
             case 'NO':
                 return dirtyFields.q6Mesa !== undefined && dirtyFields.q6Novelty !== undefined
             default:
@@ -265,6 +251,7 @@ const InformesPuestosVotacion5 = () => {
                                         rules={field.rules}
                                         control={control}
                                         error={errors[field.name]}
+                                        mesas={field.mesas}
                                     />
                                     ) : null
                                 )
@@ -289,7 +276,7 @@ const InformesPuestosVotacion5 = () => {
                                     open={open}
                                     onClose={handleClose}
                                     submitInfo={postNovedadesData}
-                                    bodyInfo={body}
+                                    bodyInfo={ values.q6 === 'SI' ? bodySi : bodyNo}
                                     dialogTitle={'¿Confirma su respuesta?'}
                                     acceptButton={acceptButton}
                                 /> : null

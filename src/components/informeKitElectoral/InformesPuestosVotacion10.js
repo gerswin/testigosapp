@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react";
-
 import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
 import {Box, Container, FormControl, MenuItem, Typography, Select} from "@mui/material";
@@ -12,6 +11,7 @@ import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
 import _ from "underscore";
 import CommonDialog from "../commons/CommonDialog";
+import useFetch from "../../utilities/useFetch";
 
 const q9Options = [
     {
@@ -25,7 +25,7 @@ const q9Options = [
 ]
 
 const InformesPuestosVotacion10 = () => {
-    const { control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
+    const { control, formState, watch, clearErrors, setError } = useForm({
         defaultValues: {
             q9: '',
             q9Novelty: '',
@@ -38,7 +38,10 @@ const InformesPuestosVotacion10 = () => {
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const values = watch()
-    const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    const placesUrl = process.env.API_PUESTOS_URL + '/delegates/places'
+    const noveltiesUrl =  process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=05'
+    const { data, loading, error } = useFetch(noveltiesUrl)
+
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -76,13 +79,15 @@ const InformesPuestosVotacion10 = () => {
             type: 'input',
             name: 'q9Novelty',
             label: 'Seleccione una novedad',
+            novelty: true,
             display: displayQ9Novelty,
             rules: {
                 required: true,
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: [
+            options: data && data.data
+                /*[
                 {
                     label: 'Documentos extraviados por fuerza mayor o caso fortuito',
                     value: 'q9a'
@@ -105,7 +110,7 @@ const InformesPuestosVotacion10 = () => {
                         //error: errors.q6NoveltyAddInput
                     }
                 }
-            ],
+            ],*/
         },
     ]
     const handleOpen = () => {
@@ -115,21 +120,31 @@ const InformesPuestosVotacion10 = () => {
     const handleClose = () => {
         setOpen(false)
     }
-    const body = {
+    const bodyNo = {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"9",
                 "answer": values.q9,
                 "novelty": values.q9Novelty
             }
         }
     }
+    const bodySi = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "document":"1120873152",
+                "question":"9",
+                "answer": values.q9,
+            }
+        }
+    }
     const postNovedadesData = async (body) => {
         let response
         try {
-            response = await axios.post( url, body )
+            response = await axios.post( placesUrl, body )
             response = await response.data
             console.log(response)
             if (response.data.status === 201) {
@@ -216,7 +231,7 @@ const InformesPuestosVotacion10 = () => {
                                 open={open}
                                 onClose={handleClose}
                                 submitInfo={postNovedadesData}
-                                bodyInfo={body}
+                                bodyInfo={ values.q9 === 'SI' ? bodySi : bodyNo}
                                 dialogTitle={'¿Confirma su respuesta?'}
                                 acceptButton={acceptButton}
                             /> : null

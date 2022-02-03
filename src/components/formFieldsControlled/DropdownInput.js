@@ -2,21 +2,33 @@ import React, {useEffect} from "react";
 import { MenuItem, Select, NativeSelect, Typography} from "@mui/material";
 import { useController } from "react-hook-form";
 
-const DropdownInput = ({ name, label, control, rules, error, options, defaultValue }) => {
-
+const DropdownInput = ({ name, label, control, rules, error, options, defaultValue, mesas }) => {
     const { field: {value, onChange, onBlur}} = useController({name, control, rules})
-
     const renderDropdownOptions = () => {
-        if (options) {
-            return options.map( option => (
+        return mesas === true ?
+            options.map( option => (
+                option.type === "typeNovelties" ?
+                    <MenuItem
+                        key={option.id}
+                        value={option.attributes.novelty}
+                    >
+                        {option.attributes.novelty}
+                    </MenuItem> :
+                    <MenuItem
+                        key={option.tableCode}
+                        value={option.tableCode}
+                    >
+                        Mesa {option.tableCode}
+                    </MenuItem>
+                )) :
+            options.map( option => (
                 <MenuItem
                     key={option.id}
-                    value={ option.id }
+                    value={option.id}
                 >
-                    { option.label}
+                    {option.label}
                 </MenuItem>
             ))
-        }
     }
 
     return (
