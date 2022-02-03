@@ -11,6 +11,10 @@ import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
 import _ from "underscore";
 import CommonDialog from "../commons/CommonDialog";
+import useFetch from "../../utilities/useFetch";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import CommonTextField from "../formFieldsControlled/CommonTextField";
 
 const radioq2 = [
     {
@@ -96,9 +100,14 @@ const InformesPuestosVotacion2 = () => {
     const [displayQ2SiCon, setDisplayQ2SiCon] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [novelties03, setNovelties03] = useState([])
     const values = watch()
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
     let navigate = useNavigate();
+
+    const noveltiesUrl02 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=02'
+    const noveltiesUrl03 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=03'
+    const { data, loading, error } = useFetch(noveltiesUrl02)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -118,6 +127,22 @@ const InformesPuestosVotacion2 = () => {
         }
         handleQ2Display()
     }, [formState])
+
+    useEffect(()=>{
+        const fetchNovelties = () => {
+            const source = axios.CancelToken.source();
+            axios.get(noveltiesUrl03, { cancelToken: source.token })
+                .then(res => {
+                    setNovelties03(res.data);
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+        fetchNovelties()
+    }, [noveltiesUrl03])
+
+
     const handleOpen = () => {
         setConfirmaRespuesta(true)
         setOpen( true)
@@ -145,6 +170,7 @@ const InformesPuestosVotacion2 = () => {
         {
             type: 'radioGroup',
             name: 'q2SiCon',
+            novelty: true,
             display: displayQ2SiCon,
             label: 'Seleccione una novedad',
             rules: {
@@ -152,11 +178,13 @@ const InformesPuestosVotacion2 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: q2SiConOptions
+            options: data,
+            addInput: true,
         },
         {
             type: 'radioGroup',
             name: 'q2No',
+            novelty: true,
             display: displayQ2No,
             label: 'Seleccione una novedad',
             rules: {
@@ -164,8 +192,10 @@ const InformesPuestosVotacion2 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: q2NoOptions
-        }
+            options: novelties03.data,
+            addInput: true,
+        },
+
     ]
 
     const sendNovelty = () => {
@@ -183,7 +213,7 @@ const InformesPuestosVotacion2 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"2",
                 "answer": values.q2,
             }
@@ -194,7 +224,7 @@ const InformesPuestosVotacion2 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"2",
                 "answer": values.q2,
                 "novelty": sendNovelty()

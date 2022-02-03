@@ -35,9 +35,11 @@ const InformesPuestosVotacion6 = () => {
     const [open, setOpen] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
+    let navigate = useNavigate();
     const values = getValues()
     const url =  process.env.API_PUESTOS_URL + '/delegates/places'
-    let navigate = useNavigate();
+    const { data, loading, error } = useFetch(url)
+
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)

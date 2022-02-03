@@ -6,8 +6,6 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import Box from "@mui/material/Box";
-import FormHelperText from '@mui/material/FormHelperText';
-import {TextField} from "@mui/material";
 import CommonTextField from "./CommonTextField";
 
 const CommonRadioGroup = ({ field, control, error }) => {
@@ -29,37 +27,57 @@ const CommonRadioGroup = ({ field, control, error }) => {
                 onChange={onChange}
                 onBlur={onBlur}
             >
-                {options.map(option => (
-                        option.addInput === true ?
-                            <Box key={option.value} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                {
+                    options.map(option => {
+                        if (field.novelty === true) {
+                            return (
                                 <FormControlLabel
                                     name={name}
+                                    key={option.attributes.novelty}
+                                    value={option.attributes.novelty}
+                                    control={<Radio/>}
+                                    label={option.attributes.novelty}
+                                    onBlur={onBlur}
+                                    onChange={onChange}
+                                />
+                            )
+                        } else if (option.addInput === true) {
+                            return (
+                                <Box key={option.value} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <FormControlLabel
+                                        name={name}
+                                        value={option.value}
+                                        control={<Radio/>}
+                                        label={option.label}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                    />
+                                    <CommonTextField
+                                        key={option.inputLabel.name}
+                                        name={option.inputLabel.name}
+                                        value={value}
+                                        disabled={value !== 'otra'}
+                                        control={control}
+                                        rules={option.inputLabel.rules}
+                                    />
+                                </Box>
+                            )
+                        } else {
+                            return (
+                                <FormControlLabel
+                                    name={name}
+                                    key={option.value}
                                     value={option.value}
                                     control={<Radio/>}
                                     label={option.label}
-                                    onChange={onChange}
                                     onBlur={onBlur}
+                                    onChange={onChange}
                                 />
-                                <CommonTextField
-                                    key={option.inputLabel.name}
-                                    name={option.inputLabel.name}
-                                    value={value}
-                                    disabled={value !== 'otra'}
-                                    control={control}
-                                    rules={option.inputLabel.rules}
-                                />
-                            </Box>
-                            : <FormControlLabel
-                                name={name}
-                                key={option.value}
-                                value={option.value}
-                                control={<Radio/>}
-                                label={option.label}
-                                onBlur={onBlur}
-                                onChange={onChange}
-                            />
+                            )
+                        }
+                    }
                     )
-                )}
+                }
             </RadioGroup>
         </>
     )
