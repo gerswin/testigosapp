@@ -15,26 +15,6 @@ import CommonDialog from "../commons/CommonDialog";
 import validateErrors from '../../utilities/validateErrors'
 import {useNavigate} from "react-router-dom";
 
-/*const data =  [
-    {
-        label: 'Disturbios',
-        id: 4
-    },
-    {
-        label: 'Sucesos ambientales',
-        id: 10
-    },
-    {
-        label: 'Conflictos',
-        id: 3
-    },
-    {
-        label: 'Protestas',
-        id: 5
-    },
-]*/
-
-
 const NovedadesProcesoEleccion = () => {
     const { control, handleSubmit, formState, clearErrors, getValues, setError} = useForm({
         defaultValues: {
@@ -55,6 +35,9 @@ const NovedadesProcesoEleccion = () => {
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
+    }, [formState])
+
+    useEffect(()=>{
         const fetchNovelties = () => {
             const source = axios.CancelToken.source();
             axios.get(noveltiesUrl, { cancelToken: source.token })
@@ -67,7 +50,7 @@ const NovedadesProcesoEleccion = () => {
                 })
         }
         fetchNovelties()
-    }, [noveltiesUrl])
+    },[noveltiesUrl])
 
     const fields = [
         {
@@ -125,7 +108,7 @@ const NovedadesProcesoEleccion = () => {
             if (response.data.status === 201) {
                 setDialogTitle('La novedad ha sido enviada')
                 setAcceptButton(true)
-                navigate('/novedades_proceso_eleccion')
+                navigate('/home')
             }
             return response
         } catch (e) {

@@ -28,58 +28,6 @@ const radioq2 = [
     }
 ]
 
-const q2SiConOptions = [
-    {
-        label: 'Sin mesas y sillas',
-        value: 'sin_mesas_y_sillas'
-    },
-    {
-        label: 'Urnas y cubículos mojados',
-        value: 'urnas_y_cubiculos_mojados'
-    },
-    {
-        label: 'Baños cerrados',
-        value: 'baños_cerrados'
-    },
-    {
-        label: 'Otra',
-        value: 'otra',
-        addInput: true,
-        inputLabel: {
-            name: 'q2SiConAddInput',
-            rules: {
-                required: true,
-            },
-        }
-    },
-]
-
-const q2NoOptions = [
-    {
-        label: 'Bloqueos para el ingreso al puesto de votación',
-        value: 'bloqueos_para_el_ingreso_al_puesto_de_votación'
-    },
-    {
-        label: 'No se encuentra el encargado de las llaves',
-        value: 'no_se_encuentra_el_encargado_de_las_llaves'
-    },
-    {
-        label: 'Problemas por disturbios',
-        value: 'problemas_por_disturbios'
-    },
-    {
-        label: 'Otra',
-        value: 'otra',
-        addInput: true,
-        inputLabel: {
-            name: 'q2NoAddInput',
-            rules: {
-                required: true,
-            },
-        }
-    },
-]
-
 const InformesPuestosVotacion2 = () => {
     const { control, formState, watch, clearErrors, setError} = useForm({
         defaultValues: {
