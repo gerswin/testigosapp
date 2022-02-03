@@ -95,6 +95,7 @@ const InformesPuestosVotacion3 = () => {
             inputLabel: {
                 display: displayQ3Input,
                 name: 'q3MissingJury',
+                label: 'Ingrese la cantidad de jurados faltantes',
                 rules: {
                     required: true,
                     type: "number",
@@ -115,6 +116,7 @@ const InformesPuestosVotacion3 = () => {
             inputLabel: {
                 display: displayQ4Input,
                 name: 'q4RemmantsUsed',
+                label: 'Ingrese la cantidad de remanentes utilizados',
                 rules: {
                     required: true,
                     type: "number",
@@ -249,10 +251,11 @@ const InformesPuestosVotacion3 = () => {
                                             field.inputLabel.display === true ?
                                                 (
                                                     <>
+                                                        <Typography variant="h3" sx={{mb: 1, mt: 4}}>
+                                                            {field.inputLabel.label}
+                                                        </Typography>
                                                         <CommonTextField
-                                                            //key={field.name}
                                                             name={field.inputLabel.name}
-                                                            //label={field.label}
                                                             placeholder="00"
                                                             control={control}
                                                             rules={field.inputLabel.rules}

@@ -87,6 +87,7 @@ export default function useAuthenticationService() {
                             identityDocument: attributes['custom:identity_document'],
                         })
                         dispatch(loginNewUser(user))
+                        navigate("/informes_asistencia")
                         //console.log({user})
                         //authenticationEmitter.dispatchSignIn()
                         //return user
