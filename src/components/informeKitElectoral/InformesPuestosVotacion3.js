@@ -130,7 +130,7 @@ const InformesPuestosVotacion3 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "questions":[
                     {
                         "question":"3",

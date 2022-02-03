@@ -1,5 +1,5 @@
-import {Route, useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
+import {Route, useNavigate} from "react-router-dom";
 import React, {useCallback, useEffect, useState} from "react";
 import HeaderCustom from "../header/HeaderCustom";
 import {Box, Container, FormControl, Typography} from "@mui/material";
@@ -12,9 +12,6 @@ import validateFunction from "../../utilities/validateFields";
 import _ from "underscore";
 import CommonDialog from "../commons/CommonDialog";
 import useFetch from "../../utilities/useFetch";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import CommonTextField from "../formFieldsControlled/CommonTextField";
 
 const radioq2 = [
     {
@@ -94,7 +91,6 @@ const InformesPuestosVotacion2 = () => {
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
-
     const [open, setOpen] = useState(false)
     const [displayQ2No, setDisplayQ2No] = useState(false)
     const [displayQ2SiCon, setDisplayQ2SiCon] = useState(false)
@@ -142,7 +138,6 @@ const InformesPuestosVotacion2 = () => {
         fetchNovelties()
     }, [noveltiesUrl03])
 
-
     const handleOpen = () => {
         setConfirmaRespuesta(true)
         setOpen( true)
@@ -178,7 +173,7 @@ const InformesPuestosVotacion2 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: data,
+            options: data && data.data,
             addInput: true,
         },
         {
@@ -195,7 +190,6 @@ const InformesPuestosVotacion2 = () => {
             options: novelties03.data,
             addInput: true,
         },
-
     ]
 
     const sendNovelty = () => {
@@ -260,7 +254,7 @@ const InformesPuestosVotacion2 = () => {
         }
     }
     const onSubmit = useCallback(
-        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+        async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
             try {
                 validateFunction(fields, errors, values, setError)

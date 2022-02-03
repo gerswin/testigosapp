@@ -6,7 +6,6 @@ import {Box, Container, FormControl, TextField, Typography} from "@mui/material"
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
-import useFetch from "../../utilities/useFetch";
 import validateErrors from "../../utilities/validateErrors";
 import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
@@ -38,8 +37,6 @@ const InformesPuestosVotacion6 = () => {
     let navigate = useNavigate();
     const values = getValues()
     const url =  process.env.API_PUESTOS_URL + '/delegates/places'
-    const { data, loading, error } = useFetch(url)
-
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -68,7 +65,7 @@ const InformesPuestosVotacion6 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"5",
                 "answer": values.q5,
             }

@@ -12,6 +12,7 @@ import CommonDialog from "../commons/CommonDialog";
 import {useNavigate} from "react-router-dom";
 import validateErrors from "../../utilities/validateErrors";
 import axios from "axios";
+import useFetch from "../../utilities/useFetch";
 
 const q11Options = [
     {
@@ -25,7 +26,7 @@ const q11Options = [
 ]
 
 const InformesPuestosVotacion11 = () => {
-    const { control, formState, watch, clearErrors, handleSubmit, setError } = useForm({
+    const { control, formState, watch, clearErrors, setError } = useForm({
         defaultValues: {
             q11: '',
             q11Novelty: '',
@@ -38,8 +39,10 @@ const InformesPuestosVotacion11 = () => {
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const values = watch()
-    const url = process.env.API_PUESTOS_URL + '/delegates/places'
     let navigate = useNavigate();
+    const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    const noveltiesUrl =  process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=06'
+    const { data, loading, error } = useFetch(noveltiesUrl)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -73,45 +76,16 @@ const InformesPuestosVotacion11 = () => {
             options: q11Options
         },
         {
-            type: 'input',
             name: 'q11Novelty',
             label: 'Seleccione una novedad',
+            novelty: true,
             display: displayQ11Novelty,
             rules: {
                 required: displayQ11Novelty,
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: [
-                {
-                    label: 'Novedad 1',
-                    value: 'q11a'
-                },
-                {
-                    label: 'Novedad 2',
-                    value: 'q11b',
-                },
-                {
-                    label: 'Novedad 3',
-                    value: 'q11c',
-                },
-                {
-                    label: 'Otra',
-                    value: 'q11d',
-                    addInput: true,
-                    inputLabel: {
-                        name: 'q11AddInput',
-                        rules: {
-                            required: displayQ11Novelty,
-                            type: 'string',
-                            validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
-                        },
-                    }
-                }
-            ],
-            inputLabel: {
-                display: false,
-            }
+            options: data && data.data
         },
     ]
 
@@ -122,14 +96,24 @@ const InformesPuestosVotacion11 = () => {
     const handleClose = () => {
         setOpen(false)
     }
-    const body = {
+    const bodyNo = {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"11",
                 "answer": values.q11,
                 "novelty": values.q11Novelty
+            }
+        }
+    }
+    const bodySi = {
+        "data": {
+            "type": "placesReports",
+            "attributes": {
+                "document":"1120873152",
+                "question":"11",
+                "answer": values.q11,
             }
         }
     }
@@ -223,7 +207,7 @@ const InformesPuestosVotacion11 = () => {
                                 open={open}
                                 onClose={handleClose}
                                 submitInfo={postNovedadesData}
-                                bodyInfo={body}
+                                bodyInfo={ values.q11 === 'SI' ? bodySi : bodyNo}
                                 dialogTitle={'¿Confirma su respuesta?'}
                                 acceptButton={acceptButton}
                             /> : null

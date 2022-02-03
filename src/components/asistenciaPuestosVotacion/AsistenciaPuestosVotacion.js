@@ -67,8 +67,6 @@ const AsistenciaPuestosVotacion = () => {
     const { data, loading, error } = useFetch(noveltiesUrl)
     let navigate = useNavigate();
 
-    console.log(data)
-
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
         const handleQ2Display = () => {
@@ -115,7 +113,7 @@ const AsistenciaPuestosVotacion = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question": "1",
                 "novelty": values.q1Novelty || 'SI',
                 "answer": values.q1

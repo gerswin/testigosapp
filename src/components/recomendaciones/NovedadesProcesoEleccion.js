@@ -15,7 +15,7 @@ import CommonDialog from "../commons/CommonDialog";
 import validateErrors from '../../utilities/validateErrors'
 import {useNavigate} from "react-router-dom";
 
-const data =  [
+/*const data =  [
     {
         label: 'Disturbios',
         id: 4
@@ -32,7 +32,7 @@ const data =  [
         label: 'Protestas',
         id: 5
     },
-]
+]*/
 
 
 const NovedadesProcesoEleccion = () => {
@@ -43,34 +43,49 @@ const NovedadesProcesoEleccion = () => {
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
-    const url = process.env.API_PUESTOS_URL + '/delegates/places'
-    //const { data, loading, error } = useFetch(url)
     const [dialogTitle, setDialogTitle] = useState('¿Desea enviar la novedad?')
     const [open, setOpen] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
+    const [noveltiesData, setNoveltiesData] = useState([])
     const values = getValues()
     let navigate = useNavigate();
+    const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    const noveltiesUrl = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=07'
+    //const { data, loading, error } = useFetch(noveltiesUrl)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
-    }, [formState])
+        const fetchNovelties = () => {
+            const source = axios.CancelToken.source();
+            axios.get(noveltiesUrl, { cancelToken: source.token })
+                .then(res => {
+                    setNoveltiesData(res && res.data && res.data.data);
+                    console.log(noveltiesData)
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+        fetchNovelties()
+    }, [noveltiesUrl])
 
     const fields = [
         {
             type: 'dropdown',
             name: 'noveltiesDropdown',
             label: 'Tipo de novedad',
+            mesas: true,
             rules: {
                 required: true,
                 type: 'string',
                 validate: (value) => {
-                    if (data.findIndex(novelty => novelty.value === value) === -1) {
+                    if (noveltiesData.findIndex(novelty => novelty.value === value) === -1) {
                         return 'invalid novelty selection'
                     }
                 }
             },
-            options: data,
-            defaultValue: 'Por favor seleccione..'
+            options: noveltiesData,
+            //defaultValue: 'Por favor seleccione..'
         },
         {
             type: 'multiline',
@@ -84,26 +99,23 @@ const NovedadesProcesoEleccion = () => {
             }
         }
     ]
-
     const body = {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"12",
-                "observation":"protestas",
+                "observation": values.noveltiesDropdown,
                 "novelty": values.newNovelty
             }
         }
     }
-
     const handleOpen = ( mesa) => {
         setOpen(true)
     }
     const handleClose = () => {
         setOpen(false)
     }
-
     const postNovedadesData = async (body) => {
         let response
         try {
@@ -134,7 +146,6 @@ const NovedadesProcesoEleccion = () => {
                         }
                }}
                 else {
-                    console.log('level4', errors)
                     validateFunction(fields, errors, values, setError)
                 }
             } catch (e) {
@@ -175,6 +186,7 @@ const NovedadesProcesoEleccion = () => {
                                 rules={fields[0].rules}
                                 control={control}
                                 error={errors[fields[0].name]}
+                                mesas={fields[0].mesas}
                             />
 
                             {
