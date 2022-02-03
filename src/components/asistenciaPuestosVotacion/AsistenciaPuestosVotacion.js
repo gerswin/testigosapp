@@ -13,6 +13,7 @@ import validateFunction from "../../utilities/validateFields";
 import React from "react";
 import CommonDialog from "../commons/CommonDialog";
 import {useNavigate} from "react-router-dom";
+import useFetch from "../../utilities/useFetch";
 
 const radioq1 = [
     {
@@ -61,8 +62,12 @@ const AsistenciaPuestosVotacion = () => {
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const values = watch()
-    const url = process.env.API_PUESTOS_URL + '/delegates/places'
+    const placesUrl = process.env.API_PUESTOS_URL + '/delegates/places'
+    const noveltiesUrl = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=01'
+    const { data, loading, error } = useFetch(noveltiesUrl)
     let navigate = useNavigate();
+
+    console.log(data)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -94,6 +99,7 @@ const AsistenciaPuestosVotacion = () => {
         {
             type: 'radioGroup',
             name: 'q1Novelty',
+            novelty: true,
             display: displayQ2,
             label: 'Seleccione una novedad en caso de no asistir al puesto de votación *',
             rules: {
@@ -101,7 +107,7 @@ const AsistenciaPuestosVotacion = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: novedades
+            options: data && data.data
         }
     ]
 
@@ -127,7 +133,7 @@ const AsistenciaPuestosVotacion = () => {
     const postNovedadesData = async (body) => {
         let response
         try {
-            response = await axios.post( url, body )
+            response = await axios.post( placesUrl, body )
             response = await response.data
             console.log(response)
             if (response.data.status === 201) {
