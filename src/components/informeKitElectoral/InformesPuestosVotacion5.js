@@ -25,10 +25,8 @@ const q6Options = [
     }
 ]
 
-
-
 const InformesPuestosVotacion5 = () => {
-    const { control, formState, clearErrors, watch, handleSubmit, setError } = useForm({
+    const { control, formState, clearErrors, watch, setError } = useForm({
         defaultValues: {
             q6: '',
             q6Mesa: '',
@@ -40,7 +38,6 @@ const InformesPuestosVotacion5 = () => {
     const [open, setOpen] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
-    const [displayQ6Mesas, setDisplayQ6Mesas] = useState(false)
     const [displayQ6Novelty, setDisplayQ6Novelty ] = useState(false)
     let navigate = useNavigate();
 
@@ -98,11 +95,9 @@ const InformesPuestosVotacion5 = () => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
         const handleQ6Display = () => {
             if (values.q6 === 'NO' ) {
-                setDisplayQ6Mesas(true)
                 setDisplayQ6Novelty(true)
             }
             if (values.q6 === 'SI') {
-                setDisplayQ6Mesas(false)
                 setDisplayQ6Novelty(false)
             }
         }
@@ -130,9 +125,9 @@ const InformesPuestosVotacion5 = () => {
             type: 'dropdown',
             name: 'q6Mesa',
             label: 'Seleccione la mesa',
-            display: displayQ6Mesas,
+            display: true,
             rules: {
-                required: displayQ6Mesas,
+                required: true,
                 type: 'string',
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
@@ -159,13 +154,12 @@ const InformesPuestosVotacion5 = () => {
             "attributes": {
                 "document":"1120387794",
                 "question":"6",
-                "answer":"SI",
-                "tableCode":"5"
+                "tableCode":values.q6Mesa,
+                "answer":values.q6,
+                "novelty": values.q6Novelty
             }
         }
     }
-
-    //body.data.attributes.tableCode = values
 
     const handleOpen = () => {
         setConfirmaRespuesta(true)
@@ -183,7 +177,6 @@ const InformesPuestosVotacion5 = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
-                //deshabilitar menu de apertura de puesto..
                 navigate('/home')
             }
             return response

@@ -1,4 +1,4 @@
-import react from 'react';
+import react, {useState} from 'react';
 import HeaderCustom from "../header/HeaderCustom";
 import {Typography, Container, Box, Grid, Paper, Link} from "@mui/material";
 import Footer from "../footer/Footer";
@@ -8,9 +8,10 @@ import CommonButton from "../commons/CommonButton";
 import aperturaPuesto from "../../images/informes_puesto/apertura_puesto.svg"
 import cierrePuesto from "../../images/informes_puesto/cierre_del_puesto.svg"
 import reporteVotantes from "../../images/informes_puesto/reporte_votantes.svg"
-import iconTips from "../../images/home/tips.svg";
 
 const SubModuloInformePuestoVotacion = () => {
+    const [isModuleDisabled, setIsModuleDisabled] = useState(false)
+
     const classes = useStyles()
 
     const menuOptions = [
@@ -27,12 +28,14 @@ const SubModuloInformePuestoVotacion = () => {
         {
             title: '1 Reporte de votantes',
             img: reporteVotantes,
-            href: 'informes_puestos_votacion7'
+            href: 'informes_puestos_votacion7',
+            disabled: isModuleDisabled
         },
         {
             title: '2 Reporte de votantes',
             img: reporteVotantes,
-            href: 'informes_puestos_votacion7'
+            href: 'informes_puestos_votacion7',
+            disabled: isModuleDisabled
         },
     ]
 
@@ -65,7 +68,7 @@ const SubModuloInformePuestoVotacion = () => {
                         menuOptions.map((option)=>{
                             return (
                                 <Grid key={option.title} item xs={6} sx={{mt: 5, height: '170px', width: '170px',}} >
-                                    <a href={option.href} style={{textDecoration: 'none'}}>
+                                    <a href={option.href} style={{textDecoration: 'none'}} >
                                         <Paper sx={{height: '170px', borderRadius: '15px',  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}} elevation={4} key={option.name} >
                                             <img src={option.img} alt={option.title} className={classes.homeIcon} />
                                             <Typography sx={{mt: 3, textDecoration: 'none'}} variant="h4" textAlign="center">{option.title}</Typography>

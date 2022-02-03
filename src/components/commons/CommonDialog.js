@@ -1,42 +1,57 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography} from "@mui/material";
+import {Controller, useForm} from "react-hook-form";
 
-const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, isinput, acceptButton, href}) => {
-    let navigate = useNavigate();
-
+const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, isinput, acceptButton, error, rules}) => {
+    const { watch, control} = useForm({
+    })
+    const values = watch()
     const handleSubmitInfo = async (body) =>{
+        console.log(body)
         try {
-            console.log(body)
             let response = await submitInfo(body)
             response = await response.data
-            //console.log(response)
             onClose()
             return response
         } catch (e) {
             console.log(e)
         }
     }
+    const handleSubmitMesaInfo = async (mesa, value) => {
+        submitInfo(mesa, value)
+    }
     return (
         <Dialog open={open}  >
-            <DialogTitle>{dialogTitle} {mesa}</DialogTitle>
+            <DialogTitle>{dialogTitle} {mesa && mesa.name}</DialogTitle>
             {
                 isinput ?
                 <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id={'votantes' + mesa}
-                        type="number"
-                        variant="outlined"
+                    <Controller
+                        control={control}
+                        name={mesa && mesa.name}
+                        render={({ field: { onChange, onBlur, value, ref } }) => {
+                            return(
+                                <TextField
+                                margin="normal"
+                                required
+                                fullWidth
+                                name={mesa.name}
+                                type={rules.type}
+                                value={value}
+                                onChange={onChange}
+                                error={error && error.isError}
+                                onBlur={onBlur}
+                                />
+                            )
+                        }}
                     />
                 </DialogContent> : null
             }
             <DialogActions sx={{mr: 4}}>
                 {
                     !acceptButton ? <>
-                        <Button onClick={()=>handleSubmitInfo(bodyInfo)} >
-                            <Typography sx={{mx: 5}} variant="h6" color="primary.main">
+                        <Button onClick={()=> mesa && mesa.name ? submitInfo(mesa.name, values[mesa.name]) : handleSubmitInfo(bodyInfo)} >
+                            <Typography sx={{mx: 10}} variant="h6" color="primary.main">
                                 SI
                             </Typography>
                         </Button>
