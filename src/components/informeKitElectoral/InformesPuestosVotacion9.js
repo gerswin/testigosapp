@@ -62,7 +62,7 @@ const InformesPuestosVotacion9 = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120387794",
+                "document":"1120873152",
                 "question":"8",
                 "answer": values.q8,
             }
