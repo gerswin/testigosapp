@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useController } from 'react-hook-form'
 import FormLabel from "@mui/material/FormLabel";
 import Typography from "@mui/material/Typography";
@@ -9,8 +9,34 @@ import Box from "@mui/material/Box";
 import CommonTextField from "./CommonTextField";
 
 const CommonRadioGroup = ({ field, control, error }) => {
-    const { name, rules, options, row } = field
+    const { name, rules, options, row, novelty, addInput } = field
     const { field: {value, onChange, onBlur}} = useController({name, control, rules})
+
+    const otherObject = {
+        "type": "typeNovelties",
+        "id": "other"+name,
+        "attributes": {
+            "eventTypeCode": "02",
+            "eventTypeText": "Apertura de puesto - Si con novedad",
+            "novelty": "Otra",
+            "status": "Active",
+            "actionDelete": "active",
+            "actionEdit": "active",
+            "validationMessageDelete": "",
+            "validationMessageEdit": ""
+        }
+    }
+    const createOther = ()=> {
+            if ( novelty === true && addInput === true) {
+                const index = options.findIndex(obj => {
+                    return obj.attributes.novelty === "Otra"
+                })
+                if (index === -1) {
+                    options.push(otherObject)
+                }
+            }
+    }
+    createOther()
 
     return (
         <>
@@ -29,8 +55,26 @@ const CommonRadioGroup = ({ field, control, error }) => {
             >
                 {
                     options.map(option => {
-                        if (field.novelty === true) {
-                            return (
+                        if (novelty === true) {
+                            return option && option.attributes && option.attributes.novelty === 'Otra' ?
+                                 <Box key={option.id} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <FormControlLabel
+                                        name={name}
+                                        value={option.attributes.novelty}
+                                        control={<Radio/>}
+                                        label={option.attributes.novelty}
+                                        onChange={onChange}
+                                        onBlur={onBlur}
+                                    />
+                                    <CommonTextField
+                                        key={option.id}
+                                        name={option.id}
+                                        value={option.id}
+                                        //disabled={value !== 'otra'}
+                                        control={control}
+                                        rules={field.inputLabel.rules}
+                                    />
+                                </Box> : (
                                 <FormControlLabel
                                     name={name}
                                     key={option.attributes.novelty}
@@ -40,27 +84,6 @@ const CommonRadioGroup = ({ field, control, error }) => {
                                     onBlur={onBlur}
                                     onChange={onChange}
                                 />
-                            )
-                        } else if (option.addInput === true) {
-                            return (
-                                <Box key={option.value} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <FormControlLabel
-                                        name={name}
-                                        value={option.value}
-                                        control={<Radio/>}
-                                        label={option.label}
-                                        onChange={onChange}
-                                        onBlur={onBlur}
-                                    />
-                                    <CommonTextField
-                                        key={option.inputLabel.name}
-                                        name={option.inputLabel.name}
-                                        value={value}
-                                        disabled={value !== 'otra'}
-                                        control={control}
-                                        rules={option.inputLabel.rules}
-                                    />
-                                </Box>
                             )
                         } else {
                             return (

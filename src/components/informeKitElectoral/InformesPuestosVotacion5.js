@@ -53,9 +53,7 @@ const InformesPuestosVotacion5 = () => {
             const source = axios.CancelToken.source();
             axios.get(tablesUrl, { cancelToken: source.token })
                 .then(res => {
-                    console.log(res.data.data)
                     setMesasData(res && res.data && res.data.data && res.data.data.attributes && res.data.data.attributes.tableAssignment);
-                    console.log(mesasData)
                 })
                 .catch(err => {
                     console.log(err)
@@ -119,7 +117,16 @@ const InformesPuestosVotacion5 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: data && data.data
+            options: data && data.data,
+            addInput: true,
+            inputLabel: {
+                name: 'q6AddInput',
+                rules: {
+                    required: values.q6 === 'NO',
+                    type: 'string',
+                    validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
+                },
+            }
         },
     ]
 

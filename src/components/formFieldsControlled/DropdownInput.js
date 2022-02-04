@@ -4,7 +4,6 @@ import { useController } from "react-hook-form";
 
 const DropdownInput = ({ name, label, control, rules, error, options, defaultValue, mesas }) => {
     const { field: {value, onChange, onBlur}} = useController({name, control, rules})
-    console.log(options)
     const renderDropdownOptions = () => {
         return mesas === true ?
             options.map( option => (

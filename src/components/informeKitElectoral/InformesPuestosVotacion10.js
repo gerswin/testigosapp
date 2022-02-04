@@ -86,31 +86,16 @@ const InformesPuestosVotacion10 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: data && data.data
-                /*[
-                {
-                    label: 'Documentos extraviados por fuerza mayor o caso fortuito',
-                    value: 'q9a'
+            options: data && data.data,
+            addInput: true,
+            inputLabel: {
+                name: 'q9AddInput',
+                rules: {
+                    required: values.q9Novelty === 'Otra',
+                    type: 'string',
+                    validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
                 },
-                {
-                    label: 'Documentos robados por fuerza mayor o c',
-                    value: 'q9b',
-                },
-                {
-                    label: 'Otra',
-                    value: 'otra',
-                    addInput: true,
-                    inputLabel: {
-                        name: 'q9AddInput',
-                        rules: {
-                            required: displayQ9Novelty,
-                            type: 'string',
-                            validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
-                        },
-                        //error: errors.q6NoveltyAddInput
-                    }
-                }
-            ],*/
+            }
         },
     ]
     const handleOpen = () => {
