@@ -51,7 +51,7 @@ const InformesPuestosVotacion2 = () => {
 
     const noveltiesUrl02 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=02'
     const noveltiesUrl03 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=03'
-    const { data, loading, error } = useFetch(noveltiesUrl02)
+    let { data, loading, error } = useFetch(noveltiesUrl02)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -123,6 +123,14 @@ const InformesPuestosVotacion2 = () => {
             },
             options: data && data.data,
             addInput: true,
+            inputLabel: {
+                name: 'q2AddInput',
+                rules: {
+                    required: values.q2SiCon === 'Otra',
+                    type: 'string',
+                    validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
+                },
+            }
         },
         {
             type: 'radioGroup',
@@ -137,6 +145,14 @@ const InformesPuestosVotacion2 = () => {
             },
             options: novelties03.data,
             addInput: true,
+            inputLabel: {
+                name: 'q9AddInput',
+                rules: {
+                    required: values.q2SiCon === 'Otra',
+                    type: 'string',
+                    validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
+                },
+            }
         },
     ]
 

@@ -85,7 +85,16 @@ const InformesPuestosVotacion11 = () => {
                 type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             },
-            options: data && data.data
+            options: data && data.data,
+            addInput: true,
+            inputLabel: {
+                name: 'q11AddInput',
+                rules: {
+                    required: values.q11Novelty === 'Otra',
+                    type: 'string',
+                    validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
+                },
+            }
         },
     ]
 
