@@ -53,6 +53,7 @@ const InformesPuestosVotacion5 = () => {
             const source = axios.CancelToken.source();
             axios.get(tablesUrl, { cancelToken: source.token })
                 .then(res => {
+                    console.log(res.data.data)
                     setMesasData(res && res.data && res.data.data && res.data.data.attributes && res.data.data.attributes.tableAssignment);
                     console.log(mesasData)
                 })

@@ -1,7 +1,6 @@
-import produce from "immer"
 import actionTypes from './actionTypes';
 
-const INITIAL_STATE = {
+let INITIAL_STATE = {
     loginNewUser: {},
     dataTableAssignment: [],
     updateTableAssignment: []
@@ -16,12 +15,18 @@ const rootReducer = (state = INITIAL_STATE, action) => {
             }
         case actionTypes.FETCH_TABLE_ASSIGNMENT:
             return Object.assign({}, state, {
-                dataTableAssignment: state.dataTableAssignment.concat(action.payload)
+                dataTableAssignment: action.payload
             })
         case actionTypes.UPDATE_TABLE_ASSIGNMENT:
-            return Object.assign({}, state, {
-                updateTableAssignment: state.dataTableAssignment.concat(action.payload)
-            })
+            const index = state.dataTableAssignment.findIndex(obj => obj.name === action.payload.name)
+            if (index !== -1 ) {
+                state.dataTableAssignment[index].value = action.payload.value
+                return {
+                    dataTableAssignment: [
+                        ...state.dataTableAssignment,
+                    ]
+                }
+            }
         default:
             return state
     }
