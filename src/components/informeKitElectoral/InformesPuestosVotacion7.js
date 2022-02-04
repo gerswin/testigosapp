@@ -4,7 +4,7 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import moment from 'moment';
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, Grid, Paper, TextField, ButtonBase, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {Box, Container, FormControl, Grid, Paper, TextField, Typography} from "@mui/material";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
 import CommonDialog from "../commons/CommonDialog";
@@ -71,12 +71,11 @@ const InformesPuestosVotacion7 = () => {
     const updateVotingUrl = process.env.API_PUESTOS_URL + '/delegates/voting'
     const { data, loading, error } = useFetch(parametersUrl)
     const dispatch = useDispatch()
-    const mesas = useSelector((state)=>state.dataTableAssignment)
+    let mesas = useSelector((state)=> state.dataTableAssignment)
     let navigate = useNavigate();
 
     useEffect(() => {
         const source = axios.CancelToken.source();
-
         axios.get(delegatesUrl, { cancelToken: source.token } )
             .then(res => {
                 //dispatch(dataTableAssignment(res.data.data[0].attributes.tableAssignment))
@@ -132,7 +131,6 @@ const InformesPuestosVotacion7 = () => {
     const handleClose = () => {
         setOpen(false)
     }
-
     const body = {
         "data": {
             "type": "delegates",
@@ -143,10 +141,8 @@ const InformesPuestosVotacion7 = () => {
             }
         }
     }
-
     const sendUpdateTableAssignment = (mesa, value) => {
-        console.log({mesa, value})
-        dispatch(dataTableAssignment({name: mesa, value: value}))
+        dispatch(updateTableAssignment({name: mesa, value: value}))
         handleClose()
     }
     const postTablesData = async (body) => {

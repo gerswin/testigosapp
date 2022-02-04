@@ -17,9 +17,6 @@ const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, i
             console.log(e)
         }
     }
-    const handleSubmitMesaInfo = async (mesa, value) => {
-        submitInfo(mesa, value)
-    }
     return (
         <Dialog open={open}  >
             <DialogTitle>{dialogTitle} {mesa && mesa.name}</DialogTitle>
