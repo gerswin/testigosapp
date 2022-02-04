@@ -1,18 +1,14 @@
-import react from 'react';
+import React from 'react';
 import HeaderCustom from "../header/HeaderCustom";
 import Footer from "../footer/Footer";
-import {Box, Typography, Container, Grid, TextField, FormControl} from "@mui/material";
-import CommonTextField from "../formFieldsControlled/CommonTextField";
+import {Box, Typography, Container, Grid, Radio, TextField, FormControl, FormLabel, RadioGroup} from "@mui/material";
 import {useForm} from "react-hook-form";
-import FormLabel from "@mui/material/FormLabel";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import React from "react";
+import CommonButton from "../commons/CommonButton";
 
 import checkGreenIcon from '../../images/estados/checkGreenIcon.svg'
 import dangerYellowIcon from '../../images/estados/dangerYellowIcon.svg'
-import CommonButton from "../commons/CommonButton";
+import faltantesGreyIcon from '../../images/estados/faltantesGreyIcon.svg'
+import inservibleRedIcon from '../../images/estados/inservibleRedIcon.svg'
 
 
 const InformeKitElectoral = () => {
@@ -85,19 +81,21 @@ const InformeKitElectoral = () => {
         {
             label: 'Inservible',
             color: '#EE002D',
-            value: 'inservible'
+            value: 'inservible',
+            icon: inservibleRedIcon
         },
         {
             label: 'Faltantes',
             color: '#B0B0B0',
-            value: 'faltantes'
+            value: 'faltantes',
+            icon: faltantesGreyIcon
         },
     ]
 
     return (
         <>
             <HeaderCustom/>
-            <Container component="main" maxWidth="xs" sx={{mb: 20}}>
+            <Container component="main" maxWidth="xs" sx={{mb: 20, px: 4}}>
                 <Typography variant="h3" sx={{mb: 5, ml: 5, mt: 5, fontWeight: 700, color: "grey.grisOscuro"}} >
                     Delegados
                 </Typography>
@@ -139,7 +137,7 @@ const InformeKitElectoral = () => {
                     {
                         mesas.map(mesa => {
                             return (
-                                <Grid sx={{mt: 1, borderBottom: 1, borderLeft: 1, borderRight: 1, borderColor: "grey.grisDetalles", py: "15px", width: 1, px: 4 }} item >
+                                <Grid key={mesa.value} sx={{mt: 1, borderBottom: 1, borderLeft: 1, borderRight: 1, borderColor: "grey.grisDetalles", py: "15px", width: 1, px: 4 }} item >
                                     <FormControl component="fieldset" sx={{width: 1, display: 'flex', flexDirection: 'row'  }} >
                                         <FormLabel sx={{width: 0.4}} >
                                             <Typography variant="h3" sx={{mb: 3, mt: 3, color: 'grey.grisOscuro'}}>
@@ -154,7 +152,7 @@ const InformeKitElectoral = () => {
                                             sx={{width: 1, display: 'flex', flexDirection: 'row', justifyItems: 'space-around'}}
                                         >
                                             {estados.map(estado => (
-                                                <Radio control={control} value={estado.value} key={estado.name} sx={{
+                                                <Radio control={control} value={estado.value} key={estado.value} sx={{
                                                     width: '55px',
                                                     '&, &.Mui-checked': {
                                                         color: estado.color,
@@ -171,12 +169,14 @@ const InformeKitElectoral = () => {
                 </Grid>
                 {
                     estados.map(estado => (
-                        <Grid container sx={{ borderBottom: 1, borderColor: "grey.grisDetalles", py: "15px", justifyContent: 'space-between' }} >
-                            <Grid item xs={6} sx={{my: "auto"}} >
+                        <Grid key={estado.value} container sx={{ borderBottom: 1, borderColor: "grey.grisDetalles", py: 4, px: 3, justifyContent: 'space-between' }} >
+                            <Grid item xs={8} sx={{my: "auto", display: 'flex', flexDirection: 'row', alignItems: 'center'}} >
+                                <img src={estado.icon} alt={estado.label} style={{marginRight: '12px'}}/>
                                 <Typography variant="titleInput">{estado.label}</Typography>
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
+                                    size="small"
                                     type="number"
                                     variant="outlined"
                                     required={true}
