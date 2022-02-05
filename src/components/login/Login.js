@@ -6,8 +6,6 @@ import { useStyles } from "../../theme/themeStyles";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-//redux
-
 import logoRnec from '../../images/registraduria-nacional.svg'
 import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
 import useAuthenticationService from "../../domains/AuthenticationService";
