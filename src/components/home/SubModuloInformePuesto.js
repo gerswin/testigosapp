@@ -11,9 +11,7 @@ import reporteVotantes from "../../images/informes_puesto/reporte_votantes.svg"
 
 const SubModuloInformePuestoVotacion = () => {
     const [isModuleDisabled, setIsModuleDisabled] = useState(false)
-
     const classes = useStyles()
-
     const menuOptions = [
         {
             title: 'Apertura del puesto',
