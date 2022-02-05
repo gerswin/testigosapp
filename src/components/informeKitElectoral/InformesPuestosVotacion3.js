@@ -46,13 +46,15 @@ const InformesPuestosVotacion3 = () => {
             q3: '',
             q3MissingJury: "",
             q4: '',
-            q4RemmantsUsed: ""
+            q4RemmantsUsed: "",
         }
     })
     const { errors, dirtyFields, touchedFields } = formState;
     const values = watch()
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
     let navigate = useNavigate();
+
+
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)

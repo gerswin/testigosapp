@@ -1,4 +1,4 @@
-import react, {useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Link, Grid, FormControl, Typography, Container, Box } from '@mui/material'
 import CommonButton from '../commons/CommonButton'
 import CommonTextField from '../formFieldsControlled/CommonTextField'

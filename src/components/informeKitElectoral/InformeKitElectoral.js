@@ -4,12 +4,10 @@ import Footer from "../footer/Footer";
 import {Box, Typography, Container, Grid, Radio, TextField, FormControl, FormLabel, RadioGroup} from "@mui/material";
 import {useForm} from "react-hook-form";
 import CommonButton from "../commons/CommonButton";
-
 import checkGreenIcon from '../../images/estados/checkGreenIcon.svg'
 import dangerYellowIcon from '../../images/estados/dangerYellowIcon.svg'
 import faltantesGreyIcon from '../../images/estados/faltantesGreyIcon.svg'
 import inservibleRedIcon from '../../images/estados/inservibleRedIcon.svg'
-
 
 const InformeKitElectoral = () => {
     const {control, formState} = useForm()
