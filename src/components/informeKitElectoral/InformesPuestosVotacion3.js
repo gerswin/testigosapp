@@ -190,7 +190,7 @@ const InformesPuestosVotacion3 = () => {
     }
 
     const onSubmit = useCallback(
-        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+        async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
             try {
                 validateFunction(fields, errors, values, setError)

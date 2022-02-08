@@ -1,16 +1,10 @@
-import react, {useState} from 'react'
+import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-
-import CommonTextField from '../formFieldsControlled/CommonTextField'
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import {Grid, Link, Paper} from '@mui/material'
-import CommonButton from '../commons/CommonButton'
-import {useStyles} from "../../theme/themeStyles";
-
+import {Grid, Link, Paper, Box, Container, Typography} from '@mui/material'
 import { useForm } from "react-hook-form";
-
+import CommonButton from '../commons/CommonButton'
+import CommonTextField from '../formFieldsControlled/CommonTextField'
+import {useStyles} from "../../theme/themeStyles";
 import logoRnec from '../../images/registraduria-nacional.svg'
 import logoRnecXxi from '../../images/logos_web_sigloXXI_negro.svg'
 
@@ -57,7 +51,7 @@ const PasswordRecover = (props) => {
                 }}
             >
                 <img src={logoRnec} alt='logoRnec' className={classes.logo} />
-                <Typography variant="h1" textAlign="center">
+                <Typography variant="h1Mobile" >
                     Recuperar contraseña
                 </Typography>
                 <Box component="form" display='flex' flexDirection='column' onSubmit={handleSubmit} sx={{ mt: 1, width: 1 }} >

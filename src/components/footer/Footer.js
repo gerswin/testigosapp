@@ -3,7 +3,6 @@ import {Box, BottomNavigation, BottomNavigationAction, Paper }from '@mui/materia
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import {useStyles} from "../../theme/themeStyles";
 
 const Footer = () => {
     const [value, setValue] = useState(0);

@@ -101,7 +101,7 @@ const InformesPuestosVotacion2 = () => {
             row: true,
             rules: {
                 required: true,
-                type: 'radio',
+                type: 'string',
                 validate: (value) => {
                     if (radioq2.findIndex(option => option.value === value) === -1) {
                         return 'invalid selection'

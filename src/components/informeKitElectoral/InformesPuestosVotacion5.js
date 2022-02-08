@@ -191,14 +191,14 @@ const InformesPuestosVotacion5 = () => {
     }
 
     const onSubmit = useCallback(
-        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+        async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
             try {
                 validateFunction(fields, errors, values, setError)
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
                     console.log('level1', errors)
-                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && fieldValidation()  ) {
+                    if (_.isEmpty( errors ) && _.isEmpty(dirtyFields) === false && fieldValidation()  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
                         }
