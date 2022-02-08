@@ -1,15 +1,15 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-rdtwebcontrolpuestos-dev-164145-authRole",
-      "UnauthRoleArn": "arn:aws:iam::570604834227:role/amplify-rdtwebcontrolpuestos-dev-164145-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::570604834227:role/amplify-rdtwebcontrolpuestos-dev-164145-authRole",
+      "AuthRoleName": "amplify-rdtwebcontrolpuestos-dev-100856-authRole",
+      "UnauthRoleArn": "arn:aws:iam::570604834227:role/amplify-rdtwebcontrolpuestos-dev-100856-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::570604834227:role/amplify-rdtwebcontrolpuestos-dev-100856-authRole",
       "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-rdtwebcontrolpuestos-dev-164145-deployment",
-      "UnauthRoleName": "amplify-rdtwebcontrolpuestos-dev-164145-unauthRole",
-      "StackName": "amplify-rdtwebcontrolpuestos-dev-164145",
-      "StackId": "arn:aws:cloudformation:us-east-1:570604834227:stack/amplify-rdtwebcontrolpuestos-dev-164145/c63a3230-7a39-11ec-a4cc-12b68f4b71db",
-      "AmplifyAppId": "d1v9wkr6uy5ea5"
+      "DeploymentBucketName": "amplify-rdtwebcontrolpuestos-dev-100856-deployment",
+      "UnauthRoleName": "amplify-rdtwebcontrolpuestos-dev-100856-unauthRole",
+      "StackName": "amplify-rdtwebcontrolpuestos-dev-100856",
+      "StackId": "arn:aws:cloudformation:us-east-1:570604834227:stack/amplify-rdtwebcontrolpuestos-dev-100856/0e002870-88f1-11ec-b575-0e2cb68ae875",
+      "AmplifyAppId": "d1m743v2ympi5w"
     },
     "categories": {
       "auth": {

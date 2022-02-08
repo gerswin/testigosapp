@@ -77,13 +77,13 @@ const ForgotPassword = (props) => {
 
     return (
         <Container component="main" maxWidth="xs">
-            <Paper
+            <Box
                 sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     p: "14px",
-                    mt: "45px",
+                    mt: "30px",
                     mx: "14px",
                     borderRadius: "15px",
                     boxShadow: 25,
@@ -91,7 +91,7 @@ const ForgotPassword = (props) => {
                 }}
             >
                 <img src={logoRnec} alt='logoRnec' className={classes.logo} />
-                <Typography variant="h1" textAlign="center">
+                <Typography variant="h1Mobile" sx={{mb: 4}} >
                     Cambiar contraseña
                 </Typography>
                 <Box component="form" display='flex' flexDirection='column' sx={{ mt: 1, width: 1 }} >
@@ -120,7 +120,7 @@ const ForgotPassword = (props) => {
                     </Link>
                     <img src={logoRnecXxi} alt='logoRnec' className={classes.logo} />
                 </Grid>
-            </Paper>
+            </Box>
         </Container>
     )
 

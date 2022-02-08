@@ -69,8 +69,7 @@ export default function useAuthenticationService() {
                 username: email || undefined,
                 password: password || undefined,
             }
-
-            await amplifyAuth.signIn(userCredentials)
+            const userAuthenticated = await amplifyAuth.signIn(userCredentials)
                 .then(async user => {
                     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
                         dispatch(loginNewUser(user))
@@ -94,8 +93,9 @@ export default function useAuthenticationService() {
                     }
                 })
                 .catch(e => {
-                    console.log(e)
+                    return e
                 })
+            return userAuthenticated
 
             //await amplifyAuth.signOut({ global: true })
 

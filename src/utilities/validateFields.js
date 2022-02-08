@@ -21,11 +21,11 @@ const validateFunction = (fields, errors, values, setError) => {
             }
 
             if (fieldInputRequiredRule && !values[field.inputLabel.name] ) {
-                await setError(field.inputLabel.name, {type: 'required', message: 'This field is required.',  isError: true})
+                await setError(field.inputLabel.name, {type: 'required', message: 'Campo obligario',  isError: true})
             }
         }
 
-        if (typeofRule !== typeof values[field.name] && values[field.name] !== undefined) {
+        if (typeofRule !== typeof values[field.name]/* && values[field.name] !== undefined*/) {
             await setError(field.name, {type: 'typeOf', message: 'Type of field is not valid', isError: true})
         }
 
@@ -37,7 +37,7 @@ const validateFunction = (fields, errors, values, setError) => {
         }
 
         if (requiredRule && !values[field.name] ) {
-            await setError(field.name, {type: 'required', message: 'This field is required.',  isError: true})
+            await setError(field.name, {type: 'required', message: 'Campo obligario',  isError: true})
         }
     });
 }
