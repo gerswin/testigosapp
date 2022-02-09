@@ -14,8 +14,6 @@ import validateErrors from "../../utilities/validateErrors";
 import validateFunction from "../../utilities/validateFields";
 import _ from "underscore";
 
-
-
 const defaultValues = {
     defaultValues: {
         username: '',
@@ -33,11 +31,10 @@ const Login = () => {
     const values = watch()
     const authenticationService = useAuthenticationService()
 
-
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
     }, [formState])
-    //console.log(newAlert)
+
     async function signIn(username, password) {
         try {
             const newLogin = await authenticationService.signIn({email: username, password: password})
@@ -81,20 +78,19 @@ const Login = () => {
             }
         },
         {
+            type: 'password',
             name: 'password',
             label: 'Contraseña',
             placeholder: 'Contraseña',
             rules: {
                 required: true,
-                type: "password",
+                type: "string",
                 validate: (value) => typeof value !== 'string' ? 'typeof value error' : true
             }
         }
     ]
     const fieldValidation = () => {
         switch(values.username){
-            case '':
-                return dirtyFields.username !== undefined && dirtyFields.password !== undefined
             default:
                 return dirtyFields.username !== undefined && dirtyFields.password !== undefined
         }
@@ -155,6 +151,7 @@ const Login = () => {
                                     control={control}
                                     rules={field.rules}
                                     error={errors[field.name]}
+                                    type={field.type}
                                 />
                             ))
                         }

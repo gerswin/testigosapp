@@ -7,13 +7,14 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {useStyles} from "../../theme/themeStyles";
 
-const CommonTextField = ({ name, label, control, rules, error, multiline, defaultValue, disabled }) => {
-    const { field: {value, onChange, onBlur} } = useController({name, control, rules})
+const CommonTextField = ({ name, label, control, rules, error, multiline, defaultValue, disabled, type }) => {
+    const { field: {value, onChange, onBlur, ref} } = useController({name, control, rules: rules})
     const classes = useStyles()
     const [values, setValues] = useState({
         showPassword: false,
     });
 
+    console.log(error)
     const handleClickShowPassword = () => {
         setValues({
             ...values,
@@ -24,7 +25,7 @@ const CommonTextField = ({ name, label, control, rules, error, multiline, defaul
         event.preventDefault();
     };
     const renderInput = () => {
-        switch (rules.type) {
+        switch (type) {
             case 'password':
                 return <TextField
                     margin="normal"
@@ -32,8 +33,9 @@ const CommonTextField = ({ name, label, control, rules, error, multiline, defaul
                     fullWidth
                     name={name}
                     label={value ? '' : label}
-                    type={values.showPassword ? 'string' : rules.type}
+                    type={values.showPassword ? 'string' : type}
                     id={name}
+                    inputRef={ref}
                     size='small'
                     InputLabelProps={{
                         style: {
