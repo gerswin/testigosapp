@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Route, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, TextField, Typography} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -24,7 +24,6 @@ const q5Options = [
 ]
 
 const InformesPuestosVotacion6 = () => {
-
     const { control, formState, clearErrors, getValues, setError } = useForm({
         defaultValues: {
             q5: '',
@@ -34,6 +33,7 @@ const InformesPuestosVotacion6 = () => {
     const [open, setOpen] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     let navigate = useNavigate();
     const values = getValues()
     const url =  process.env.API_PUESTOS_URL + '/delegates/places'
@@ -42,6 +42,26 @@ const InformesPuestosVotacion6 = () => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
     }, [formState])
 
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
+
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
+    }
     const fields = [
         {
             type: 'radioGroup',
@@ -60,7 +80,6 @@ const InformesPuestosVotacion6 = () => {
             options: q5Options
         }
     ]
-
     const body = {
         "data": {
             "type": "placesReports",
@@ -71,7 +90,6 @@ const InformesPuestosVotacion6 = () => {
             }
         }
     }
-
     const handleOpen = () => {
         setConfirmaRespuesta(true)
         setOpen( true)
@@ -79,7 +97,6 @@ const InformesPuestosVotacion6 = () => {
     const handleClose = () => {
         setOpen(false)
     }
-
     const postNovedadesData = async (body) => {
         let response
         try {
@@ -156,7 +173,6 @@ const InformesPuestosVotacion6 = () => {
                         }
                     </FormControl>
                     <CommonButton style={{margin: '0 auto'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} sx={{marginTop: 8}} text={'GUARDAR'} type='primario' />
-
                     {
                         confirmaRespuesta ?
                             <CommonDialog
@@ -169,6 +185,16 @@ const InformesPuestosVotacion6 = () => {
                             /> : null
                     }
                 </Box>
+                <Snackbar
+                    open={newAlert.displayAlert}
+                    autoHideDuration={5000}
+                    sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                    onClose={handleAlertClose}
+                    children={(
+                        <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                    )}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+                />
             </Container>
             <Footer/>
         </>

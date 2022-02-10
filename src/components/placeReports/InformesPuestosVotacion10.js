@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, MenuItem, Typography, Select} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -37,11 +37,11 @@ const InformesPuestosVotacion10 = () => {
     const [displayQ9Novelty, setDisplayQ9Novelty] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     const values = watch()
     const placesUrl = process.env.API_PUESTOS_URL + '/delegates/places'
     const noveltiesUrl =  process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=05'
     const { data, loading, error } = useFetch(noveltiesUrl)
-
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -56,6 +56,19 @@ const InformesPuestosVotacion10 = () => {
         }
         handleQ9Display()
     }, [formState])
+
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
 
     const fields = [
         {
@@ -104,6 +117,13 @@ const InformesPuestosVotacion10 = () => {
     }
     const handleClose = () => {
         setOpen(false)
+    }
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
     }
     const bodyNo = {
         "data": {
@@ -223,6 +243,16 @@ const InformesPuestosVotacion10 = () => {
                     }
                 </Box>
             </Container>
+            <Snackbar
+                open={newAlert.displayAlert}
+                autoHideDuration={5000}
+                sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                onClose={handleAlertClose}
+                children={(
+                    <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                )}
+                anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+            />
             <Footer/>
         </>
     )
