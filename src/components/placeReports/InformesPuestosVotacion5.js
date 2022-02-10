@@ -1,10 +1,9 @@
-import {Route, useNavigate} from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import React, {useCallback, useEffect, useState} from "react";
 import _ from "underscore";
-
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, TextField, MenuItem, Typography, Select} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -41,12 +40,26 @@ const InformesPuestosVotacion5 = () => {
     const [acceptButton, setAcceptButton] = useState(false)
     const [displayQ6Novelty, setDisplayQ6Novelty ] = useState(false)
     const [mesasData, setMesasData] = useState([])
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     let navigate = useNavigate();
     const values = watch()
     const placesUrl =  process.env.API_PUESTOS_URL + '/delegates/places'
     const noveltiesUrl =  process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=04'
     const tablesUrl =  process.env.API_PUESTOS_URL + '/delegates/table?document=1120873152'
     const { data, loading, error } = useFetch(noveltiesUrl)
+
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
 
     useEffect(()=>{
         const fetchMesas = () => {
@@ -154,7 +167,13 @@ const InformesPuestosVotacion5 = () => {
             }
         }
     }
-
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
+    }
     const handleOpen = () => {
         setConfirmaRespuesta(true)
         setOpen( true)
@@ -291,6 +310,16 @@ const InformesPuestosVotacion5 = () => {
                         }
                     </Box>
                 </Box>
+                <Snackbar
+                    open={newAlert.displayAlert}
+                    autoHideDuration={5000}
+                    sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                    onClose={handleAlertClose}
+                    children={(
+                        <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                    )}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+                />
             </Container>
             <Footer/>
         </>

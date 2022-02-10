@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, TextField, Typography} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -41,6 +41,7 @@ const InformesPuestosVotacion3 = () => {
     const [open, setOpen] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     const { control, formState, watch, clearErrors, setError } = useForm({
         defaultValues: {
             q3: '',
@@ -54,7 +55,26 @@ const InformesPuestosVotacion3 = () => {
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
     let navigate = useNavigate();
 
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
 
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
+    }
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -284,6 +304,16 @@ const InformesPuestosVotacion3 = () => {
                         }
                     </Box>
                 </Box>
+                <Snackbar
+                    open={newAlert.displayAlert}
+                    autoHideDuration={5000}
+                    sx={{display: 'flex', mb: 12, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                    onClose={handleAlertClose}
+                    children={(
+                        <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                    )}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+                />
             </Container>
             <Footer/>
         </>
