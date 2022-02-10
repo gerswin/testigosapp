@@ -1,5 +1,5 @@
-import react, {useCallback, useEffect, useState} from 'react';
-import { Box, Typography, Container, FormControl } from "@mui/material"
+import React, {useCallback, useEffect, useState} from 'react';
+import { Box, Typography, Container, FormControl, Snackbar } from "@mui/material"
 import _ from "underscore";
 import HeaderCustom from '../header/HeaderCustom.js'
 import CommonButton from "../commons/CommonButton";
@@ -9,10 +9,10 @@ import Footer from "../footer/Footer";
 import validateErrors from '../../utilities/validateErrors'
 import axios from "axios";
 import validateFunction from "../../utilities/validateFields";
-import React from "react";
 import CommonDialog from "../commons/CommonDialog";
 import {useNavigate} from "react-router-dom";
 import useFetch from "../../utilities/useFetch";
+import { useSelector, shallowEqual} from "react-redux";
 
 const radioq1 = [
     {
@@ -23,29 +23,6 @@ const radioq1 = [
         label: 'No asistiré',
         value: 'NO'
     }
-]
-
-const novedades = [
-    {
-        label: 'Lluvia intensa',
-        value: 'lluvia-intensa'
-    },
-    {
-        label: 'Retraso personal',
-        value: 'retraso-personal'
-    },
-    {
-        label: 'Calamidad Familiar',
-        value: 'calamidad-familiar'
-    },
-    {
-        label: 'Caos Vehicular',
-        value: 'caos-vehicular'
-    },
-    {
-        label: 'Disturbios',
-        value: 'disturbios'
-    },
 ]
 
 const AsistenciaPuestosVotacion = () => {
@@ -60,12 +37,15 @@ const AsistenciaPuestosVotacion = () => {
     const [displayQ2, setDisplayQ2] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     const values = watch()
     const placesUrl = process.env.API_PUESTOS_URL + '/delegates/places'
     const noveltiesUrl = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=01'
     const { data, loading, error } = useFetch(noveltiesUrl)
     let navigate = useNavigate();
+    const userLoggedIn = useSelector( state => state.loginNewUser, shallowEqual)
 
+    console.log(userLoggedIn)
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
         const handleQ2Display = () => {
@@ -78,6 +58,19 @@ const AsistenciaPuestosVotacion = () => {
         }
         handleQ2Display()
     }, [formState])
+
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
 
     const fields = [
         {
@@ -112,7 +105,7 @@ const AsistenciaPuestosVotacion = () => {
         "data": {
             "type": "placesReports",
             "attributes": {
-                "document":"1120873152",
+                "document": userLoggedIn,
                 "question": "1",
                 "novelty": values.q1Novelty || 'SI',
                 "answer": values.q1
@@ -126,7 +119,13 @@ const AsistenciaPuestosVotacion = () => {
     const handleClose = () => {
         setOpen(false)
     }
-
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
+    }
     const postNovedadesData = async (body) => {
         let response
         try {
@@ -143,7 +142,6 @@ const AsistenciaPuestosVotacion = () => {
             console.log(e)
         }
     }
-
     const fieldValidation = () => {
         switch(values.q1){
             case 'NO':
@@ -154,7 +152,6 @@ const AsistenciaPuestosVotacion = () => {
                 return
         }
     }
-
     const onSubmit = useCallback(
         async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
@@ -224,10 +221,18 @@ const AsistenciaPuestosVotacion = () => {
                                 /> : null
                         }
                     </Box>
-
+                    <Snackbar
+                        open={newAlert.displayAlert}
+                        autoHideDuration={5000}
+                        sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                        onClose={handleAlertClose}
+                        children={(
+                            <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                        )}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+                    />
                 </Box>
             </Container>
-
             <Footer/>
         </>
     )

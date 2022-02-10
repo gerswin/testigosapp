@@ -149,7 +149,7 @@ const InformesPuestosVotacion10 = () => {
             case 'SI':
                 return true
             default:
-                return
+                return dirtyFields.q9 !== undefined || dirtyFields.q9Novelty !== undefined
         }
     }
     const onSubmit = useCallback(

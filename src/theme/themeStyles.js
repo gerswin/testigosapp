@@ -133,6 +133,14 @@ export const theme = createTheme({
             lineHeight: "24px",
             color: '#EE002D',
             letterSpacing: '0.5px'
+        },
+        alertTittleS: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 400,
+            fontSize: "14px",
+            lineHeight: "16px",
+            color: '#EE002D',
+            //letterSpacing: '0.5px'
         }
     },
     shape: {

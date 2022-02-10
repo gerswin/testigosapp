@@ -21,12 +21,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import validateErrors from "../../utilities/validateErrors";
 import validateFunction from "../../utilities/validateFields";
 
-const ForgotPassword = (props) => {
+const ChangePassword = (props) => {
     const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
-    const [passwordValues, setPasswordValues] = useState({
-        showPassword: false,
-    })
-    const { control, formState, watch, clearErrors, setError, getValues, register} = useForm({
+    const { control, formState, watch, clearErrors, setError, getValues} = useForm({
         defaultValues: {
             newPassword: '',
             passwordConfirm: ''
@@ -74,7 +71,7 @@ const ForgotPassword = (props) => {
     const createNewPassword = (password) => {
         try {
             const newPassword = authenticationService.completeNewPassword(newLoginUser, password)
-            console.log(newPassword)
+            //console.log(newPassword)
             return newPassword
         } catch (e) {
             console.log(e)
@@ -177,4 +174,4 @@ const ForgotPassword = (props) => {
         </Container>
     )
 }
-export default ForgotPassword
+export default ChangePassword
