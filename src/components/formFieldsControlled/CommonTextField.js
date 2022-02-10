@@ -14,7 +14,6 @@ const CommonTextField = ({ name, label, control, rules, error, multiline, defaul
         showPassword: false,
     });
 
-    console.log(error)
     const handleClickShowPassword = () => {
         setValues({
             ...values,

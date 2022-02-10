@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import { Link, Grid, FormControl, Typography, Container, Box, Alert, AlertTitle } from '@mui/material'
+import { Link, Grid, FormControl, Typography, Container, Box, Alert } from '@mui/material'
 import CancelIcon from '@mui/icons-material/Cancel';
 import PersonIcon from "@mui/icons-material/Person";
 import CommonButton from '../commons/CommonButton'
@@ -27,7 +27,6 @@ const Login = () => {
     const { control, formState, watch, clearErrors, setError } = useForm(defaultValues)
     const { errors, touchedFields, dirtyFields } = formState;
     const classes = useStyles()
-    let navigate = useNavigate();
     const values = watch()
     const authenticationService = useAuthenticationService()
 
@@ -39,7 +38,6 @@ const Login = () => {
         try {
             const newLogin = await authenticationService.signIn({email: username, password: password})
             const currentUser = authenticationService.currentUser()
-            //console.log(newLogin.message)
             if (newLogin && newLogin.message === "Incorrect username or password." ) {
                 setNewAlert({
                     ...newAlert,
@@ -55,12 +53,14 @@ const Login = () => {
                     ...newAlert,
                     displayAlert: true, alertMessage: "Usuario y/o contraseña inválida"
                 })
-            } else {
+            } else if (currentUser) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true, alertMessage: "Usted ya tiene una sesión abierta, debe cerrar sesión para iniciar una nueva"
+                })
+            }  else {
                 return newLogin
             }
-            //if (await currentUser ) {
-                //navigate("/informes_asistencia")
-            //}
         } catch (error) {
             console.log('error signing in', error);
         }
@@ -176,8 +176,7 @@ const Login = () => {
                            severity="error"
                            action={ <a onClick={()=>setNewAlert({...newAlert, displayAlert: false})}> <CancelIcon fontSize="20px" color="error"/> </a> }
                     >
-                        <Typography variant="alertTittle"
-                        >
+                        <Typography variant="alertTittle">
                             {newAlert.alertMessage}
                         </Typography>
                     </Alert>

@@ -13,18 +13,11 @@
     },
     "categories": {
       "auth": {
-        "rdtwebcontrolpuestosdbd8c6cd": {
-          "userPoolId": "us-east-1_OgKZqKUvQ",
-          "userPoolName": "rdtwebcontrolpuestos64b307e8_userpool_64b307e8-dev",
-          "webClientId": "69qmb93oh5picmaoe0vt6o57sl",
-          "nativeClientId": "5qt875t8kcq9r65i36cdtro4kk",
-          "identityPoolId": "us-east-1:36b95ba7-b977-4a88-85e6-bb6e96b10ef8",
-          "identityPoolName": "rdtwebcontrolpuestos64b307e8_identitypool_64b307e8__dev",
-          "allowUnauthenticatedIdentities": false,
-          "authRoleArn": "arn:aws:iam::570604834227:role/amplify-rdtwebcontrolpuestos-dev-164145-authRole",
-          "authRoleName": "amplify-rdtwebcontrolpuestos-dev-164145-authRole",
-          "unauthRoleArn": "arn:aws:iam::570604834227:role/amplify-rdtwebcontrolpuestos-dev-164145-unauthRole",
-          "unauthRoleName": "amplify-rdtwebcontrolpuestos-dev-164145-unauthRole"
+        "rdtwebcontrolpuestos1b64c48e": {
+          "userPoolId": "us-east-1_RnI92jf32",
+          "userPoolName": "testigos-cognito-user-pool",
+          "webClientId": "60e8730orgldpf7b1renb759ru",
+          "nativeClientId": "60e8730orgldpf7b1renb759ru"
         }
       }
     }

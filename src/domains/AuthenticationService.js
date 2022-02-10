@@ -158,7 +158,15 @@ export default function useAuthenticationService() {
     }
 
     async function forgotPassword(email) {
-        return await amplifyAuth.forgotPassword(email)
+        try {
+            const forgotPassw = await amplifyAuth.forgotPassword(email)
+            //const forgotPasswJson = forgotPassw.toJSON
+
+            return forgotPassw
+        } catch (e) {
+            //console.log(e)
+            return e
+        }
     }
 
     async function forgotPasswordSubmit(email, code, newPassword) {

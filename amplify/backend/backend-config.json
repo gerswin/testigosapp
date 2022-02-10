@@ -1,6 +1,6 @@
 {
   "auth": {
-    "rdtwebcontrolpuestosdbd8c6cd": {
+    "rdtwebcontrolpuestos1b64c48e": {
       "service": "Cognito",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
