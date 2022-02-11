@@ -1,8 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
-
 import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, MenuItem, Typography, Select} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -38,6 +37,7 @@ const InformesPuestosVotacion11 = () => {
     const [displayQ11Novelty, setDisplayQ11Novelty] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     const values = watch()
     let navigate = useNavigate();
     const url = process.env.API_PUESTOS_URL + '/delegates/places'
@@ -57,6 +57,18 @@ const InformesPuestosVotacion11 = () => {
         handleQ9Display()
     }, [formState])
 
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
     const fields = [
         {
             type: 'radioGroup',
@@ -104,6 +116,13 @@ const InformesPuestosVotacion11 = () => {
     }
     const handleClose = () => {
         setOpen(false)
+    }
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
     }
     const bodyNo = {
         "data": {
@@ -153,13 +172,13 @@ const InformesPuestosVotacion11 = () => {
         }
     }
     const onSubmit = useCallback(
-        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+        async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
             try {
                 validateFunction(fields, errors, values, setError)
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
-                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && fieldValidation()  ) {
+                    if (_.isEmpty( errors ) && _.isEmpty(dirtyFields) === false && fieldValidation()  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
                         }
@@ -223,6 +242,16 @@ const InformesPuestosVotacion11 = () => {
                     }
                 </Box>
             </Container>
+            <Snackbar
+                open={newAlert.displayAlert}
+                autoHideDuration={5000}
+                sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                onClose={handleAlertClose}
+                children={(
+                    <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                )}
+                anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+            />
             <Footer/>
         </>
     )

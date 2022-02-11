@@ -3,7 +3,7 @@ import actionTypes from './actionTypes';
 let INITIAL_STATE = {
     loginNewUser: {},
     dataTableAssignment: [],
-    updateTableAssignment: []
+    updateTableAssignment: [],
 }
 
 const rootReducer = (state = INITIAL_STATE, action) => {

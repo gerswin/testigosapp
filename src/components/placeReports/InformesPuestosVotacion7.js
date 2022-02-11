@@ -1,10 +1,10 @@
-import {Route, useNavigate} from "react-router-dom";
-import {useForm} from "react-hook-form";
 import React, {useEffect, useState} from "react";
+import { useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
 import axios from "axios";
 import moment from 'moment';
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, Grid, Paper, TextField, Typography} from "@mui/material";
+import {Box, Container, FormControl, Grid, Snackbar, TextField, Typography} from "@mui/material";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
 import CommonDialog from "../commons/CommonDialog";
@@ -58,6 +58,7 @@ const mesasEj = [
 const InformesPuestosVotacion7 = () => {
     const [displayModal, setDisplayModal] = useState({})
     const [open, setOpen] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     const { formState, watch, control} = useForm({
         defaultValues: {
             q1: '',
@@ -73,6 +74,19 @@ const InformesPuestosVotacion7 = () => {
     const dispatch = useDispatch()
     let mesas = useSelector((state)=> state.dataTableAssignment)
     let navigate = useNavigate();
+
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
 
     useEffect(() => {
         const source = axios.CancelToken.source();
@@ -122,7 +136,6 @@ const InformesPuestosVotacion7 = () => {
             }
         }
     ]
-
     const handleOpen = ( mesa) => {
         setOpen(true)
         setDisplayModal(mesa)
@@ -130,6 +143,13 @@ const InformesPuestosVotacion7 = () => {
     }
     const handleClose = () => {
         setOpen(false)
+    }
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
     }
     const body = {
         "data": {
@@ -268,6 +288,16 @@ const InformesPuestosVotacion7 = () => {
                     submitInfo={sendUpdateTableAssignment}
                 />
             </Container>
+            <Snackbar
+                open={newAlert.displayAlert}
+                autoHideDuration={5000}
+                sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                onClose={handleAlertClose}
+                children={(
+                    <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                )}
+                anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+            />
             <Footer/>
         </>
     )

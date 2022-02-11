@@ -42,7 +42,7 @@ const CommonDialog = ({dialogTitle, mesa, bodyInfo, submitInfo, onClose, open, i
                             )
                         }}
                     />
-                </DialogContent> : null
+                </DialogContent> : <></>
             }
             <DialogActions sx={{mr: 4}}>
                 {

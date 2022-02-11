@@ -13,6 +13,7 @@ export const theme = createTheme({
             contrastText: "#fff"
         },
         grey: {
+            main: "#B0B0B0",
             textos: "#333333",
             grisOscuro: "#555555",
             textoGris: "#B0B0B0",
@@ -38,6 +39,14 @@ export const theme = createTheme({
             fontWeight: 700,
             fontSize: "28px",
             lineHeight: "32.81px",
+            textAlign: "center",
+            color: "#333333"
+        },
+        h1Mobile: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 700,
+            fontSize: "24px",
+            lineHeight: "28.13px",
             textAlign: "center",
             color: "#333333"
         },
@@ -108,6 +117,30 @@ export const theme = createTheme({
             lineHeight: "18.75px",
             fontStyle: 'normal',
             color: "#555555",
+        },
+        mandatoryField: {
+            fontFamily: "'Lato', sans-serif",
+            fontWeight: 400,
+            fontSize: "14px",
+            lineHeight: "16.8px",
+            color: '#EE002D',
+            marginTop: '5px',
+        },
+        alertTittle: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 400,
+            fontSize: "16px",
+            lineHeight: "24px",
+            color: '#EE002D',
+            letterSpacing: '0.5px'
+        },
+        alertTittleS: {
+            fontFamily: "'Roboto', sans-serif",
+            fontWeight: 400,
+            fontSize: "14px",
+            lineHeight: "16px",
+            color: '#EE002D',
+            //letterSpacing: '0.5px'
         }
     },
     shape: {
@@ -129,9 +162,9 @@ theme.shadows.push("-4px 5px 15px rgba(176, 176, 176, 0.45)")
 
 export const useStyles = makeStyles({
     logo: {
-        maxWidth: 160,
-        marginTop: 20,
-        marginBottom: 30
+        maxWidth: '160px',
+        marginTop: '30px',
+        marginBottom: '20px'
     },
     logoSmall: {
         maxWidth: 92,
@@ -147,5 +180,6 @@ export const useStyles = makeStyles({
     footerFontStyle: {
         fontFamily: "'Roboto', sans-serif",
         fontWeight: 500, fontSize: 12
-    }
+    },
+    alertStyle: {display: 'flex', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255, 82, 82, 0.12)', color: 'status.rojo' }
 })

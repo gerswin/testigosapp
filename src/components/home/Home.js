@@ -14,7 +14,6 @@ import {useStyles} from "../../theme/themeStyles";
 const Home = () => {
 
     const classes = useStyles()
-
     const menuOptions = [
         {
             title: 'Informes del puesto',

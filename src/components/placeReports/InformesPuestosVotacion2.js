@@ -1,8 +1,8 @@
 import {useForm} from "react-hook-form";
-import {Route, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import React, {useCallback, useEffect, useState} from "react";
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, Typography} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -51,7 +51,7 @@ const InformesPuestosVotacion2 = () => {
 
     const noveltiesUrl02 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=02'
     const noveltiesUrl03 = process.env.API_PUESTOS_URL + '/novelties?eventTypeCode=03'
-    let { data, loading, error } = useFetch(noveltiesUrl02)
+    let { data } = useFetch(noveltiesUrl02)
 
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
@@ -86,12 +86,33 @@ const InformesPuestosVotacion2 = () => {
         fetchNovelties()
     }, [noveltiesUrl03])
 
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
+
     const handleOpen = () => {
         setConfirmaRespuesta(true)
         setOpen( true)
     }
     const handleClose = () => {
         setOpen(false)
+    }
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
     }
     const fields = [
         {
@@ -101,7 +122,7 @@ const InformesPuestosVotacion2 = () => {
             row: true,
             rules: {
                 required: true,
-                type: 'radio',
+                type: 'string',
                 validate: (value) => {
                     if (radioq2.findIndex(option => option.value === value) === -1) {
                         return 'invalid selection'
@@ -301,6 +322,16 @@ const InformesPuestosVotacion2 = () => {
                         }
                     </Box>
                 </Box>
+                <Snackbar
+                    open={newAlert.displayAlert}
+                    autoHideDuration={5000}
+                    sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                    onClose={handleAlertClose}
+                    children={(
+                        <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                    )}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+                />
             </Container>
             <Footer/>
         </>

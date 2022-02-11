@@ -1,8 +1,8 @@
-import {Route, useNavigate} from "react-router-dom";
-import {useForm} from "react-hook-form";
 import React, {useCallback, useEffect, useState} from "react";
+import { useNavigate} from "react-router-dom";
+import {useForm} from "react-hook-form";
 import HeaderCustom from "../header/HeaderCustom";
-import {Box, Container, FormControl, TextField, MenuItem, Typography, Select} from "@mui/material";
+import {Box, Container, FormControl, Snackbar, Typography} from "@mui/material";
 import CommonRadioGroup from "../formFieldsControlled/CommonRadioGroup";
 import CommonButton from "../commons/CommonButton";
 import Footer from "../footer/Footer";
@@ -12,7 +12,7 @@ import validateFunction from "../../utilities/validateFields";
 import _ from "underscore";
 import CommonDialog from "../commons/CommonDialog";
 
-const q8Options = [
+const q7Options = [
     {
         label: 'Si',
         value: 'SI'
@@ -22,39 +22,60 @@ const q8Options = [
         value: 'NO',
     }
 ]
-
-const InformesPuestosVotacion9 = () => {
+const InformesPuestosVotacion8 = () => {
     const { control, formState, clearErrors, getValues, setError} = useForm({
         defaultValues: {
-            q8: ''
+            q7: ''
         }
     })
     const { errors, touchedFields, dirtyFields } = formState;
     const [open, setOpen] = useState(false)
     const [confirmaRespuesta, setConfirmaRespuesta] = useState(false)
     const [acceptButton, setAcceptButton] = useState(false)
+    const [newAlert, setNewAlert] = useState({displayAlert: false, alertMessage: ''})
     const values = getValues()
     const url =  process.env.API_PUESTOS_URL + '/delegates/places'
     let navigate = useNavigate();
+
     useEffect(() => {
         validateErrors(touchedFields, errors, dirtyFields, values, clearErrors)
     }, [formState])
+
+    useEffect(()=>{
+        const showErrorAlert = () => {
+            if (Object.values(errors).length >= 1) {
+                setNewAlert({
+                    ...newAlert,
+                    displayAlert: true,
+                    alertMessage: 'Debe seleccionar una opción válida para continuar'
+                })
+            }
+        }
+        return showErrorAlert()
+    }, [formState.errors])
+    const handleAlertClose = () => {
+        setNewAlert({
+            ...newAlert,
+            displayAlert: false,
+            alertMessage: ""
+        })
+    }
     const fields = [
         {
             type: 'radioGroup',
-            name: 'q8',
+            name: 'q7',
             row: true,
-            label: '¿Se realizó el plan puntilla?',
+            label: '¿Se utilizó tarjetas braile?',
             rules: {
                 required: true,
                 type: 'string',
                 validate: (value) => {
-                    if (q8Options.findIndex(option => option.value === value) === -1) {
+                    if (q7Options.findIndex(option => option.value === value) === -1) {
                         return 'invalid selection'
                     }
                 }
             },
-            options: q8Options
+            options: q7Options
         }
     ]
 
@@ -63,8 +84,8 @@ const InformesPuestosVotacion9 = () => {
             "type": "placesReports",
             "attributes": {
                 "document":"1120873152",
-                "question":"8",
-                "answer": values.q8,
+                "question":"7",
+                "answer": values.q7,
             }
         }
     }
@@ -85,7 +106,7 @@ const InformesPuestosVotacion9 = () => {
             console.log(response)
             if (response.data.status === 201) {
                 setAcceptButton(true)
-                navigate('/informes_puestos_votacion10')
+                navigate('/informes_puestos_votacion9')
             }
             return response
         } catch (e) {
@@ -94,13 +115,13 @@ const InformesPuestosVotacion9 = () => {
     }
 
     const onSubmit = useCallback(
-        async (e, values, fields, dirtyFields, setError, errors, touchedFields ) => {
+        async (e, values, fields, dirtyFields, setError, errors ) => {
             clearErrors()
             try {
                 validateFunction(fields, errors, values, setError)
                 if (_.isEmpty( errors )) {
                     validateFunction(fields, errors, values, setError)
-                    if (_.isEmpty( errors ) && _.isEmpty(touchedFields) === false && _.values(values).includes('') === false  ) {
+                    if (_.isEmpty( errors ) && _.isEmpty(dirtyFields) === false && _.values(values).includes('') === false  ) {
                         if (_.isEmpty( errors )) {
                             handleOpen()
                         }
@@ -153,9 +174,10 @@ const InformesPuestosVotacion9 = () => {
                             Descipción:
                         </Typography>
                         <Typography variant="actionDrop">
-                            Las copias de los E-14 delegados se fijarán en lugares visibles para que los Testigos Electorales puedan tomar fotos o grabar los documentos originales.
+                            Colombia garantiza el voto en Braile, siendo el Instituto Nacional para Ciegos -INCI quién imprime los tarjetones en braile, de acuerdo al mandato de la Corte Constitucional de la Sentencia T-487 de 2003
                         </Typography>
-                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)} text={'GUARDAR'} type='primario' />
+
+                        <CommonButton style={{margin: '0 auto'}} sx={{marginTop: 8, alignSelf: 'center'}} onClick={async (e )=> onSubmit(e, values, fields, dirtyFields, setError, errors, touchedFields)}  text={'GUARDAR'} type='primario' />
                     </Box>
                     {
                         confirmaRespuesta ?
@@ -170,9 +192,19 @@ const InformesPuestosVotacion9 = () => {
                     }
                 </Box>
             </Container>
+            <Snackbar
+                open={newAlert.displayAlert}
+                autoHideDuration={5000}
+                sx={{display: 'flex', mb: 15, padding: '16px', flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgb(251, 235, 234)'}}
+                onClose={handleAlertClose}
+                children={(
+                    <Typography variant="alertTittleS" >{newAlert.alertMessage}</Typography>
+                )}
+                anchorOrigin={{ vertical: 'bottom', horizontal: "center" }}
+            />
             <Footer/>
         </>
     )
 }
 
-export default InformesPuestosVotacion9
+export default InformesPuestosVotacion8
